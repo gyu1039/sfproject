@@ -1,4 +1,4 @@
-package yonam2023.sfproject.domain;
+package yonam2023.sfproject.production.domain;
 
 import lombok.Builder;
 import lombok.Getter;
