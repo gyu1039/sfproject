@@ -3,7 +3,7 @@ package yonam2023.sfproject.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import yonam2023.sfproject.employee.Employee;
+import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.employee.EmployeeRepository;
 
 @SpringBootTest
