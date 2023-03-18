@@ -16,7 +16,7 @@ class EmployeeRepositoryTest {
     public void saveEmployee(){
 
         //given
-        Employee em = new Employee(1L, "직원 관리", "010-1233-3333");
+        //Employee em = new Employee(1L, "직원 관리", "010-1233-3333");
 
 
     }
