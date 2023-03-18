@@ -33,4 +33,5 @@ build/
 .vscode/
 
 pom.xml
-src/main/resources/application.properties
+application.properties
+persistence.xml
