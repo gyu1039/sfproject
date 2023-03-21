@@ -1,6 +1,7 @@
 package yonam2023.sfproject.inventory.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 public class Received {
     @Id @GeneratedValue
@@ -20,4 +22,10 @@ public class Received {
     private int amount;
 
     private LocalDateTime localDateTime;
+
+    public Received(String name, int amount, LocalDateTime localDateTime) {
+        this.name = name;
+        this.amount = amount;
+        this.localDateTime = localDateTime;
+    }
 }
