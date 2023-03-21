@@ -13,18 +13,26 @@ import javax.persistence.Id;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Inventory {
+public class StoredItem {
     @Id @GeneratedValue
-    @Column(name = "product_id")
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     private int amount;
 
-    public Inventory(String name, int amount) {
+    public StoredItem(String name, int amount) {
         this.name = name;
         this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "StoredItem{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", amount=" + amount +
+                '}';
     }
 }
