@@ -14,12 +14,11 @@ import javax.persistence.Id;
 public class Inventory {
     @Id @GeneratedValue
     @Column(name = "product_id")
-    public Long id;
+    private Long id;
 
     @Column
-    public String name;
+    private String name;
 
-
-    public int amount;
+    private int amount;
 
 }
