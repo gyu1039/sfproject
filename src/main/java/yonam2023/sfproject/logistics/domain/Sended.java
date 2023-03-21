@@ -1,4 +1,4 @@
-package yonam2023.sfproject.inventory.domain;
+package yonam2023.sfproject.logistics.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

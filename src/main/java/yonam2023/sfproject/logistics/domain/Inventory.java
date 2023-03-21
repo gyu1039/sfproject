@@ -1,31 +1,30 @@
-package yonam2023.sfproject.inventory.domain;
+package yonam2023.sfproject.logistics.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class Received {
+public class Inventory {
     @Id @GeneratedValue
+    @Column(name = "product_id")
     private Long id;
 
+    @Column
     private String name;
 
     private int amount;
 
-    private LocalDateTime localDateTime;
-
-    public Received(String name, int amount, LocalDateTime localDateTime) {
+    public Inventory(String name, int amount) {
         this.name = name;
         this.amount = amount;
-        this.localDateTime = localDateTime;
     }
 }
