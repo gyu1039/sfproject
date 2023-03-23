@@ -17,8 +17,8 @@ import java.util.Date;
 public class Production {
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name = "STYPE")
     private String stype;
