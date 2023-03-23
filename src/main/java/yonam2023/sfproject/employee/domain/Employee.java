@@ -20,9 +20,9 @@ public class Employee {
     @Column(nullable = false)
     private DepartmentType department;
 
-    @Column(nullable = false)
     private EmployeeType employeeType;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)

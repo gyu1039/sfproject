@@ -2,6 +2,7 @@ package yonam2023.sfproject.employee;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import yonam2023.sfproject.employee.domain.DepartmentType;
@@ -12,24 +13,27 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EmployeeRepositoryTest {
 
     @Autowired
     EmployeeRepository em;
 
-
     @BeforeAll
     public void insertDummy() {
 
 
-        Employee e = Employee.builder()
-                .name("강인규")
-                .department(DepartmentType.PERSONNEL)
-                .employeeType(EmployeeType.MANAGER)
-                .phoneNumber("010-1111-111")
-                .build();
+        IntStream.rangeClosed(1, 100).forEach(i -> {
 
-        em.save(e);
+            Employee e = Employee.builder()
+                    .name("test" + i)
+                    .department(DepartmentType.PERSONNEL)
+                    .phoneNumber(i + "")
+                    .build();
+
+            em.save(e);
+        });
+
     }
 
     @Test
