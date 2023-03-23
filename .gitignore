@@ -35,3 +35,4 @@ build/
 pom.xml
 application.properties
 persistence.xml
+.jpb/
