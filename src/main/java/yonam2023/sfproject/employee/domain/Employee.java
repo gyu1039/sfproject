@@ -18,15 +18,18 @@ public class Employee {
     private Long id;
 
     @Column(nullable = false)
-    private DepartmentType department;
-
-    private EmployeeType employeeType;
-
-    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private String phoneNumber;
+
+
+    @Column(nullable = false)
+    private DepartmentType department;
+
+    private EmployeeType employeeType;
+
+
 
     @Builder
     public Employee(DepartmentType department, EmployeeType employeeType, String name, String phoneNumber) {
