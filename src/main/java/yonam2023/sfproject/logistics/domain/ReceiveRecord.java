@@ -23,12 +23,12 @@ public class ReceiveRecord {
 
     private int amount;
 
-    private LocalDateTime receiveDateTime;
+    private LocalDateTime dateTime;
 
-    public ReceiveRecord(String itemName, int amount, LocalDateTime receiveDateTime) {
+    public ReceiveRecord(String itemName, int amount, LocalDateTime dateTime) {
         this.itemName = itemName;
         this.amount = amount;
-        this.receiveDateTime = receiveDateTime;
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ReceiveRecord {
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
                 ", amount=" + amount +
-                ", receiveDateTime=" + receiveDateTime +
+                ", receiveDateTime=" + dateTime +
                 '}';
     }
 }

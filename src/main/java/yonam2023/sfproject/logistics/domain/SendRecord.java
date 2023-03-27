@@ -24,12 +24,12 @@ public class SendRecord {
 
     private int amount;
 
-    private LocalDateTime sendDateTime;
+    private LocalDateTime dateTime;
 
-    public SendRecord(String itemName, int amount, LocalDateTime sendDateTime) {
+    public SendRecord(String itemName, int amount, LocalDateTime dateTime) {
         this.itemName = itemName;
         this.amount = amount;
-        this.sendDateTime = sendDateTime;
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SendRecord {
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
                 ", amount=" + amount +
-                ", sendDateTime=" + sendDateTime +
+                ", sendDateTime=" + dateTime +
                 '}';
     }
 }
