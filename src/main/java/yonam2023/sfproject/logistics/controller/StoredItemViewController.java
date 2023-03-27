@@ -24,7 +24,7 @@ public class StoredItemViewController {
     public String storedItemsHome(Model model){
         List<StoredItem> storedItems = storedItemRepo.findAll();
         model.addAttribute("storedItems", storedItems);
-        return "storedItems";
+        return "logistics/storedItems";
     }
 
 
