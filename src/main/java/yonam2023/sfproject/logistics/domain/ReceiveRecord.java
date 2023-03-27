@@ -23,11 +23,14 @@ public class ReceiveRecord {
 
     private int amount;
 
+    private String supplier;  // 공급처
+
     private LocalDateTime dateTime;
 
-    public ReceiveRecord(String itemName, int amount, LocalDateTime dateTime) {
+    public ReceiveRecord(String itemName, int amount, String supplier, LocalDateTime dateTime) {
         this.itemName = itemName;
         this.amount = amount;
+        this.supplier = supplier;
         this.dateTime = dateTime;
     }
 
@@ -37,7 +40,8 @@ public class ReceiveRecord {
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
                 ", amount=" + amount +
-                ", receiveDateTime=" + dateTime +
+                ", supplier='" + supplier + '\'' +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }
