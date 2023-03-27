@@ -24,11 +24,15 @@ public class SendRecord {
 
     private int amount;
 
+    private String destination;
+
     private LocalDateTime dateTime;
 
-    public SendRecord(String itemName, int amount, LocalDateTime dateTime) {
+
+    public SendRecord(String itemName, int amount, String destination, LocalDateTime dateTime) {
         this.itemName = itemName;
         this.amount = amount;
+        this.destination = destination;
         this.dateTime = dateTime;
     }
 
@@ -38,7 +42,8 @@ public class SendRecord {
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
                 ", amount=" + amount +
-                ", sendDateTime=" + dateTime +
+                ", destination='" + destination + '\'' +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }
