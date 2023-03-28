@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import yonam2023.sfproject.employee.domain.Employee;
 
@@ -25,10 +26,22 @@ public class EmployeeController {
     private final EmployeeRepository er;
 
     @GetMapping
-    public String test(Model model, @PageableDefault(sort = "department", direction = Sort.Direction.DESC) Pageable pageable) {
+    public String page1(Model model, @PageableDefault(sort = "department", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<Employee> all = er.findAll(pageable);
         model.addAttribute("list", all);
-        return "employee";
+        return "employee/init";
+    }
+
+    @GetMapping("/add")
+    public String page2() {
+
+        return "employee/add";
+    }
+
+    @PostMapping
+    public String page3() {
+
+        return "";
     }
 }
