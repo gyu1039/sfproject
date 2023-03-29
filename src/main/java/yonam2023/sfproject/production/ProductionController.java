@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.production.domain.Production;
-import yonam2023.sfproject.production.rpository.ProductionRepository;
+import yonam2023.sfproject.production.repository.ProductionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +70,7 @@ public class ProductionController {
     @PostMapping("/insert")
     public @ResponseBody List<Production> productionInsert(@RequestBody Map<String, String> param){
         String stype = param.get("STYPE");
+        System.out.println(param.get("SVALUE"));
         int svalue = Integer.parseInt(param.get("SVALUE"));
         Production production= Production.builder().stype(stype).svalue(svalue).build();
         pr.save(production);
@@ -98,5 +99,12 @@ public class ProductionController {
     public @ResponseBody List<Production> productionDeleteAll(){
         pr.deleteAll();
         return pr.findAll();
+    }
+
+    @GetMapping("/wakeStub")
+    public void runFactoryStub(){
+        Thread ProductionStub = new FactoryStub();
+        ProductionStub.run();
+
     }
 }

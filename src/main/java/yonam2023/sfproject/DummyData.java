@@ -6,7 +6,7 @@ import yonam2023.sfproject.employee.EmployeeRepository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.production.domain.Production;
-import yonam2023.sfproject.production.rpository.ProductionRepository;
+import yonam2023.sfproject.production.repository.ProductionRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.stream.IntStream;

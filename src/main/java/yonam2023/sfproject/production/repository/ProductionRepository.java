@@ -1,10 +1,9 @@
-package yonam2023.sfproject.production.rpository;
+package yonam2023.sfproject.production.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.production.domain.Production;
 
 @Repository

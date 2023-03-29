@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout (~{::title}, '요약', '센서별 통계', '데이터 제어', ~{::section})}"
+      th:replace="~{layout/base :: layout (~{::title}, '요약', 'stub 작동', '데이터 삭제', ~{::section})}"
       lang="ko">
 <head>
     <title>index</title>
@@ -68,6 +68,7 @@
                         <span class="sr-only">Last</span>
                     </a>
                 </li>
+                &nbsp;&nbsp;<button type="button" onclick="location.href='/production/wakeStub' ">Stub on</button>
             </ul>
         </nav>
     </div>
