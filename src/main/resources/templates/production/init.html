@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout (~{::title}, '요약', '센서별 통계', '데이터 제어', ~{::section})}"
+      lang="ko">
+<head>
+    <title>index</title>
+</head>
+<body>
+
+<section>
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">sensorType</th>
+                <th scope="col">Value</th>
+                <th scope="col">OccurTime </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${list}">
+                <td><span th:text="${e.id}"></span></td>
+                <td><span th:text="${e.stype}"></span></td>
+                <td><span th:text="${e.svalue}"></span></td>
+                <td><span th:text="${e.otime}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+        <nav th:with="
+                    pageNumber = ${list.pageable.pageNumber},
+                    pageSize = ${list.pageable.pageSize},
+                    totalPages = ${list.totalPages},
+                    startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                    tempEndPage = ${startPage + pageSize - 1},
+                    endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})" aria-label="Page navigation">
+
+            <ul class="pagination ">
+                <!-- 처음으로 이동 -->
+                <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="@{/production(page=0)}">
+                        <span class="sr-only">First</span>
+                    </a>
+                </li>
+
+                <!-- 이전으로 이동 -->
+                <li th:classappend="${list.first} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="${list.first} ? '#' : @{/production(page=${pageNumber - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&lt;</span>
+                    </a>
+                </li>
+
+                <!-- 특정 페이지로 이동 -->
+                <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                    <a th:text="${page}" class="page-link" th:href="@{/production(page=${page - 1})}"></a>
+                </li>
+
+                <!-- 다음으로 이동 -->
+                <li th:classappend="${list.last} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="${list.last} ? '#' : @{/production(page=${pageNumber + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&gt;</span>
+                    </a>
+                </li>
+
+                <!-- 마지막으로 이동 -->
+                <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 < endPage} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="@{/production(page=${totalPages - 1})}">
+                        <span class="sr-only">Last</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+</body>
+</html>
