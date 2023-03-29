@@ -154,16 +154,21 @@
             <h1>add 페이지 입니다</h1>
 
             <form action="add.html" th:action method="post" th:object="${e}" class="row g-3 align-items-center">
-                <div class="mb-3">
-                    <label for="test1">테스트1</label>
+                <label for="test1" class="col-sm-2 col-form-label">테스트1</label>
+                <div class="col-sm-10">
                     <input type="text" id="test1" placeholder="테스트1" class="form-control">
                 </div>
 
-                <div class="mb-3">
-                    <label for="test2">테스트2</label>
+                <label for="test2" class="col-sm-2 col-form-label">테스트2</label>
+                <div class="col-sm-10">
                     <input type="text" id="test2" placeholder="테스트2" class="form-control">
                 </div>
+
+                <div class="'d-grid gap-2 d-md-block">
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                </div>
             </form>
+
 
         </main>
     </div>
