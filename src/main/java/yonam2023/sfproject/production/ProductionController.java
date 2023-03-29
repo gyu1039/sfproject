@@ -27,13 +27,32 @@ public class ProductionController {
     public String initGet(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<Production> all = pr.findAll(pageable);
+        List<Production> graph = pr.findTop10ByOrderByIdDesc();
+        List<String> ids = new ArrayList<String>();
+        List<Integer> values = new ArrayList<Integer>();
+
+        for(int i = graph.size()-1; i>=0; i--){
+            Production p = graph.get(i);
+            ids.add(Long.toString(p.getId()));
+            values.add(p.getSvalue());
+        }
+
         model.addAttribute("list", all);
+        model.addAttribute("sType", "testSensor");
+        model.addAttribute("gIds", ids);
+        model.addAttribute("gValues", values);
+
         return "production/init";
     }
 
     @GetMapping("/getAll")
     public @ResponseBody List<Production> productionGetAll(){
         return pr.findAll();
+    }
+
+    @GetMapping("/getTen")//10개만 구하기
+    public @ResponseBody List<Production> productionGetTen(){
+        return pr.findTop10ByOrderByIdDesc();
     }
 
     @GetMapping("/{id}")
