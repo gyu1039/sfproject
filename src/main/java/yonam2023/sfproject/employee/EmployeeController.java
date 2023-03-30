@@ -1,20 +1,18 @@
 package yonam2023.sfproject.employee;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import yonam2023.sfproject.employee.domain.Employee;
-
-import java.util.List;
+import yonam2023.sfproject.employee.domain.EmployeeDTO;
 
 
 @Controller
@@ -26,7 +24,7 @@ public class EmployeeController {
     private final EmployeeRepository er;
 
     @GetMapping
-    public String page1(Model model, @PageableDefault(sort = "department", direction = Sort.Direction.DESC) Pageable pageable) {
+    public String page1(Model model, @PageableDefault Pageable pageable) {
 
         Page<Employee> all = er.findAll(pageable);
         model.addAttribute("list", all);
@@ -34,14 +32,21 @@ public class EmployeeController {
     }
 
     @GetMapping("/add")
-    public String page2() {
+    public String page2(Model m) {
 
+        m.addAttribute("e", new EmployeeDTO());
         return "employee/add";
     }
 
-    @PostMapping
-    public String page3() {
+    @PostMapping("/add")
+    public String page3(@ModelAttribute("e") EmployeeDTO e) {
 
-        return "";
+        Employee build = Employee.builder()
+                .name(e.getName())
+                .phoneNumber(e.getPhoneNumber())
+                .department(e.getDepartment()).build();
+
+        er.save(build);
+        return "redirect:/employee";
     }
 }

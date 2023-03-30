@@ -6,25 +6,22 @@
 <form action="add.html" th:action method="post" th:object="${e}" class="row g-3 align-items-center">
     <div class="col-md-6">
         <label for="name" class="col-md-6 col-form-label">이름</label>
-        <input type="text" id="name" placeholder="이름" class="form-control">
+        <input type="text" id="name" th:field="*{name}" placeholder="이름" class="form-control">
     </div>
 
     <div class="col-md-6">
         <label for="phoneNumber" class="col-md-6 col-form-label">휴대폰 번호</label>
-        <input type="text" id="phoneNumber" placeholder="휴대폰 번호" class="form-control">
+        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" placeholder="휴대폰 번호" class="form-control">
     </div>
 
 
     <div class="col-md-4">
         <label for="department" class="col-md-2 col-form-label">부서</label>
-        <select class="form-select" aria-label="Default select example" id="department">
-            <option value="PERSONNEL">인사</option>
-            <option value="PRODUCTION">생산</option>
-            <option value="LOGISTICS">물류</option>
+        <select class="form-select" aria-label="Default select example" id="department" th:field="*{department}">
+            <option th:each="type : ${T(yonam2023.sfproject.employee.domain.DepartmentType).values()}"
+            th:value="${type}" th:text="${type.value}"}></option>
         </select>
     </div>
-
-
     <div class="'d-grid gap-2 d-md-block">
         <button type="submit" class="btn btn-primary">Sign in</button>
     </div>

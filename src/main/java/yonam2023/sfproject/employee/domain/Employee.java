@@ -23,18 +23,16 @@ public class Employee {
     @Column(nullable = false)
     private String phoneNumber;
 
-
     @Column(nullable = false)
     private DepartmentType department;
 
-    private EmployeeType employeeType;
-
+    private EmployeeType employee;
 
 
     @Builder
-    public Employee(DepartmentType department, EmployeeType employeeType, String name, String phoneNumber) {
+    public Employee(DepartmentType department, EmployeeType employee, String name, String phoneNumber) {
         this.department = department;
-        this.employeeType = employeeType;
+        this.employee = employee;
         this.name = name;
         this.phoneNumber = phoneNumber;
     }
