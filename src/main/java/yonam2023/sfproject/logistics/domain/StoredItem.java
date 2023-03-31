@@ -27,6 +27,10 @@ public class StoredItem {
         this.amount = amount;
     }
 
+    public void addAmount(int amount){
+        this.amount += amount;
+    }
+
     @Override
     public String toString() {
         return "StoredItem{" +

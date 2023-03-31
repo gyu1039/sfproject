@@ -6,9 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import yonam2023.sfproject.logistics.controller.form.ReceiveForm;
 import yonam2023.sfproject.logistics.domain.ReceiveRecord;
 import yonam2023.sfproject.logistics.repository.ReceiveRecordRepository;
+import yonam2023.sfproject.logistics.service.ReceiveService;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
@@ -23,6 +27,7 @@ import java.util.List;
 @Slf4j
 public class ReceiveRecordViewController {
     private final ReceiveRecordRepository receiveRecordRepo;
+    private final ReceiveService receiveService;
 
     @PostConstruct
     public void init(){
@@ -41,6 +46,18 @@ public class ReceiveRecordViewController {
         model.addAttribute("receiveRecords", receiveRecords);
 
         return "logistics/receiveRecords";
+    }
+
+    @GetMapping("/reserve")
+    public String reserveForm(Model model){
+        model.addAttribute("today", LocalDate.now());
+        return "logistics/receiveReserveForm";
+    }
+
+    @PostMapping("/reserve")
+    public String reserveItem(@ModelAttribute ReceiveForm.Request receiveReqForm){
+        receiveService.saveReceiveRecord(receiveReqForm);
+        return "redirect:/receiveRecords";
     }
 
 
