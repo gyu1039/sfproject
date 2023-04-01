@@ -90,19 +90,19 @@
             <div class="position-sticky pt-3 sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/employee">
+                        <a class="nav-link active" aria-current="page" href="#">
                             <span data-feather="home" class="align-text-bottom"></span>
                             직원 관리
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/production">
+                        <a class="nav-link" href="#">
                             <span data-feather="file" class="align-text-bottom"></span>
                             생산 관리
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logistics">
+                        <a class="nav-link" href="#">
                             <span data-feather="shopping-cart" class="align-text-bottom"></span>
                             재고 관리
                         </a>
@@ -155,6 +155,7 @@
             </div>
             <section th:replace="${section}">
             </section>
+
         </main>
     </div>
 </div>
@@ -164,45 +165,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-<script th:inline="javascript" >
-    /*<![CDATA[*/
-(() => {
-  'use strict'
-
-  feather.replace({ 'aria-hidden': 'true' })
-
-  // Graphs
-  const ctx1 = document.getElementById('productionChart')
-  // eslint-disable-next-line no-unused-vars
-  const myChart1 = new Chart(ctx1, {
-    type: 'line',
-    data: {
-      label: /*[[${sType}]]*/,
-      labels: /*[[${gIds}]]*/,
-      datasets: [{
-        data: /*[[${gValues}]]*/,
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#0000ff',
-        borderWidth: 4,
-        pointBackgroundColor: '#00ff00'
-      }]
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      },
-      legend: {
-        display: true
-      }
-    }
-  })
-})()
-/*]]>*/
-</script>
+<script src="/js/dashboard.js"></script>
 </body>
 </html>

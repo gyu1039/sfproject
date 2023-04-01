@@ -1,10 +1,8 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout (~{::title}, '직원관리1', '직원관리2', '직원관리3', ~{::section})}"
+      th:replace="~{layout/base :: layout ('index', '직원관리1', '직원관리2', '직원관리3', ~{::section})}"
       lang="ko">
-<head>
-    <title>index</title>
-</head>
+
 <body>
 
 <section>

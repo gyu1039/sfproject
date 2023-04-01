@@ -23,7 +23,7 @@ public class DummyData {
     @PostConstruct
     public void initialize() {
 
-        IntStream.rangeClosed(1, 100).forEach(i -> {
+        IntStream.rangeClosed(1, 5).forEach(i -> {
             Employee e = Employee.builder()
                     .name("test " + i)
                     .phoneNumber(i + " ")
