@@ -3,6 +3,7 @@ package yonam2023.sfproject.logistics.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import yonam2023.sfproject.logistics.exception.minusAmountException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +30,12 @@ public class StoredItem {
 
     public void addAmount(int amount){
         this.amount += amount;
+    }
+    public void subAmount(int amount){
+        if (this.amount < amount){
+        //todo:  throw new minusAmountException("출고량이 재고량을 초과합니다.");
+        }
+        this.amount -= amount;
     }
 
     @Override

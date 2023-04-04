@@ -6,9 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import yonam2023.sfproject.logistics.controller.form.ReceiveForm;
+import yonam2023.sfproject.logistics.controller.form.SendForm;
 import yonam2023.sfproject.logistics.domain.SendRecord;
 import yonam2023.sfproject.logistics.repository.SendRecordRepository;
+import yonam2023.sfproject.logistics.service.SendService;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
@@ -23,6 +28,7 @@ import java.util.List;
 @Slf4j
 public class SendRecordViewController {
     private final SendRecordRepository sendRecordRepo;
+    private final SendService sendService;
 
     @PostConstruct
     public void init(){
@@ -39,6 +45,19 @@ public class SendRecordViewController {
         List<SendRecord> sendRecords = sendRecordRepo.findAll();
         model.addAttribute("sendRecords", sendRecords);
         return "logistics/sendRecords";
+    }
+
+    @GetMapping("/reserve")
+    public String reserveForm(Model model){
+        model.addAttribute("today", LocalDate.now());
+        return "logistics/sendReserveForm";
+    }
+
+    @PostMapping("/reserve")
+    public String reserveItem(@ModelAttribute SendForm.Request sendReqForm){
+        sendService.saveSendRecord(sendReqForm);
+        // todo: 값 검증 로직 추가하기. ex) 재고량을 초과하는 출고량이 입력되면 경고 문구.
+        return "redirect:/sendRecords";
     }
 
 
