@@ -1,0 +1,74 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head th:replace="~{logistics/fragment_ojh :: head ('receiveReserveForm')}"></head>
+<body>
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">smart factory project</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav th:replace="~{logistics/fragment_ojh :: nav}"></nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">물건 출고 예약</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <a role="button" href="sendRecords/reserve" class="btn btn-sm btn-outline-secondary">출고 예약(= 물건 구매 사이트)</a>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <span data-feather="calendar" class="align-text-bottom"></span>
+                        This week
+                    </button>
+                </div>
+            </div>
+
+            <div class="container-fluid mx-0 col " >
+
+                <!-- 입고 예약 폼-->
+                <div id="posts_list" class="row mt-5">
+                    <div class="col-md-12 w-50">
+                        <form class="card" th:action method="post">
+                            <div class="card-body w-75">
+                                <label for="itemName">출고할 물건</label>
+                                <select class="form-select" id="itemName" name="itemName">
+                                    <option selected value="sugar">설탕</option>
+                                    <option value="can">캔</option>
+                                    <option value="water">물</option>
+                                </select>
+                                <br/>
+                                <label for="amount">수량</label>
+                                <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter amount">
+                                <br/>
+                                <label for="date">출고일 예약</label>
+                                <input type="date" id="date" name="date" th:value="${#temporals.format(today,'yyyy-MM-dd')}"
+                                       th:min="${today}" th:max="${today.plusDays(60)}">
+                                <br/>
+                                <br/>
+                                <label for="destination">목적지(실주소 or 고객사를 입력)</label>
+                                <input type="text" class="form-control" id="destination" name="destination" placeholder="Enter supplier">
+                            </div>
+                            <div class="d-flex justify-content-end my-2 w-75">
+                                <input type="submit" value="출고" class="btn btn-info bi bi-pencil-square mx-1">
+                                <a role="button" href="/receiveRecords" id="btn-delete" class="btn btn-secondary bi bi-trash mx-1"> 취소</a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div> <!-- sub container end -->
+
+        </main>
+    </div>
+</div>
+
+<div th:replace="~{logistics/fragment_ojh :: bottomScript}"></div>
+
+</body>
+</html>
