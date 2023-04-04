@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.employee.domain.EmployeeDTO;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/employee")
@@ -23,11 +27,14 @@ public class EmployeeController {
 
     private final EmployeeRepository er;
 
+
+
     @GetMapping
     public String page1(Model model, @PageableDefault Pageable pageable) {
 
         Page<Employee> all = er.findAll(pageable);
         model.addAttribute("list", all);
+
         return "employee/init";
     }
 
@@ -41,12 +48,10 @@ public class EmployeeController {
     @PostMapping("/add")
     public String page3(@ModelAttribute("e") EmployeeDTO e) {
 
-        Employee build = Employee.builder()
+        er.save(Employee.builder()
                 .name(e.getName())
                 .phoneNumber(e.getPhoneNumber())
-                .department(e.getDepartment()).build();
-
-        er.save(build);
+                .department(e.getDepartment()).build());
         return "redirect:/employee";
     }
 }
