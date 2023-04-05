@@ -46,7 +46,7 @@ public class ReceiveRecordViewController {
 
 
     @GetMapping
-    public String receiveRecordsHomeTest(Model model, @PageableDefault(sort = "dateTime", direction = Sort.Direction.DESC) Pageable pageable){
+    public String receiveRecordsHome(Model model, @PageableDefault(sort = "dateTime", direction = Sort.Direction.DESC) Pageable pageable){
         Page<ReceiveRecord> all = receiveRecordRepo.findAll(pageable);
         model.addAttribute("pageObj", all);
 

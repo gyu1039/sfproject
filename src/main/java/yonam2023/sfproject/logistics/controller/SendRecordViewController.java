@@ -3,6 +3,10 @@ package yonam2023.sfproject.logistics.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import yonam2023.sfproject.logistics.controller.form.ReceiveForm;
 import yonam2023.sfproject.logistics.controller.form.SendForm;
+import yonam2023.sfproject.logistics.domain.ReceiveRecord;
 import yonam2023.sfproject.logistics.domain.SendRecord;
 import yonam2023.sfproject.logistics.repository.SendRecordRepository;
 import yonam2023.sfproject.logistics.service.SendService;
@@ -41,9 +46,10 @@ public class SendRecordViewController {
     }
 
     @GetMapping
-    public String sendRecordsHome(Model model){
-        List<SendRecord> sendRecords = sendRecordRepo.findAll();
-        model.addAttribute("sendRecords", sendRecords);
+    public String sendRecordsHome(Model model, @PageableDefault(sort = "dateTime", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<SendRecord> all = sendRecordRepo.findAll(pageable);
+        model.addAttribute("pageObj", all);
+
         return "logistics/sendRecords";
     }
 
