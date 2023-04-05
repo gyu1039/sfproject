@@ -113,6 +113,32 @@
     </div>
 </nav>
 
+<div th:fragment="subSidebar">
+    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
+        <span>Logistics</span>
+    </h6>
+    <ul class="nav flex-column mb-2 mt-3">
+        <li class="nav-item">
+            <a class="nav-link" href="/storedItems">
+                <span data-feather="file-text" class="align-text-bottom"></span>
+                재고 목록
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/receiveRecords">
+                <span data-feather="file-text" class="align-text-bottom"></span>
+                입고 기록
+            </a>
+            <a class="nav-link" href="/sendRecords">
+                <span data-feather="file-text" class="align-text-bottom"></span>
+                출고 기록
+            </a>
+        </li>
+
+    </ul>
+</div>
+
 <div th:fragment="bottomScript">
     <script src="/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>

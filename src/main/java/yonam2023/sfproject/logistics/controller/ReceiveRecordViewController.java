@@ -3,6 +3,10 @@ package yonam2023.sfproject.logistics.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,10 +44,11 @@ public class ReceiveRecordViewController {
         receiveRecordRepo.saveAll(receiveRecords);
     }
 
+
     @GetMapping
-    public String receiveRecordsHome(Model model){
-        List<ReceiveRecord> receiveRecords = receiveRecordRepo.findAll();
-        model.addAttribute("receiveRecords", receiveRecords);
+    public String receiveRecordsHomeTest(Model model, @PageableDefault(sort = "dateTime", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<ReceiveRecord> all = receiveRecordRepo.findAll(pageable);
+        model.addAttribute("pageObj", all);
 
         return "logistics/receiveRecords";
     }
