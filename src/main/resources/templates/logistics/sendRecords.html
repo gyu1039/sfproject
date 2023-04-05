@@ -73,8 +73,10 @@
                 </li>
             </ul>
         </nav>
-        <button  type="button" onclick="location.href=add.html"
-                 th:onclick="|location.href='@{/sendRecords/reserve}'|" class="btn btn-outline-primary">출고 예약</button>
+        <div class="w-50 d-flex justify-content-end">
+            <button  type="button" onclick="location.href=add.html"
+                     th:onclick="|location.href='@{/sendRecords/reserve}'|" class="btn btn-outline-primary">출고 예약</button>
+        </div>
     </div>
 </section>
 </body>
