@@ -63,5 +63,20 @@ public class ReceiveRecordViewController {
         return "redirect:/receiveRecords";
     }
 
+    // edit form page
+    @GetMapping("/{recordId}/edit")
+    public String editForm(@PathVariable long recordId, Model model){
+        ReceiveRecord targetRecord = receiveRecordRepo.findById(recordId).orElse(null);
+        model.addAttribute("record", targetRecord);
+        model.addAttribute("today", LocalDate.now());
+        return "logistics/receiveRecord/receiveEditForm";
+    }
+
+    @PatchMapping("/{recordId}")
+    public String editReserveItem(@PathVariable long recordId, @ModelAttribute ReceiveForm.Request receiveReqForm){
+        receiveService.editReceiveRecord(recordId, receiveReqForm);
+        return "redirect:/receiveRecords";
+    }
+
 
 }
