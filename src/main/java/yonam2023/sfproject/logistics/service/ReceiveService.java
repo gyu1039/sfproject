@@ -36,7 +36,6 @@ public class ReceiveService {
         ReceiveRecord targetRecord = receiveRecordRepo.findById(id).orElseThrow();
         targetRecord.setAmount(receiveReqForm.getAmount());
         targetRecord.setDateTime(receiveReqForm.getDateTime());
-
     }
 
 }

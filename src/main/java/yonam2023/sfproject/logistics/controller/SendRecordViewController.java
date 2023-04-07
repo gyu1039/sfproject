@@ -9,13 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import yonam2023.sfproject.logistics.controller.form.ReceiveForm;
+import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.logistics.controller.form.SendForm;
-import yonam2023.sfproject.logistics.domain.ReceiveRecord;
 import yonam2023.sfproject.logistics.domain.SendRecord;
 import yonam2023.sfproject.logistics.repository.SendRecordRepository;
 import yonam2023.sfproject.logistics.service.SendService;
@@ -63,6 +58,21 @@ public class SendRecordViewController {
     public String reserveItem(@ModelAttribute SendForm.Request sendReqForm){
         sendService.saveSendRecord(sendReqForm);
         // todo: 값 검증 로직 추가하기. ex) 재고량을 초과하는 출고량이 입력되면 경고 문구.
+        return "redirect:/sendRecords";
+    }
+
+    // edit form page
+    @GetMapping("/{recordId}/edit")
+    public String editForm(@PathVariable long recordId, Model model){
+        SendRecord targetRecord = sendRecordRepo.findById(recordId).orElse(null);
+        model.addAttribute("record", targetRecord);
+        model.addAttribute("today", LocalDate.now());
+        return "logistics/sendRecord/sendEditForm";
+    }
+
+    @PatchMapping("/{recordId}")
+    public String editReserveItem(@PathVariable long recordId, @ModelAttribute SendForm.Request sendReqForm){
+        sendService.editSendRecord(recordId, sendReqForm);
         return "redirect:/sendRecords";
     }
 

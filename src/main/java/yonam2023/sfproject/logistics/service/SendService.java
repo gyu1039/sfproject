@@ -3,12 +3,9 @@ package yonam2023.sfproject.logistics.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import yonam2023.sfproject.logistics.controller.form.ReceiveForm;
 import yonam2023.sfproject.logistics.controller.form.SendForm;
-import yonam2023.sfproject.logistics.domain.ReceiveRecord;
 import yonam2023.sfproject.logistics.domain.SendRecord;
 import yonam2023.sfproject.logistics.domain.StoredItem;
-import yonam2023.sfproject.logistics.repository.ReceiveRecordRepository;
 import yonam2023.sfproject.logistics.repository.SendRecordRepository;
 import yonam2023.sfproject.logistics.repository.StoredItemRepository;
 
@@ -33,6 +30,14 @@ public class SendService {
             storedItem.subAmount(sendRecord.getAmount());
             return storedItem.getId();
         }
+    }
+
+    @Transactional
+    public void editSendRecord(long id, SendForm.Request sendReqForm){
+        SendRecord targetRecord = sendRecordRepo.findById(id).orElseThrow();
+        targetRecord.setAmount(sendReqForm.getAmount());
+        targetRecord.setDateTime(sendReqForm.getDateTime());
+
     }
 
 }

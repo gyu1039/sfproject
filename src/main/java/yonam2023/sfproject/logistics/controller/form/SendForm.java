@@ -1,17 +1,18 @@
 package yonam2023.sfproject.logistics.controller.form;
 
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import yonam2023.sfproject.logistics.domain.ReceiveRecord;
 import yonam2023.sfproject.logistics.domain.SendRecord;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class SendForm {
 
-    @AllArgsConstructor
+    @NoArgsConstructor
     @ToString
+    @Getter
+    @Setter
     public static class Request {
         private String itemName;
         private int amount;
@@ -24,7 +25,9 @@ public class SendForm {
             return new SendRecord(itemName, amount, destination,
                     date.atTime((int) (Math.random() * 24) + 1, (int) (Math.random() * 59) + 1));
         }
-
+        public LocalDateTime getDateTime(){
+            return date.atTime((int) (Math.random() * 24) + 1, (int) (Math.random() * 59) + 1);
+        }
     }
 
 }

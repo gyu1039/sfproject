@@ -1,0 +1,35 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base_form :: layout ('예약된 선적 수정', 'logistics', ~{::section} )}"
+      lang="ko">
+
+<body>
+<section>
+    <div class="col-md-12 w-50">
+        <form class="card" th:action="@{/sendRecords/{id}(id=${record.id})}" th:method="patch">
+            <div class="card-body w-75">
+                <label for="itemName">예약된 물건명: </label>
+                <input class="text-secondary" id="itemName" th:value="${record.itemName}" readonly>
+                <br/>
+                <label for="destination">목적지: </label>
+                <input class="text-secondary" id="destination" th:value="${record.destination}" readonly>
+                <br/>
+                <label for="amount">수량</label>
+                <input type="text" class="form-control" id="amount" name="amount" th:value="${record.amount}" placeholder="Enter amount">
+                <br/>
+                <label for="date">출고 예약일</label>
+                <input type="date" id="date" name="date" th:value="${#temporals.format(record.dateTime,'yyyy-MM-dd')}"
+                       th:min="${today}" th:max="${today.plusDays(60)}">
+            </div>
+            <div class="d-flex justify-content-end my-2 w-75">
+                <input type="submit" value="수정" class="btn btn-info bi bi-pencil-square mx-1">
+                <a role="button" href="/receiveRecords" id="btn-delete" class="btn btn-secondary bi bi-trash mx-1"> 취소</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<button disabled></button>
+
+</body>
+</html>
