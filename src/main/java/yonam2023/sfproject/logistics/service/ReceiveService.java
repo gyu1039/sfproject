@@ -31,4 +31,12 @@ public class ReceiveService {
         }
     }
 
+    @Transactional
+    public void editReceiveRecord(long id, ReceiveForm.Request receiveReqForm){
+        ReceiveRecord targetRecord = receiveRecordRepo.findById(id).orElseThrow();
+        targetRecord.setAmount(receiveReqForm.getAmount());
+        targetRecord.setDateTime(receiveReqForm.getDateTime());
+
+    }
+
 }
