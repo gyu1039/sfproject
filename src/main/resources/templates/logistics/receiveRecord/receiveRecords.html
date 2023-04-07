@@ -15,6 +15,7 @@
         <th style="width: 5%" scope="col">입고 수량</th>
         <th style="width: 6%" scope="col">공급처(from)</th>
         <th style="width: 7%" scope="col">입고일</th>
+        <th style="width: 3%"></th>
       </tr>
       </thead>
       <tbody>
@@ -24,12 +25,15 @@
         <td th:text="|+${record.amount}|">0022</td>
         <td th:text="${record.supplier}">aa회사</td>
         <td th:text="${#temporals.format(record.dateTime, 'yyyy-MM-dd &nbsp; HH:mm')}">2022.10.11</td>
+        <td><a type="button"
+               th:href="@{{currentPath}/{itemId}/edit(currentPath=${#request.getRequestURL()}, itemId=${record.id}) }"
+               class="btn btn-outline-primary">수정</a></td>
       </tr>
       </tbody>
     </table>
   </div>
 </section>
-<button  type="button" onclick="location.href=add.html"
+<button  type="button"
          th:onclick="|location.href='@{/receiveRecords/reserve}'|" class="btn btn-outline-primary">입고 예약</button>
 </body>
 </html>

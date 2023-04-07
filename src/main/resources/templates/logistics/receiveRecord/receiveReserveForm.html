@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base_form :: layout ('물건 입고 예약', 'logistics', ~{::section} )}"
+      lang="ko">
+
+<body>
+<section>
+    <div class="col-md-12 w-50">
+        <form class="card" th:action method="post">
+            <div class="card-body w-75">
+                <label for="itemName">주문할 물건</label>
+                <select class="form-select" id="itemName" name="itemName">
+                    <option selected value="sugar">설탕</option>
+                    <option value="can">캔</option>
+                    <option value="water">물</option>
+                </select>
+                <br/>
+                <label for="amount">수량</label>
+                <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter amount">
+                <br/>
+                <label for="date">입고 예약일</label>
+                <input type="date" id="date" name="date" th:value="${#temporals.format(today,'yyyy-MM-dd')}"
+                       th:min="${today}" th:max="${today.plusDays(60)}">
+                <br/>
+                <br/>
+                <label for="supplier">물건 제공자</label>
+                <input type="text" class="form-control" id="supplier" name="supplier" placeholder="Enter supplier">
+            </div>
+            <div class="d-flex justify-content-end my-2 w-75">
+                <input type="submit" value="예약" class="btn btn-info bi bi-pencil-square mx-1">
+                <a role="button" href="/receiveRecords" id="btn-delete" class="btn btn-secondary bi bi-trash mx-1"> 취소</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<button disabled></button>
+
+</body>
+</html>

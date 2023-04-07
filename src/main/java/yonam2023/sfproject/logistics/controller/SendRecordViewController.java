@@ -50,13 +50,13 @@ public class SendRecordViewController {
         Page<SendRecord> all = sendRecordRepo.findAll(pageable);
         model.addAttribute("pageObj", all);
 
-        return "logistics/sendRecords";
+        return "logistics/sendRecord/sendRecords";
     }
 
     @GetMapping("/reserve")
     public String reserveForm(Model model){
         model.addAttribute("today", LocalDate.now());
-        return "logistics/sendReserveForm";
+        return "logistics/sendRecord/sendReserveForm";
     }
 
     @PostMapping("/reserve")
