@@ -31,7 +31,7 @@ public class StoredItemViewController {
         Page<StoredItem> all = storedItemRepo.findAll(pageable);
         model.addAttribute("pageObj", all);
 
-        return "logistics/storedItems";
+        return "logistics/storedItem/storedItems";
     }
 
 

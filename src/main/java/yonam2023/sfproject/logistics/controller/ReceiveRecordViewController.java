@@ -9,10 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.logistics.controller.form.ReceiveForm;
 import yonam2023.sfproject.logistics.domain.ReceiveRecord;
 import yonam2023.sfproject.logistics.repository.ReceiveRecordRepository;
@@ -50,13 +47,14 @@ public class ReceiveRecordViewController {
         Page<ReceiveRecord> all = receiveRecordRepo.findAll(pageable);
         model.addAttribute("pageObj", all);
 
-        return "logistics/receiveRecords";
+        return "logistics/receiveRecord/receiveRecords";
     }
 
+    // add form page
     @GetMapping("/reserve")
     public String reserveForm(Model model){
         model.addAttribute("today", LocalDate.now());
-        return "logistics/receiveReserveForm";
+        return "logistics/receiveRecord/receiveReserveForm";
     }
 
     @PostMapping("/reserve")
