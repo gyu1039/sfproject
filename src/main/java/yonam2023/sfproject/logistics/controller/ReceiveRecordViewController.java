@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class ReceiveRecordViewController {
     public String receiveRecordsHome(Model model, @PageableDefault(sort = "dateTime", direction = Sort.Direction.DESC) Pageable pageable){
         Page<ReceiveRecord> all = receiveRecordRepo.findAll(pageable);
         model.addAttribute("pageObj", all);
-
+        model.addAttribute("today", LocalDate.now());
         return "logistics/receiveRecord/receiveRecords";
     }
 
@@ -73,10 +74,15 @@ public class ReceiveRecordViewController {
     }
 
     @PatchMapping("/{recordId}")
-    public String editReserveItem(@PathVariable long recordId, @ModelAttribute ReceiveForm.Request receiveReqForm){
+    public String editReserveRecord(@PathVariable long recordId, @ModelAttribute ReceiveForm.Request receiveReqForm){
         receiveService.editReceiveRecord(recordId, receiveReqForm);
         return "redirect:/receiveRecords";
     }
-
+    @DeleteMapping("/{recordId}")
+    @ResponseBody
+    public ResponseEntity deleteReserve(@PathVariable long recordId){
+        receiveService.deleteReceiveRecord(recordId);
+        return ResponseEntity.ok(recordId);
+    }
 
 }
