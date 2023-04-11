@@ -45,7 +45,7 @@ public class SendRecordViewController {
     public String sendRecordsHome(Model model, @PageableDefault(sort = "dateTime", direction = Sort.Direction.DESC) Pageable pageable){
         Page<SendRecord> all = sendRecordRepo.findAll(pageable);
         model.addAttribute("pageObj", all);
-
+        model.addAttribute("today", LocalDate.now());
         return "logistics/sendRecord/sendRecords";
     }
 
