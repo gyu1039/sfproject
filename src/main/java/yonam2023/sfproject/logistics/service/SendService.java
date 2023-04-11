@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yonam2023.sfproject.logistics.controller.form.SendForm;
+import yonam2023.sfproject.logistics.domain.ReceiveRecord;
 import yonam2023.sfproject.logistics.domain.SendRecord;
 import yonam2023.sfproject.logistics.domain.StoredItem;
 import yonam2023.sfproject.logistics.repository.SendRecordRepository;
@@ -38,6 +39,20 @@ public class SendService {
         targetRecord.setAmount(sendReqForm.getAmount());
         targetRecord.setDateTime(sendReqForm.getDateTime());
 
+    }
+
+    @Transactional
+    public void deleteReceiveRecord(long recordId){
+
+        SendRecord findRecord = sendRecordRepo.findById(recordId).orElseThrow();
+        StoredItem byNameItem = storedItemRepo.findByName(findRecord.getItemName());
+        if(byNameItem == null){
+            storedItemRepo.save(new StoredItem(findRecord.getItemName(), findRecord.getAmount()));
+        }
+        else{
+            byNameItem.addAmount(findRecord.getAmount());
+        }
+        sendRecordRepo.deleteById(recordId);
     }
 
 }
