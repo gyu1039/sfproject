@@ -38,4 +38,18 @@ public class ReceiveService {
         targetRecord.setDateTime(receiveReqForm.getDateTime());
     }
 
+    @Transactional
+    public void deleteReceiveRecord(long recordId){
+
+        ReceiveRecord findRecord = receiveRecordRepo.findById(recordId).orElseThrow();
+        StoredItem byNameItem = storedItemRepo.findByName(findRecord.getItemName());
+        if(byNameItem == null){
+            storedItemRepo.save(new StoredItem(findRecord.getItemName(), -findRecord.getAmount()));
+        }
+        else{
+            byNameItem.subAmount(findRecord.getAmount());
+        }
+        receiveRecordRepo.deleteById(recordId);
+    }
+
 }
