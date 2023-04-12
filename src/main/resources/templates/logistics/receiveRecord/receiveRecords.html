@@ -23,7 +23,7 @@
       <tr th:each="record : ${pageObj.content}">
         <td th:id="${record.id}" th:text="${record.id}">1111</td>
         <td th:text="${record.itemName}">thymeleaf 안 돌아간 물건</td>
-        <td th:text="|+${record.amount}|">0022</td>
+        <td class="text-success" th:text="|+${record.amount}|">22</td>
         <td th:text="${record.supplier}">aa회사</td>
         <td th:text="${#temporals.format(record.dateTime, 'yyyy-MM-dd &nbsp; HH:mm')}">2022.10.11</td>
         <div th:unless="${record.dateTime.toLocalDate().isBefore(#temporals.createToday())}">
