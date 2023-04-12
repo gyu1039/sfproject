@@ -1,0 +1,187 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout (title, department, section, add_button)"
+      lang="ko">
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.108.0">
+    <title th:text="${title}">title</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <!--    <link href="dashboard.css" rel="stylesheet">-->
+</head>
+<body>
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="/">smart factory project</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3 sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">
+                            <span data-feather="home" class="align-text-bottom"></span>
+                            직원 관리
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file" class="align-text-bottom"></span>
+                            생산 관리
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/storedItems">
+                            <span data-feather="shopping-cart" class="align-text-bottom"></span>
+                            재고 관리
+                        </a>
+                    </li>
+                </ul>
+                <div th:replace="~{|${department}/fragment_ojh| :: subSidebar}"></div>
+            </div>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2" th:text="${title}">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <span data-feather="calendar" class="align-text-bottom"></span>
+                        This week
+                    </button>
+                </div>
+            </div>
+            <section th:replace="${section}"></section>
+
+            <div class="d-flex">
+                <nav th:with="
+                          pageNumber = ${pageObj.pageable.pageNumber},
+                          pageSize = ${pageObj.pageable.pageSize},
+                          totalPages = ${pageObj.totalPages},
+                          startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                          tempEndPage = ${startPage + pageSize - 1},
+                          endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})" aria-label="Page navigation">
+
+                    <ul class="pagination ">
+                        <!-- 처음으로 이동 -->
+                        <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
+                            <a class="page-link" th:href="@{/|${currentPath}|(page=0)}">
+                                <span class="sr-only">First</span>
+                            </a>
+                        </li>
+
+                        <!-- 이전으로 이동 -->
+                        <li th:classappend="${pageObj.first} ? 'disabled'" class="page-item">
+                            <a class="page-link" th:href="${pageObj.first} ? '#' : @{{currentPath}(currentPath=${#request.getRequestURL()}, page=${pageNumber - 1})}" aria-label="Previous">
+                                <span aria-hidden="true">&lt;</span>
+                            </a>
+                        </li>
+
+                        <!-- 특정 페이지로 이동 -->
+                        <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                            <a th:text="${page}" class="page-link" th:href="@{{currentPath}(currentPath=${#request.getRequestURL()}, page=${page - 1})}"></a>
+                        </li>
+
+                        <!-- 다음으로 이동 -->
+                        <li th:classappend="${pageObj.last} ? 'disabled'" class="page-item">
+                            <a class="page-link" th:href="${pageObj.last} ? '#' : @{{currentPath}(currentPath=${#request.getRequestURL()},page=${pageNumber + 1})}" aria-label="Next">
+                                <span aria-hidden="true">&gt;</span>
+                            </a>
+                        </li>
+
+                        <!-- 마지막으로 이동 -->
+                        <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 < endPage} ? 'disabled'" class="page-item">
+                            <a class="page-link" th:href="@{{currentPath}(currentPath=${#request.getRequestURL()},page=${totalPages - 1})}">
+                                <span class="sr-only">Last</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="w-50 d-flex justify-content-end">
+                    <button th:replace="${add_button}"></button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="/js/logistics_app.js"></script>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base_paging :: layout ('물건 출고 기록(-)', 'logistics', ~{::section}, ~{::#formBtn})}"
+      lang="ko">
+
+<body>
+
+<section>
+    <div class="table-responsive w-75">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th style="width: 4%" scope="col">물건 id</th>
+                <th style="width: 9%" scope="col">출고된 물건명</th>
+                <th style="width: 5%" scope="col">출고 수량</th>
+                <th style="width: 6%" scope="col">목적지</th>
+                <th style="width: 7%" scope="col">출고일</th>
+                <th style="width: 2%"></th>
+                <th style="width: 2%"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="record : ${pageObj.content}">
+                <td id="id" th:text="${record.id}">1111</td>
+                <td th:text="${record.itemName}">thymeleaf 안 돌아간 물건</td>
+                <td class="text-danger" th:text="|-${record.amount}|">22</td>
+                <td th:text="${record.destination}">aa회사</td>
+                <td th:text="${#temporals.format(record.dateTime, 'yyyy-MM-dd &nbsp; HH:mm')}">2022.10.11</td>
+                <div th:unless="${record.dateTime.toLocalDate().isBefore(#temporals.createToday())}">
+                <td><a type="button"
+                       th:href="@{{currentPath}/{itemId}/edit(currentPath=${#request.getRequestURL()}, itemId=${record.id}) }"
+                       class="btn btn-outline-primary">수정</a></td>
+                    <td><button  th:onclick="|del(${record.id})|" class="btn btn-outline-danger">예약 취소</button></td>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <script th:inline="javascript">
+    function del(id) {
+
+      const con_check = confirm(id+"번 예약을 정말 삭제하시겠습니까?");
+
+      if(con_check == true) {
+          $.ajax({
+              type: 'DELETE',
+              url: document.location.pathname+'/'+id,
+              dataType: 'JSON',
+              contentType: 'application/json; charset=utf-8'
+          })
+          .done(function () {
+              alert("삭제되었습니다.");
+              window.location.href = document.location.pathname;
+          }).fail(function (error) {
+              alert(JSON.stringify(error));
+          });
+      } else {
+          return false;
+      }
+  }
+  </script>
+</section>
+
+<button id="formBtn" th:onclick="|location.href='@{sendRecords/reserve}'|" class="btn btn-outline-primary">출고 예약</button>
+
+</body>
+</html>
