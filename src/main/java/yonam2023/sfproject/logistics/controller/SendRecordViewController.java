@@ -31,6 +31,7 @@ public class SendRecordViewController {
     private final SendRecordRepository sendRecordRepo;
     private final SendService sendService;
 
+    //더미 데이터 생성
     @PostConstruct
     public void init(){
         List<SendRecord> sendRecords = new ArrayList<>();

@@ -31,6 +31,7 @@ public class ReceiveRecordViewController {
     private final ReceiveRecordRepository receiveRecordRepo;
     private final ReceiveService receiveService;
 
+    //더미 데이터 생성.
     @PostConstruct
     public void init(){
         List<ReceiveRecord> receiveRecords = new ArrayList<>();
