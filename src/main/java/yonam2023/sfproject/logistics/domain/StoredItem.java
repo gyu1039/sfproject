@@ -4,17 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 public class StoredItem {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -25,6 +22,16 @@ public class StoredItem {
     public StoredItem(String name, int amount) {
         this.name = name;
         this.amount = amount;
+    }
+
+    public void addAmount(int amount){
+        this.amount += amount;
+    }
+    public void subAmount(int amount){
+        if (this.amount < amount){
+        //todo:  throw new minusAmountException("출고량이 재고량을 초과합니다.");
+        }
+        this.amount -= amount;
     }
 
     @Override

@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 public class SendRecord {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -24,12 +21,16 @@ public class SendRecord {
 
     private int amount;
 
-    private LocalDateTime sendDateTime;
+    private String destination;
 
-    public SendRecord(String itemName, int amount, LocalDateTime sendDateTime) {
+    private LocalDateTime dateTime;
+
+
+    public SendRecord(String itemName, int amount, String destination, LocalDateTime dateTime) {
         this.itemName = itemName;
         this.amount = amount;
-        this.sendDateTime = sendDateTime;
+        this.destination = destination;
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -38,7 +39,8 @@ public class SendRecord {
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
                 ", amount=" + amount +
-                ", sendDateTime=" + sendDateTime +
+                ", destination='" + destination + '\'' +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }

@@ -38,6 +38,19 @@ class StoredItemRepositoryTest {
         assertThat(findItem).isNotNull().isEqualTo(savedItem);
     }
 
+    @Transactional  //Test 클래스에서 @Transactional을 붙이면 최종적으로 DB를 롤백하므로 DB에 반영되지 않음
+    @Test
+    public void Save() throws Exception{
+        //given
+        StoredItem item1 = new StoredItem("item1", 10);
+
+        //when
+        itemRepo.save(item1);
+
+        //then
+        log.info(item1.toString()); //id를 자동으로 삽입해줌.
+    }
+
     @Transactional
     @Test
     public void update() throws Exception{
