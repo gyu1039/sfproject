@@ -11,10 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import yonam2023.sfproject.logistics.domain.SendRecord;
 import yonam2023.sfproject.logistics.domain.StoredItem;
 import yonam2023.sfproject.logistics.repository.StoredItemRepository;
 
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,9 +26,18 @@ import java.util.List;
 public class StoredItemViewController {
     private final StoredItemRepository storedItemRepo;
 
+    //더미 데이터 생성.
+    @PostConstruct
+    public void init(){
+        List<StoredItem> storedItems = new ArrayList<>();
+        for(int i = 0; i<20; i++){
+            storedItems.add(new StoredItem("item "+i, 0));
+        }
+        storedItemRepo.saveAll(storedItems);
+    }
 
     @GetMapping
-    public String storedItemsHome(Model model, @PageableDefault Pageable pageable){
+    public String storedItemsHome(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         Page<StoredItem> all = storedItemRepo.findAll(pageable);
         model.addAttribute("pageObj", all);
 
