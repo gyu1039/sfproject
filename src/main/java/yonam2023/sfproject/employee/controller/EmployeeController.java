@@ -1,4 +1,4 @@
-package yonam2023.sfproject.employee;
+package yonam2023.sfproject.employee.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.employee.domain.EmployeeDTO;
+import yonam2023.sfproject.employee.repository.EmployeeRepository;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

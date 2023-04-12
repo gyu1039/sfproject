@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
-import yonam2023.sfproject.employee.domain.EmployeeType;
+import yonam2023.sfproject.employee.repository.EmployeeRepository;
 
 import java.util.List;
 import java.util.stream.IntStream;

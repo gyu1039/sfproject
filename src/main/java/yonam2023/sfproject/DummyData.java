@@ -2,7 +2,7 @@ package yonam2023.sfproject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import yonam2023.sfproject.employee.EmployeeRepository;
+import yonam2023.sfproject.employee.repository.EmployeeRepository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.production.domain.Production;

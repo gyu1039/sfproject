@@ -1,4 +1,4 @@
-package yonam2023.sfproject.employee;
+package yonam2023.sfproject.employee.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

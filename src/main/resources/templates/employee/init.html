@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout ('index', '직원관리1', '직원관리2', '직원관리3', ~{::section})}"
+      th:replace="~{layout/base :: layout ('index', '직원 출퇴근', '직원관리2', '직원관리3', ~{::section})}"
       lang="ko">
 
 <body>
@@ -10,6 +10,7 @@
         <table class="table table-sm">
             <thead>
             <tr>
+                <th scope="col">Id</th>
                 <th scope="col">Name</th>
                 <th scope="col">PhoneNumber</th>
                 <th scope="col">department</th>
@@ -17,9 +18,10 @@
             </thead>
             <tbody>
             <tr th:each="e : ${list}">
+                <td><span th:text="${e.id}"></span></td>
                 <td><span th:text="${e.name}"></span></td>
                 <td><span th:text="${e.phoneNumber}"></span></td>
-                <td><span th:text="${e.department}"></span></td>
+                <td><span th:text="${e.department.getValue()}"></span></td>
             </tr>
             </tbody>
         </table>
