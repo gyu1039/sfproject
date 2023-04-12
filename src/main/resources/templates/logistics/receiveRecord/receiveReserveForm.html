@@ -15,11 +15,11 @@
                     <option value="water">물</option>
                 </select>
                 <br/>
-                <label for="amount">수량</label>
+                <label class="text-success" for="amount"><b>수량(+)</b></label>
                 <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter amount">
                 <br/>
                 <label for="date">입고 예약일</label>
-                <input type="date" id="date" name="date" th:value="${#temporals.format(today,'yyyy-MM-dd')}"
+                <input type="date" id="date" name="date" th:value="${#temporals.createToday()}"
                        th:min="${#temporals.createToday()}" th:max="${#temporals.createToday().plusDays(60)}">
                 <br/>
                 <br/>

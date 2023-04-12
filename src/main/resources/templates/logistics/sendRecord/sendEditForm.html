@@ -11,10 +11,12 @@
                 <label for="itemName">예약된 물건명: </label>
                 <input class="text-secondary" id="itemName" th:value="${record.itemName}" readonly>
                 <br/>
+                <br/>
                 <label for="destination">목적지: </label>
                 <input class="text-secondary" id="destination" th:value="${record.destination}" readonly>
                 <br/>
-                <label for="amount">수량</label>
+                <br/>
+                <label class="text-danger" for="amount"><b>수량(-)</b></label>
                 <input type="text" class="form-control" id="amount" name="amount" th:value="${record.amount}" placeholder="Enter amount">
                 <br/>
                 <label for="date">출고 예약일</label>
