@@ -19,7 +19,7 @@
                 <br/>
                 <label for="date">출고일 예약</label>
                 <input type="date" id="date" name="date" th:value="${#temporals.format(today,'yyyy-MM-dd')}"
-                       th:min="${today}" th:max="${today.plusDays(60)}">
+                       th:min="${#temporals.createToday()}" th:max="${#temporals.createToday().plusDays(60)}">
                 <br/>
                 <br/>
                 <label for="destination">목적지(실주소 or 고객사를 입력)</label>
@@ -27,7 +27,7 @@
             </div>
             <div class="d-flex justify-content-end my-2 w-75">
                 <input type="submit" value="출고" class="btn btn-info bi bi-pencil-square mx-1">
-                <a role="button" href="/receiveRecords" id="btn-delete" class="btn btn-secondary bi bi-trash mx-1"> 취소</a>
+                <a role="button" href="/sendRecords" id="btn-delete" class="btn btn-secondary bi bi-trash mx-1"> 취소</a>
             </div>
         </form>
 

@@ -45,13 +45,11 @@ public class SendRecordViewController {
     public String sendRecordsHome(Model model, @PageableDefault(sort = "dateTime", direction = Sort.Direction.DESC) Pageable pageable){
         Page<SendRecord> all = sendRecordRepo.findAll(pageable);
         model.addAttribute("pageObj", all);
-        model.addAttribute("today", LocalDate.now());
         return "logistics/sendRecord/sendRecords";
     }
 
     @GetMapping("/reserve")
     public String reserveForm(Model model){
-        model.addAttribute("today", LocalDate.now());
         return "logistics/sendRecord/sendReserveForm";
     }
 
@@ -67,7 +65,6 @@ public class SendRecordViewController {
     public String editForm(@PathVariable long recordId, Model model){
         SendRecord targetRecord = sendRecordRepo.findById(recordId).orElse(null);
         model.addAttribute("record", targetRecord);
-        model.addAttribute("today", LocalDate.now());
         return "logistics/sendRecord/sendEditForm";
     }
 

@@ -20,7 +20,7 @@
                 <br/>
                 <label for="date">입고 예약일</label>
                 <input type="date" id="date" name="date" th:value="${#temporals.format(today,'yyyy-MM-dd')}"
-                       th:min="${today}" th:max="${today.plusDays(60)}">
+                       th:min="${#temporals.createToday()}" th:max="${#temporals.createToday().plusDays(60)}">
                 <br/>
                 <br/>
                 <label for="supplier">물건 제공자</label>

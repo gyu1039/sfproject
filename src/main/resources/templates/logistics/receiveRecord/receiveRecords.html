@@ -26,7 +26,7 @@
         <td th:text="|+${record.amount}|">0022</td>
         <td th:text="${record.supplier}">aa회사</td>
         <td th:text="${#temporals.format(record.dateTime, 'yyyy-MM-dd &nbsp; HH:mm')}">2022.10.11</td>
-        <div th:unless="${record.dateTime.toLocalDate().isBefore(today)}">
+        <div th:unless="${record.dateTime.toLocalDate().isBefore(#temporals.createToday())}">
           <td><a type="button"
                  th:href="@{{currentPath}/{itemId}/edit(currentPath=${#request.getRequestURL()}, itemId=${record.id}) }"
                  class="btn btn-outline-primary">수정</a></td>
