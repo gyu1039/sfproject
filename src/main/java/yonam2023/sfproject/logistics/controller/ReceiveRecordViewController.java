@@ -47,14 +47,12 @@ public class ReceiveRecordViewController {
     public String receiveRecordsHome(Model model, @PageableDefault(sort = "dateTime", direction = Sort.Direction.DESC) Pageable pageable){
         Page<ReceiveRecord> all = receiveRecordRepo.findAll(pageable);
         model.addAttribute("pageObj", all);
-        model.addAttribute("today", LocalDate.now());
         return "logistics/receiveRecord/receiveRecords";
     }
 
     // add form page
     @GetMapping("/reserve")
     public String reserveForm(Model model){
-        model.addAttribute("today", LocalDate.now());
         return "logistics/receiveRecord/receiveReserveForm";
     }
 
@@ -69,7 +67,6 @@ public class ReceiveRecordViewController {
     public String editForm(@PathVariable long recordId, Model model){
         ReceiveRecord targetRecord = receiveRecordRepo.findById(recordId).orElse(null);
         model.addAttribute("record", targetRecord);
-        model.addAttribute("today", LocalDate.now());
         return "logistics/receiveRecord/receiveEditForm";
     }
 
