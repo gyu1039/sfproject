@@ -27,10 +27,8 @@ public class EmployeeController {
 
     private final EmployeeRepository er;
 
-
-
     @GetMapping
-    public String page1(Model model, @PageableDefault Pageable pageable) {
+    public String totalList(Model model, @PageableDefault Pageable pageable) {
 
         Page<Employee> all = er.findAll(pageable);
         model.addAttribute("list", all);
@@ -39,14 +37,14 @@ public class EmployeeController {
     }
 
     @GetMapping("/add")
-    public String page2(Model m) {
+    public String add(Model m) {
 
         m.addAttribute("e", new EmployeeDTO());
         return "employee/add";
     }
 
     @PostMapping("/add")
-    public String page3(@ModelAttribute("e") EmployeeDTO e) {
+    public String add(@ModelAttribute("e") EmployeeDTO e) {
 
         er.save(Employee.builder()
                 .name(e.getName())

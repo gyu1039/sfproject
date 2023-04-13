@@ -10,6 +10,7 @@
         <table class="table table-sm">
             <thead>
             <tr>
+                <th scope="col">id</th>
                 <th scope="col">Name</th>
                 <th scope="col">PhoneNumber</th>
                 <th scope="col">department</th>
@@ -17,6 +18,7 @@
             </thead>
             <tbody>
             <tr th:each="e : ${list}">
+                <td><span th:text="${e.id}"></span></td>
                 <td><span th:text="${e.name}"></span></td>
                 <td><span th:text="${e.phoneNumber}"></span></td>
                 <td><span th:text="${e.department}"></span></td>
