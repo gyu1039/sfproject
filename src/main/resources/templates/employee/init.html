@@ -18,7 +18,7 @@
             </thead>
             <tbody>
             <tr th:each="e : ${list}">
-                <td><span th:text="${e.id}"></span></td>
+                <td><a th:href="@{employee/edit/{id}(id=${e.id})}"><span th:text="${e.id}"></span></a></td>
                 <td><span th:text="${e.name}"></span></td>
                 <td><span th:text="${e.phoneNumber}"></span></td>
                 <td><span th:text="${e.department}"></span></td>
