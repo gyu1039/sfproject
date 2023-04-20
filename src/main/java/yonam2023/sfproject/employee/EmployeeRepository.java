@@ -14,8 +14,7 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-
     public Page<Employee> findAll(Pageable pageable);
-    public List<Employee> findByDepartment(DepartmentType type);
+    public Page<Employee> findByDepartment(DepartmentType departmentType, Pageable pageable);
     public List<Employee> findByEmployeeType(EmployeeType employeeType);
 }

@@ -1,5 +1,6 @@
 package yonam2023.sfproject.employee;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -8,8 +9,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import yonam2023.sfproject.employee.domain.DepartmentDTO;
+import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.employee.domain.EmployeeDTO;
+
+import java.util.List;
 
 
 @Controller
@@ -25,7 +30,6 @@ public class EmployeeController {
 
         Page<Employee> all = er.findAll(pageable);
         model.addAttribute("list", all);
-
         return "employee/init";
     }
 
@@ -68,5 +72,23 @@ public class EmployeeController {
         employee.employeeUpdate(e);
         er.save(employee);
         return "redirect:/employee";
+    }
+
+    @PostMapping("/bydepartment")
+    public String byDepartment(@ModelAttribute DepartmentDTO departmentDTO, @PageableDefault Pageable pageable, Model model) {
+
+        Iterable<Employee> byDepartment = er.findByDepartment(departmentDTO.getDepartmentType(), pageable);
+        model.addAttribute("list", byDepartment);
+        return "employee/init";
+    }
+
+    @ModelAttribute("d")
+    public DepartmentDTO d() {
+        return new DepartmentDTO();
+    }
+
+    @ModelAttribute("departments")
+    public DepartmentType[] departments() {
+        return DepartmentType.values();
     }
 }
