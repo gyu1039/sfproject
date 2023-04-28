@@ -27,10 +27,12 @@ public class MachineService {
         System.out.println("MachineService:check Machine "+id+" exist");
         MachineData md = mr.findByMid(id);
         if(md!=null){
+            //db에 이미 등록된 기계임
             System.out.println("MachineService:Machine "+id+" is Already in DB");
             return false;
         }
         if(!checkMachine(id)){
+            //기계가 존재하지 않음
             System.out.println("MachineService:Machine "+id+" is not exist");
             return false;
         }
@@ -40,8 +42,23 @@ public class MachineService {
         return true;
     }
 
-    public void runMachine(){
+    public boolean runMachine(int id){
         //run some Machine
+        System.out.println("MachineService:check Machine "+id+" exist");
+        MachineData md = mr.findByMid(id);
+        if(md==null){
+            //db에 이미 등록된 기계임
+            System.out.println("MachineService:Machine "+id+" is Exists in DB");
+            return false;
+        }
+        try {
+            String res = httpPS.sendGet(machineURL + "runMachine/"+id);
+            System.out.println("MachineService:"+res);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
+        return true;
     }
 
     public void stopMachine(){
@@ -61,5 +78,9 @@ public class MachineService {
             System.out.println(e);
         }
         return false;
+    }
+
+    public void fatalState(int McId){
+        System.out.println("Fatal Received "+McId);
     }
 }
