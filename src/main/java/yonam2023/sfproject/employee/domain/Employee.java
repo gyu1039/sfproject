@@ -26,13 +26,20 @@ public class Employee {
     @Column(nullable = false)
     private DepartmentType department;
 
-    private EmployeeType employee;
+    private EmployeeType employeeType;
 
+
+    public void employeeUpdate(EmployeeDTO dto) {
+        this.name = dto.getName();
+        this.phoneNumber = dto.getPhoneNumber();
+        this.department = dto.getDepartment();
+        this.employeeType = dto.getEmployeeType();
+    }
 
     @Builder
-    public Employee(DepartmentType department, EmployeeType employee, String name, String phoneNumber) {
+    public Employee(DepartmentType department, EmployeeType employeeType, String name, String phoneNumber) {
         this.department = department;
-        this.employee = employee;
+        this.employeeType = employeeType;
         this.name = name;
         this.phoneNumber = phoneNumber;
     }
