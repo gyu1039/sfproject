@@ -8,11 +8,16 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeDTO {
+public class EmployeeTO {
 
     private Long id;
     private String name;
+    private String password;
     private String phoneNumber;
     private DepartmentType department;
     private EmployeeType employeeType;
+
+    public Employee toEntity() {
+        return new Employee();
+    }
 }

@@ -21,6 +21,9 @@ public class Employee {
     private String name;
 
     @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String phoneNumber;
 
     @Column(nullable = false)
@@ -29,7 +32,7 @@ public class Employee {
     private EmployeeType employeeType;
 
 
-    public void employeeUpdate(EmployeeDTO dto) {
+    public void employeeUpdate(EmployeeTO dto) {
         this.name = dto.getName();
         this.phoneNumber = dto.getPhoneNumber();
         this.department = dto.getDepartment();
@@ -37,10 +40,11 @@ public class Employee {
     }
 
     @Builder
-    public Employee(DepartmentType department, EmployeeType employeeType, String name, String phoneNumber) {
+    public Employee(DepartmentType department, EmployeeType employeeType, String name, String phoneNumber, String password) {
         this.department = department;
         this.employeeType = employeeType;
         this.name = name;
+        this.password = password;
         this.phoneNumber = phoneNumber;
     }
 }

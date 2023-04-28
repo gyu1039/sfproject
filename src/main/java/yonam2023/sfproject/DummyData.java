@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import yonam2023.sfproject.employee.EmployeeRepository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
+import yonam2023.sfproject.employee.domain.EmployeeType;
 import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.ProductionRepository;
 
@@ -44,6 +45,13 @@ public class DummyData {
 
             er.save(e);
         });
+
+        Employee gyu1039 = Employee.builder().name("gyu1039").phoneNumber("22371002").employeeType(EmployeeType.MANAGER).department(DepartmentType.PERSONNEL).build();
+        er.save(gyu1039);
+        Employee ghk4889 = Employee.builder().name("ghk4889").phoneNumber("22371012").employeeType(EmployeeType.MANAGER).department(DepartmentType.LOGISTICS).build();
+        er.save(ghk4889);
+        Employee Ljh3141 = Employee.builder().name("Ljh3141").phoneNumber("22371018").employeeType(EmployeeType.MANAGER).department(DepartmentType.PRODUCTION).build();
+        er.save(Ljh3141);
     }
 
 
