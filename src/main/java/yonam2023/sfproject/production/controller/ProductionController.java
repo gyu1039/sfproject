@@ -1,13 +1,16 @@
-package yonam2023.sfproject.production;
+package yonam2023.sfproject.production.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import yonam2023.sfproject.production.FactoryStub;
 import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.ProductionRepository;
 
@@ -120,10 +123,5 @@ public class ProductionController {
         return pr.findAll();
     }
 
-    @GetMapping("/wakeStub")
-    public void runFactoryStub(){
-        Thread ProductionStub = new FactoryStub();
-        ProductionStub.run();
 
-    }
 }
