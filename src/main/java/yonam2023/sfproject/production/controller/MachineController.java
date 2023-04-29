@@ -3,13 +3,12 @@ package yonam2023.sfproject.production.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import yonam2023.sfproject.production.service.MachineService;
+
 
 @Controller
 public class MachineController {
@@ -34,23 +33,31 @@ public class MachineController {
         }
     }
 
-    @GetMapping("/wakeStub")
+    @GetMapping("/startupFactory")
     @ResponseBody
-    public void runFactoryStub(){
+    public void startupFactoryStub(){
         //run Factory code
         /*
         Thread ProductionStub = new FactoryStub();
         ProductionStub.run();
          */
         logger.info("MachineController:attempt wake up Factory");
-        ms.wakeFactory();
+        ms.startupFactory();
     }
-    @GetMapping("/stopStub")
+
+    @GetMapping("/pauseFactory")
     @ResponseBody
-    public void stopFactoryStub(){
+    public void pauseFactoryStub(){
+        //stop Factory code
+        logger.info("MachineController:attempt pause Factory");
+        ms.pauseFactory();
+    }
+    @GetMapping("/shutdownFactory")
+    @ResponseBody
+    public void shutdownFactoryStub(){
         //stop Factory code
         logger.info("MachineController:attempt shut down Factory");
-        ms.stopFactory();
+        ms.shutdownFactory();
     }
 
 
@@ -114,4 +121,5 @@ public class MachineController {
     public String mcTestPage(){
         return "production/machineTest";
     }
+
 }

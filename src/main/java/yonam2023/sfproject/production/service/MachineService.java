@@ -36,7 +36,7 @@ public class MachineService {
         }
     }
 
-    public boolean wakeFactory(){
+    public boolean startupFactory(){
         logger.info("MachineService:attempt startup Factory");
         try {
             String res = httpPS.sendGet(machineURL + "turnOn/");
@@ -48,10 +48,22 @@ public class MachineService {
         }
     }
 
-    public boolean stopFactory(){
+    public boolean pauseFactory(){
+        logger.info("MachineService:attempt pause Factory");
+        try {
+            String res = httpPS.sendGet(machineURL + "pause/");
+            logger.info("MachineService:receive {"+res+"}");
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean shutdownFactory(){
         logger.info("MachineService:attempt shut down Factory");
         try {
-            String res = httpPS.sendGet(machineURL + "turnOff/");
+            String res = httpPS.sendGet(machineURL + "shutdown/");
             logger.info("MachineService:receive {"+res+"}");
             return true;
         }catch (Exception e){

@@ -3,13 +3,18 @@ function doCheckFactory(){
         method: "GET"
     }).then((response) => console.log(response));
 }
-function doWakeStub(){
-    fetch("http://localhost:8080/wakeStub", {
+function doStartupFactory(){
+    fetch("http://localhost:8080/startupFactory", {
         method: "GET"
     }).then((response) => console.log(response));
 }
-function doStopStub(){
-    fetch("http://localhost:8080/stopStub", {
+function doPauseFactory(){
+    fetch("http://localhost:8080/pauseFactory", {
+          method: "GET"
+    }).then((response) => console.log(response));
+}
+function doShutdownFactory(){
+    fetch("http://localhost:8080/shutdownFactory", {
          method: "GET"
     }).then((response) => console.log(response));
 }
