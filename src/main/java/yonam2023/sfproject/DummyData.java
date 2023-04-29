@@ -23,14 +23,9 @@ public class DummyData {
     @PostConstruct
     public void initialize() {
 
-        IntStream.rangeClosed(1, 5).forEach(i -> {
-            Employee e = Employee.builder()
-                    .name("test " + i)
-                    .phoneNumber(i + " ")
-                    .department(DepartmentType.PERSONNEL)
-                    .build();
+        DepartmentType[] dts = {DepartmentType.PERSONNEL, DepartmentType.LOGISTICS, DepartmentType.PRODUCTION};
 
-            er.save(e);
+        IntStream.rangeClosed(1, 5).forEach(i -> {
 
             Production p = Production.builder()
                     .stype("sensor1")
@@ -38,5 +33,18 @@ public class DummyData {
                     .build();
             pr.save(p);
         });
+
+        IntStream.rangeClosed(1, 50).forEach(i -> {
+
+            Employee e = Employee.builder()
+                    .name("test" + i)
+                    .phoneNumber(i + "")
+                    .department(dts[i % 3])
+                    .build();
+
+            er.save(e);
+        });
     }
+
+
 }

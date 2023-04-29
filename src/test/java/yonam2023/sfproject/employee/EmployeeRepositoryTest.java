@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.employee.domain.EmployeeType;
@@ -19,15 +21,16 @@ class EmployeeRepositoryTest {
     @Autowired
     EmployeeRepository em;
 
+    DepartmentType[] dts = {DepartmentType.PERSONNEL, DepartmentType.LOGISTICS, DepartmentType.PRODUCTION};
+
     @BeforeAll
     public void insertDummy() {
-
 
         IntStream.rangeClosed(1, 100).forEach(i -> {
 
             Employee e = Employee.builder()
                     .name("test" + i)
-                    .department(DepartmentType.PERSONNEL)
+                    .department(dts[i % 3])
                     .phoneNumber(i + "")
                     .build();
 
@@ -43,4 +46,10 @@ class EmployeeRepositoryTest {
         all.forEach(System.out::println);
     }
 
+    @Test
+    public void 부서별_검색() {
+
+        Iterable<Employee> byDepartment = em.findByDepartment(dts[0], PageRequest.ofSize(10));
+        byDepartment.forEach(System.out::println);
+    }
 }
