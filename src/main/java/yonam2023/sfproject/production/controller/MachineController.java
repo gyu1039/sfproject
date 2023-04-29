@@ -1,5 +1,7 @@
 package yonam2023.sfproject.production.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +17,20 @@ public class MachineController {
     @Autowired
     MachineService ms;
 
+    private Logger logger = LoggerFactory.getLogger(MachineController.class);
+
     @GetMapping("/checkFactory")
     @ResponseBody
     public void checkFactory(){
         //check Factory Connect code
-        System.out.println("MachineController:check Factory Connection");
+        logger.info("MachineController:check Factory Connection");
         boolean res = ms.checkFactory();
         if(res){
             //Connection ok
-            System.out.println("MachineController:Factory Connection ok");
+            logger.info("MachineController:Factory Connection ok");
         }else{
             //Connection failed
-            System.out.println("MachineController:Factory Connection failed");
+            logger.info("MachineController:Factory Connection failed");
         }
     }
 
@@ -34,7 +38,7 @@ public class MachineController {
     @ResponseBody
     public void addMachinePost(@PathVariable("McId") int McId){
         //add Machine code
-        System.out.println("MachineController:attempt add Machine "+McId);
+        logger.info("MachineController:attempt add Machine "+McId);
         ms.addMachine(McId);
     }
     @GetMapping("/delMachine")
@@ -46,8 +50,15 @@ public class MachineController {
     @ResponseBody
     public void runMachinePost(@PathVariable("McId") int McId){
         //add Machine code
-        System.out.println("MachineController:check Machine "+McId+" exist");
+        logger.info("MachineController:attempt run Machine "+McId);
         ms.runMachine(McId);
+    }
+
+    @GetMapping("/stopMachine/{McId}")
+    @ResponseBody
+    public void stopFactoryStub(@PathVariable("McId") int McId){
+        //stop code
+
     }
 
     @GetMapping("/checkMcState")
@@ -66,16 +77,12 @@ public class MachineController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/stopMachine")
-    @ResponseBody
-    public void stopFactoryStub(int id){
-        //stop code
-    }
 
     @GetMapping("/fatalOccur/{McId}")
     @ResponseBody
     public void fatalStop(@PathVariable("McId")int McId){
         //fatal code
+        logger.error("MachineController:Receive Fatal Error Occur On Machine "+McId);
         ms.fatalState(McId);
     }
 

@@ -1,18 +1,14 @@
 package yonam2023.sfproject.production.service;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import yonam2023.sfproject.production.domain.MachineData;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
-import yonam2023.sfproject.production.repository.ProductionRepository;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
 import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @Service
 public class MachineService {
@@ -22,15 +18,16 @@ public class MachineService {
     @Autowired
     MachineDataRepository mr;
 
+    private Logger logger = LoggerFactory.getLogger(MachineService.class);
     private static final String machineURL="http://localhost:8085/";
 
     public boolean checkFactory(){
-        System.out.println("MachineService:check Factory Connection");
+        logger.info("MachineService:check Factory Connection");
         try {
             String res = httpPS.sendGet(machineURL + "cntCheck/");
             return Boolean.valueOf(res);
         }catch(ConnectException e){
-            System.out.println("MachineService:Factory Connection failed");
+            logger.warn("MachineService:Factory Connection failed");
             return false;
         }catch (Exception e){
             e.printStackTrace();
@@ -38,64 +35,81 @@ public class MachineService {
         }
     }
 
-    public boolean addMachine(int id){
-        System.out.println("MachineService:check Machine "+id+" exists");
-        MachineData md = mr.findByMid(id);
+    public boolean addMachine(int mid){
+        logger.info("MachineService:check Machine "+mid+" exists");
+        MachineData md = mr.findByMid(mid);
         if(md!=null){
             //db에 이미 등록된 기계임
-            System.out.println("MachineService:Machine "+id+" is Already in DB");
+            logger.warn("MachineService:Machine "+mid+" is Already in DB");
             return false;
         }
-        if(!checkMachine(id)){
+        if(!checkMachine(mid)){
             //기계가 존재하지 않음
-            System.out.println("MachineService:Machine "+id+" is not exists");
+            logger.warn("MachineService:Machine "+mid+" is not exists");
             return false;
         }
-        MachineData smd = MachineData.builder().mid(id).name("temp").status(true).build();
+        MachineData smd = MachineData.builder().mid(mid).name("temp").status(true).build();
         mr.save(smd);
-        System.out.println("MachineService:Machine "+id+" is now registered");
+        logger.info("MachineService:Machine "+mid+" is now registered");
         return true;
     }
 
-    public boolean runMachine(int id){
+    public boolean runMachine(int mid){
         //run some Machine
-        System.out.println("MachineService:check Machine "+id+" exists");
-        MachineData md = mr.findByMid(id);
+        logger.info("MachineService:check Machine "+mid+" exists");
+        MachineData md = mr.findByMid(mid);
         if(md==null){
             //db에 없는 기계임
-            System.out.println("MachineService:Machine "+id+" is Not Exists in DB");
+            logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
             return false;
         }
         try {
-            String res = httpPS.sendGet(machineURL + "runMachine/"+id);
-            System.out.println("MachineService:"+res);
+            //기계 작동
+            String res = httpPS.sendGet(machineURL + "runMachine/"+mid);
+            logger.info("MachineService:"+res);
         }catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         return true;
     }
 
-    public void stopMachine(){
+    public boolean stopMachine(int mid){
         //stop Some Machine
+        logger.info("MachineService:check Machine "+mid+" exists");
+        MachineData md = mr.findByMid(mid);
+        if(md==null){
+            //db에 없는 기계임
+            logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
+            return false;
+        }
+        try {
+            //기계 작동
+            String res = httpPS.sendGet(machineURL + "stopMachine/"+mid);
+            logger.info("MachineService:"+res);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return true;
     }
 
-    public void getMachineInfo(int id){
+    public void getMachineInfo(int mid){
 
     }
 
-    public boolean checkMachine(int id){
+    public boolean checkMachine(int mid){
         //check Machine exist and state
         try {
-            String res = httpPS.sendGet(machineURL + "isMcExist/"+id);
+            logger.info("MachineService:check Machine "+mid+" exists");
+            String res = httpPS.sendGet(machineURL + "isMcExist/"+mid);
             return Boolean.parseBoolean(res);
         }catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
         return false;
     }
 
-    public void fatalState(int McId){
-        System.out.println("Fatal Received "+McId);
+    public void fatalState(int mid){
+        logger.error("Fatal Received "+mid);
     }
 }
