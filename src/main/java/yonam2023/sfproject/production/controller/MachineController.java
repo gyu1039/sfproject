@@ -34,49 +34,64 @@ public class MachineController {
         }
     }
 
+    @GetMapping("/wakeStub")
+    @ResponseBody
+    public void runFactoryStub(){
+        //run Factory code
+        /*
+        Thread ProductionStub = new FactoryStub();
+        ProductionStub.run();
+         */
+        logger.info("MachineController:attempt wake up Factory");
+        ms.wakeFactory();
+    }
+    @GetMapping("/stopStub")
+    @ResponseBody
+    public void stopFactoryStub(){
+        //stop Factory code
+        logger.info("MachineController:attempt shut down Factory");
+        ms.stopFactory();
+    }
+
+
+    @GetMapping("/chkMachine")
+    public void checkMachine(){
+        //del Machine code
+    }
+
     @GetMapping("/addMachine/{McId}")
     @ResponseBody
-    public void addMachinePost(@PathVariable("McId") int McId){
+    public void addMachine(@PathVariable("McId") int McId){
         //add Machine code
         logger.info("MachineController:attempt add Machine "+McId);
         ms.addMachine(McId);
     }
+
     @GetMapping("/delMachine")
-    public void delMachinePost(){
+    public void delMachine(){
         //del Machine code
     }
 
     @GetMapping("/runMachine/{McId}")
     @ResponseBody
-    public void runMachinePost(@PathVariable("McId") int McId){
+    public void runMachine(@PathVariable("McId") int mid){
         //add Machine code
-        logger.info("MachineController:attempt run Machine "+McId);
-        ms.runMachine(McId);
+        logger.info("MachineController:attempt run Machine "+mid);
+        ms.runMachine(mid);
     }
 
     @GetMapping("/stopMachine/{McId}")
     @ResponseBody
-    public void stopFactoryStub(@PathVariable("McId") int McId){
+    public void stopMachine(@PathVariable("McId") int mid){
         //stop code
+        logger.info("MachineController:attempt stop Machine "+mid);
 
     }
 
-    @GetMapping("/checkMcState")
-    public void checkMachineStateGet(){
-        //check Machine Status code
+    @GetMapping("/checkMcState/{McId}")
+    public void checkMachineStateGet(@PathVariable("McId") int mid){
+        //check Machine State code
     }
-
-    @GetMapping("/wakeStub")
-    @ResponseBody
-    public ResponseEntity runFactoryStub(int id){
-        //run code
-        /*
-        Thread ProductionStub = new FactoryStub();
-        ProductionStub.run();
-         */
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
 
     @GetMapping("/fatalOccur/{McId}")
     @ResponseBody
@@ -88,6 +103,6 @@ public class MachineController {
 
     @GetMapping("/mctest")
     public String mcTestPage(){
-        return "machineTest";
+        return "production/machineTest";
     }
 }

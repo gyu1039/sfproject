@@ -1,11 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout (~{::title}, '요약', 'stub 작동', '데이터 삭제', ~{::section})}"
+      lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>index</title>
 </head>
 <body>
-machine test</br>
+
+<section>
+    machine test</br>
+    <a href="http://localhost:8085">factory control page</a>done</br>
+    <button onclick="doCheckFactory()">click</button>check factory connection-done</br>
+    <button onclick="doWakeStub()">click</button>run factory-done</br>
+    <button onclick="doStopStub()">click</button>stop factory-done</br>
+    <button onclick="doCheckMachine()">click</button>check Machine 0 exists</br>
+    <button onclick="doAddMachine()">click</button>add Machine 0-done</br>
+    <button onclick="doDelMachine()">click</button>delete Machine 0</br>
+    <button onclick="doRunMachine()">click</button>run Machine 0-done</br>
+    <button onclick="doStopMachine()">click</button>stop Machine 0</br>
+    <button onclick="doCheckMcState()">click</button>check running state of Machine 0</br>
+</section>
 
 </body>
 </html>

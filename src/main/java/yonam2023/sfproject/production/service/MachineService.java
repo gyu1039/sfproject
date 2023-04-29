@@ -35,6 +35,30 @@ public class MachineService {
         }
     }
 
+    public boolean wakeFactory(){
+        logger.info("MachineService:attempt startup Factory");
+        try {
+            String res = httpPS.sendGet(machineURL + "turnOn/");
+            logger.info("MachineService:receive {"+res+"}");
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean stopFactory(){
+        logger.info("MachineService:attempt shut down Factory");
+        try {
+            String res = httpPS.sendGet(machineURL + "turnOff/");
+            logger.info("MachineService:receive {"+res+"}");
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean addMachine(int mid){
         logger.info("MachineService:check Machine "+mid+" exists");
         MachineData md = mr.findByMid(mid);
