@@ -106,7 +106,7 @@ public class MachineService {
         try {
             //기계 작동
             String res = httpPS.sendGet(machineURL + "runMachine/"+mid);
-            logger.info("MachineService:"+res);
+            logger.info("MachineService:Machine "+mid+" Run Result : "+res);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -126,7 +126,7 @@ public class MachineService {
         try {
             //기계 작동
             String res = httpPS.sendGet(machineURL + "stopMachine/"+mid);
-            logger.info("MachineService:"+res);
+            logger.info("MachineService:Machine "+mid+" Stop Result : "+res);
         }catch (Exception e){
             e.printStackTrace();
         }

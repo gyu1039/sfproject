@@ -91,7 +91,7 @@ public class MachineController {
     public void stopMachine(@PathVariable("McId") int mid){
         //stop code
         logger.info("MachineController:attempt stop Machine "+mid);
-
+        ms.stopMachine(mid);
     }
 
     @GetMapping("/checkMcState/{McId}")
