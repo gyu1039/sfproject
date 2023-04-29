@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import yonam2023.sfproject.production.domain.MachineData;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 
@@ -78,6 +79,21 @@ public class MachineService {
         return true;
     }
 
+    @Transactional
+    public boolean delMachine(int mid){
+        //del machine code
+        logger.info("MachineService:check Machine "+mid+" exists");
+        MachineData md = mr.findByMid(mid);
+        if(md==null){
+            //db에 없는 기계임
+            logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
+            return false;
+        }
+        mr.delete(md);
+        logger.info("MachineService:Machine "+mid+" was successfully delete from DB");
+        return true;
+    }
+
     public boolean runMachine(int mid){
         //run some Machine
         logger.info("MachineService:check Machine "+mid+" exists");
@@ -126,6 +142,7 @@ public class MachineService {
         try {
             logger.info("MachineService:check Machine "+mid+" exists");
             String res = httpPS.sendGet(machineURL + "isMcExist/"+mid);
+            logger.info("MachineService:checking Result:"+res);
             return Boolean.parseBoolean(res);
         }catch (Exception e){
             e.printStackTrace();

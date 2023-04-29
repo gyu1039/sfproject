@@ -54,22 +54,28 @@ public class MachineController {
     }
 
 
-    @GetMapping("/chkMachine")
-    public void checkMachine(){
+    @GetMapping("/chkMachine/{McId}")
+    @ResponseBody
+    public void checkMachine(@PathVariable("McId") int mid){
         //del Machine code
+        logger.info("MachineController:check Machine "+mid+" exists");
+        ms.checkMachine(mid);
     }
 
     @GetMapping("/addMachine/{McId}")
     @ResponseBody
-    public void addMachine(@PathVariable("McId") int McId){
+    public void addMachine(@PathVariable("McId") int mid){
         //add Machine code
-        logger.info("MachineController:attempt add Machine "+McId);
-        ms.addMachine(McId);
+        logger.info("MachineController:attempt add Machine "+mid);
+        ms.addMachine(mid);
     }
 
-    @GetMapping("/delMachine")
-    public void delMachine(){
+    @GetMapping("/delMachine/{McId}")
+    @ResponseBody
+    public void delMachine(@PathVariable("McId") int mid){
         //del Machine code
+        logger.info("MachineController:attempt del Machine "+mid);
+        ms.delMachine(mid);
     }
 
     @GetMapping("/runMachine/{McId}")

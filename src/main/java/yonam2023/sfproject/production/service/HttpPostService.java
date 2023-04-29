@@ -1,6 +1,8 @@
 package yonam2023.sfproject.production.service;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -12,6 +14,8 @@ import java.net.URL;
 @Service
 public class HttpPostService {
     private final String USER_AGENT = "Mozilla/5.0";
+
+    private Logger logger = LoggerFactory.getLogger(HttpPostService.class);
     public void sendPost(String targetUrl, JSONObject jsonObject) throws Exception {
 
         URL url = new URL(targetUrl);
@@ -39,8 +43,9 @@ public class HttpPostService {
         in.close();
 
         // print result
-        System.out.println("HTTP 응답 코드 : " + responseCode);
-        System.out.println("HTTP body : " + response.toString());
+        logger.info("HttpPostService:HTTP 응답 코드:" + responseCode);
+        logger.info("HttpPostService:HTTP body:" + response.toString());
+        System.out.println();
 
     }
     public String sendGet(String targetUrl) throws Exception {
@@ -65,8 +70,8 @@ public class HttpPostService {
         in.close();
 
         // print result
-        System.out.println("HTTP 응답 코드 : " + responseCode);
-        System.out.println("HTTP body : " + response.toString());
+        logger.info("HttpPostService:HTTP 응답 코드:" + responseCode);
+        logger.info("HttpPostService:HTTP body:" + response.toString());
         return response.toString();
     }
 }
