@@ -133,6 +133,25 @@ public class MachineService {
         return true;
     }
 
+    public boolean checkMachineState(int mid){
+        //check Machine State code
+        logger.info("MachineService:check Machine "+mid+" exists");
+        MachineData md = mr.findByMid(mid);
+        if(md==null){
+            //db에 없는 기계임
+            logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
+            return false;
+        }
+        try{
+            //기계 확인
+            String res = httpPS.sendGet(machineURL + "checkMcState/"+mid);
+            logger.info("MachineService:Machine "+mid+" Running State : "+res);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     public void getMachineInfo(int mid){
 
     }

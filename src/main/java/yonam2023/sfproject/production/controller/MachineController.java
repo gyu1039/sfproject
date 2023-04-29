@@ -95,8 +95,11 @@ public class MachineController {
     }
 
     @GetMapping("/checkMcState/{McId}")
+    @ResponseBody
     public void checkMachineStateGet(@PathVariable("McId") int mid){
         //check Machine State code
+        logger.info("MachineController:check Machine "+mid);
+        ms.checkMachineState(mid);
     }
 
     @GetMapping("/fatalOccur/{McId}")
