@@ -16,15 +16,25 @@ public class MachineController {
     MachineService ms;
 
     @GetMapping("/checkFactory")
-    public void checkFacotory(){
+    @ResponseBody
+    public void checkFactory(){
         //check Factory Connect code
+        System.out.println("MachineController:check Factory Connection");
+        boolean res = ms.checkFactory();
+        if(res){
+            //Connection ok
+            System.out.println("MachineController:Factory Connection ok");
+        }else{
+            //Connection failed
+            System.out.println("MachineController:Factory Connection failed");
+        }
     }
 
     @GetMapping("/addMachine/{McId}")
     @ResponseBody
     public void addMachinePost(@PathVariable("McId") int McId){
         //add Machine code
-        System.out.println("MachineController:check Machine "+McId+" exist");
+        System.out.println("MachineController:attempt add Machine "+McId);
         ms.addMachine(McId);
     }
     @GetMapping("/delMachine")

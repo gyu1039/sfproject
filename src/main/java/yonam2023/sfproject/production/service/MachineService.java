@@ -10,6 +10,7 @@ import yonam2023.sfproject.production.repository.ProductionRepository;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -23,8 +24,22 @@ public class MachineService {
 
     private static final String machineURL="http://localhost:8085/";
 
+    public boolean checkFactory(){
+        System.out.println("MachineService:check Factory Connection");
+        try {
+            String res = httpPS.sendGet(machineURL + "cntCheck/");
+            return Boolean.valueOf(res);
+        }catch(ConnectException e){
+            System.out.println("MachineService:Factory Connection failed");
+            return false;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean addMachine(int id){
-        System.out.println("MachineService:check Machine "+id+" exist");
+        System.out.println("MachineService:check Machine "+id+" exists");
         MachineData md = mr.findByMid(id);
         if(md!=null){
             //db에 이미 등록된 기계임
@@ -33,7 +48,7 @@ public class MachineService {
         }
         if(!checkMachine(id)){
             //기계가 존재하지 않음
-            System.out.println("MachineService:Machine "+id+" is not exist");
+            System.out.println("MachineService:Machine "+id+" is not exists");
             return false;
         }
         MachineData smd = MachineData.builder().mid(id).name("temp").status(true).build();
@@ -44,11 +59,11 @@ public class MachineService {
 
     public boolean runMachine(int id){
         //run some Machine
-        System.out.println("MachineService:check Machine "+id+" exist");
+        System.out.println("MachineService:check Machine "+id+" exists");
         MachineData md = mr.findByMid(id);
         if(md==null){
-            //db에 이미 등록된 기계임
-            System.out.println("MachineService:Machine "+id+" is Exists in DB");
+            //db에 없는 기계임
+            System.out.println("MachineService:Machine "+id+" is Not Exists in DB");
             return false;
         }
         try {
