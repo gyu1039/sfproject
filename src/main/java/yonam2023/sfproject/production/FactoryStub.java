@@ -16,9 +16,6 @@ import java.util.Random;
 public class FactoryStub extends Thread {
     private final String USER_AGENT = "Mozilla/5.0";
 
-    @Autowired
-    ProductionRepository pr;
-
     @Override
     public void run(){
         FactoryStub http = new FactoryStub();
