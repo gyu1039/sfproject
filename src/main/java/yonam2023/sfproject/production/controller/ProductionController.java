@@ -1,5 +1,7 @@
 package yonam2023.sfproject.production.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.production.FactoryStub;
 import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.ProductionRepository;
+import yonam2023.sfproject.production.service.FactoryService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +26,18 @@ import java.util.Optional;
 @RequestMapping("/production")
 public class ProductionController {
 
+    private Logger logger = LoggerFactory.getLogger(ProductionController.class);
     @Autowired
     ProductionRepository pr;
+    @Autowired
+    FactoryService fs;
 
     @GetMapping
     public String initGet(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-
+        logger.info("ProductionController:Factory Connection State:"+fs.getFactoryConnectionState());
+        if(!fs.getFactoryConnectionState()){
+            return "production/connectionCheck";
+        }
         Page<Production> all = pr.findAll(pageable);
         List<Production> graph = pr.findTop10ByOrderByIdDesc();
         List<String> ids = new ArrayList<String>();

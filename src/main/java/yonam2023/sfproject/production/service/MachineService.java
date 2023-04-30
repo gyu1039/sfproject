@@ -22,55 +22,6 @@ public class MachineService {
     private Logger logger = LoggerFactory.getLogger(MachineService.class);
     private static final String machineURL="http://localhost:8085/";
 
-    public boolean checkFactory(){
-        logger.info("MachineService:check Factory Connection");
-        try {
-            String res = httpPS.sendGet(machineURL + "cntCheck/");
-            return Boolean.valueOf(res);
-        }catch(ConnectException e){
-            logger.warn("MachineService:Factory Connection failed");
-            return false;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean startupFactory(){
-        logger.info("MachineService:attempt startup Factory");
-        try {
-            String res = httpPS.sendGet(machineURL + "turnOn/");
-            logger.info("MachineService:receive {"+res+"}");
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean pauseFactory(){
-        logger.info("MachineService:attempt pause Factory");
-        try {
-            String res = httpPS.sendGet(machineURL + "pause/");
-            logger.info("MachineService:receive {"+res+"}");
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean shutdownFactory(){
-        logger.info("MachineService:attempt shut down Factory");
-        try {
-            String res = httpPS.sendGet(machineURL + "shutdown/");
-            logger.info("MachineService:receive {"+res+"}");
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     public boolean addMachine(int mid){
         logger.info("MachineService:check Machine "+mid+" exists");

@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import yonam2023.sfproject.production.service.MachineService;
 
 
 @Controller
+@RequestMapping("/machine")
 public class MachineController {
 
     @Autowired
@@ -18,47 +20,7 @@ public class MachineController {
 
     private Logger logger = LoggerFactory.getLogger(MachineController.class);
 
-    @GetMapping("/checkFactory")
-    @ResponseBody
-    public void checkFactory(){
-        //check Factory Connect code
-        logger.info("MachineController:check Factory Connection");
-        boolean res = ms.checkFactory();
-        if(res){
-            //Connection ok
-            logger.info("MachineController:Factory Connection ok");
-        }else{
-            //Connection failed
-            logger.info("MachineController:Factory Connection failed");
-        }
-    }
 
-    @GetMapping("/startupFactory")
-    @ResponseBody
-    public void startupFactoryStub(){
-        //run Factory code
-        /*
-        Thread ProductionStub = new FactoryStub();
-        ProductionStub.run();
-         */
-        logger.info("MachineController:attempt wake up Factory");
-        ms.startupFactory();
-    }
-
-    @GetMapping("/pauseFactory")
-    @ResponseBody
-    public void pauseFactoryStub(){
-        //stop Factory code
-        logger.info("MachineController:attempt pause Factory");
-        ms.pauseFactory();
-    }
-    @GetMapping("/shutdownFactory")
-    @ResponseBody
-    public void shutdownFactoryStub(){
-        //stop Factory code
-        logger.info("MachineController:attempt shut down Factory");
-        ms.shutdownFactory();
-    }
 
 
     @GetMapping("/chkMachine/{McId}")

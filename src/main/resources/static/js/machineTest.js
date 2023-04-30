@@ -1,20 +1,29 @@
 function doCheckFactory(){
-    fetch("http://localhost:8080/checkFactory", {
+    fetch("http://localhost:8080/factory/check", {
         method: "GET"
-    }).then((response) => console.log(response));
+    }).then((response) => response.json())
+    .then((response)=>{
+        console.log(response);
+        if(response){
+            alert("Connection Successful");
+            window.location.reload();
+        }else{
+            alert("Connection Denied.\nPleas Check Factory or Contact Administrator");
+        }
+    });
 }
 function doStartupFactory(){
-    fetch("http://localhost:8080/startupFactory", {
+    fetch("http://localhost:8080/factory/startup", {
         method: "GET"
     }).then((response) => console.log(response));
 }
 function doPauseFactory(){
-    fetch("http://localhost:8080/pauseFactory", {
+    fetch("http://localhost:8080/factory/pause", {
           method: "GET"
     }).then((response) => console.log(response));
 }
 function doShutdownFactory(){
-    fetch("http://localhost:8080/shutdownFactory", {
+    fetch("http://localhost:8080/factory/shutdown", {
          method: "GET"
     }).then((response) => console.log(response));
 }
