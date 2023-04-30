@@ -9,6 +9,11 @@
 
 <section>
   MachineDetail</br>
+  Machine Id:<span th:text="${machineData.mid}"></span></br>
+  Machine Name:<span th:text="${machineData.name}"></span></br>
+  Operation State:<span th:text="${machineData.state}"></span></br>
+  Fatal Error:<span th:text="${machineData.fatal}"></span></br>
+  Description:</br><textarea cols="50" rows="10" th:text="${machineData.description}"></textarea></br>
 </section>
 
 </body>

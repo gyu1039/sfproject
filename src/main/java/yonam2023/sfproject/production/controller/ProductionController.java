@@ -118,6 +118,18 @@ public class ProductionController {
         }
     }
 
+    @GetMapping("/machineDetail/{McId}")
+    public String machineDetailGet(@PathVariable("McId") int mid, Model model){
+        logger.info("ProductionController:Request Machine "+mid+" detail");
+        if(!ms.isMachineInDB(mid)){
+            logger.info("ProductionController:Requested Machine "+mid+" is not registered");
+            return "redirect:/production";
+        }
+        MachineData machineData = mr.findByMid(mid);
+        model.addAttribute("machineData", machineData);
+        return "production/machineDetail";
+    }
+
     @GetMapping("/getAll")
     public @ResponseBody List<Production> productionGetAll(){
         return pr.findAll();
@@ -132,7 +144,7 @@ public class ProductionController {
     public @ResponseBody Production productionGetAll(@PathVariable long id){
         Optional<Production> oProduction =  pr.findById(id);
         if(oProduction.isEmpty()){
-            return Production.builder().stype("logNotExist").build();
+            return Production.builder().build();
         }else{
             return oProduction.get();
         }
@@ -150,7 +162,6 @@ public class ProductionController {
             return "그런 값은 존재하지 않음.";
         }else{
             Production production = oProduction.get();
-            production.setStype(stype);
             production.setSvalue(svalue);
 
             pr.save(production);
@@ -159,6 +170,7 @@ public class ProductionController {
         }
     }
 
+    /*
     @PostMapping("/insert")
     public @ResponseBody List<Production> productionInsert(@RequestBody Map<String, String> param){
         String stype = param.get("STYPE");
@@ -169,6 +181,7 @@ public class ProductionController {
 
         return pr.findAll();
     }
+     */
 
     @PostMapping("/delete")
     public @ResponseBody List<Production> productionDelete(@RequestBody Map<String, String> param){
@@ -177,7 +190,7 @@ public class ProductionController {
 
         Optional<Production> oProduction =  pr.findById(id);
         if(oProduction.isEmpty()){
-            Production rp = Production.builder().stype("logNotExist").build();
+            Production rp = Production.builder().build();
             lProduction.add(rp);
             return lProduction;
         }else{

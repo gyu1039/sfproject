@@ -27,7 +27,7 @@
       <tbody>
       <tr th:each="e : ${list}">
         <td><span th:text="${e.mid}"></span></td>
-        <td><span th:text="${e.name}"></span></td>
+        <td><a th:href="'/production/machineDetail/'+${e.mid}" th:text="${e.name}"></a></td>
         <td>Temporary Value</td>
         <td><span th:text="${e.state}"></span></td>
         <td><span th:text="${e.fatal}"></span></td>

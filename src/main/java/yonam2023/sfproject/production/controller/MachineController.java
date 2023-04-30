@@ -1,14 +1,16 @@
 package yonam2023.sfproject.production.controller;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import yonam2023.sfproject.production.domain.MachineData;
-import yonam2023.sfproject.production.domain.MachineRegistData;
 import yonam2023.sfproject.production.service.MachineService;
+
+import java.util.HashMap;
 
 
 @Controller
@@ -19,9 +21,6 @@ public class MachineController {
     MachineService ms;
 
     private Logger logger = LoggerFactory.getLogger(MachineController.class);
-
-
-
 
     @GetMapping("/chk/{McId}")
     @ResponseBody
@@ -91,4 +90,10 @@ public class MachineController {
         return "production/machineTest";
     }
 
+    @PostMapping("/insertData")
+    @ResponseBody
+    public void insertSensorData(@RequestBody String data){
+        logger.info("MachineController:Receive data:"+data);
+        ms.insertSensorData(data);
+    }
 }

@@ -30,32 +30,32 @@ function doShutdownFactory(){
     }).then((response) => console.log(response));
 }
 function doCheckMachine(){
-    fetch("http://localhost:8080/chkMachine/0", {
+    fetch("http://localhost:8080/machine/chk/0", {
           method: "GET"
     }).then((response) => console.log(response));
 }
 function doAddMachine(){
-    fetch("http://localhost:8080/addMachine/0", {
+    fetch("http://localhost:8080/machine/add/0", {
            method: "GET"
     }).then((response) => console.log(response));
 }
 function doDelMachine(){
-    fetch("http://localhost:8080/delMachine/0", {
+    fetch("http://localhost:8080/machine/del/0", {
             method: "GET"
     }).then((response) => console.log(response));
 }
 function doRunMachine(){
-    fetch("http://localhost:8080/runMachine/0", {
+    fetch("http://localhost:8080/machine/run/0", {
             method: "GET"
     }).then((response) => console.log(response));
 }
 function doStopMachine(){
-    fetch("http://localhost:8080/stopMachine/0", {
+    fetch("http://localhost:8080/machine/stop/0", {
             method: "GET"
     }).then((response) => console.log(response));
 }
 function doCheckMcState(){
-    fetch("http://localhost:8080/checkMcState/0", {
+    fetch("http://localhost:8080/machine/checkMcState/0", {
             method: "GET"
     }).then((response) => console.log(response));
 }

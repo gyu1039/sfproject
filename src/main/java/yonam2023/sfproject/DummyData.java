@@ -33,15 +33,14 @@ public class DummyData {
         IntStream.rangeClosed(1, 5).forEach(i -> {
             //센서 임시 추가
             MachineData m = MachineData.builder()
-                    .mid(i)
-                    .name("machine-"+i)
+                    .mid(i+1)
+                    .name("machine-"+i+1)
                     .state(false)
-                    .description("machine-"+i+" description")
+                    .description("machine-"+(i+1)+" description")
                     .build();
             mr.save(m);
             //값 임시 추가. 제거 또는 수정 필요
             Production p = Production.builder()
-                    .stype("sensor1")
                     .svalue(i)
                     .build();
             pr.save(p);
