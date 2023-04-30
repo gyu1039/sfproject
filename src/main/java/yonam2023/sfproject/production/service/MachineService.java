@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yonam2023.sfproject.production.domain.MachineData;
+import yonam2023.sfproject.production.domain.MachineRegistData;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 
 import java.net.ConnectException;
@@ -36,7 +37,31 @@ public class MachineService {
             logger.warn("MachineService:Machine "+mid+" is not exists");
             return false;
         }
-        MachineData smd = MachineData.builder().mid(mid).name("temp").status(true).build();
+        MachineData smd = MachineData.builder().mid(mid).name("temp").state(true).build();
+        mr.save(smd);
+        logger.info("MachineService:Machine "+mid+" is now registered");
+        return true;
+    }
+    public boolean addMachine(MachineRegistData machineRegistData){
+        int mid = machineRegistData.getMid();
+        logger.info("MachineService:check Machine "+mid+" exists");
+        MachineData md = mr.findByMid(mid);
+        if(md!=null){
+            //db에 이미 등록된 기계임
+            logger.warn("MachineService:Machine "+mid+" is Already in DB");
+            return false;
+        }
+        if(!checkMachine(mid)){
+            //기계가 존재하지 않음
+            logger.warn("MachineService:Machine "+mid+" is not exists");
+            return false;
+        }
+        MachineData smd = MachineData.builder()
+                .mid(machineRegistData.getMid())
+                .name(machineRegistData.getName())
+                .state(false)
+                .description(machineRegistData.getDescription())
+                .build();
         mr.save(smd);
         logger.info("MachineService:Machine "+mid+" is now registered");
         return true;

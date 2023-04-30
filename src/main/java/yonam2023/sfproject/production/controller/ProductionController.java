@@ -13,9 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.production.FactoryStub;
+import yonam2023.sfproject.production.domain.MachineData;
+import yonam2023.sfproject.production.domain.MachineRegistData;
 import yonam2023.sfproject.production.domain.Production;
+import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
 import yonam2023.sfproject.production.service.FactoryService;
+import yonam2023.sfproject.production.service.MachineService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +34,11 @@ public class ProductionController {
     @Autowired
     ProductionRepository pr;
     @Autowired
+    MachineDataRepository mr;
+    @Autowired
     FactoryService fs;
+    @Autowired
+    MachineService ms;
 
     //주로 뷰 관리 코드를 위치 시킬것.
     /*
@@ -61,11 +69,18 @@ public class ProductionController {
     }
      */
     @GetMapping
-    public String initGet() {
+    public String initGet(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         logger.info("ProductionController:Factory Connection State:"+fs.getFactoryConnectionState());
         if(!fs.getFactoryConnectionState()){
             return "production/connectionCheck";
+        }else{
+            model.addAttribute("factoryState", "Connected");
         }
+
+
+        Page<MachineData> all = mr.findAll(pageable);
+
+        model.addAttribute("list", all);
         return "production/machineOverview";
     }
 
@@ -75,9 +90,31 @@ public class ProductionController {
         return "production/factoryManagement";
     }
     @GetMapping("/machineRegistration")
-    public String machineRegistrationPage(){
+    public String machineRegistrationPage(Model model){
         logger.info("ProductionController:machineRegistration called");
+        MachineRegistData machineRegistData = MachineRegistData.builder().mid(0).build();
+        model.addAttribute("machineRegistData", machineRegistData);
+
         return "production/machineRegistration";
+    }
+
+    @PostMapping("/machineRegistration")
+    public String addMachinePost(@ModelAttribute(name = "machineRegistData") MachineRegistData machineRegistData, Model model){
+        //add Machine code
+        logger.info("ProductionController:attempt add Machine\n\tMachine id : "+machineRegistData.getMid()+"\n\tMachine name : "+machineRegistData.getName()+"\n\tMachine description:"+machineRegistData.getDescription());
+        //logger.info("MachineController:attempt add Machine "+mid);
+        //ms.addMachine(mid);
+        int mid = machineRegistData.getMid();
+        if(ms.addMachine(machineRegistData)){
+            logger.info("ProductionController:Adding Machine "+mid+" is successfully done");
+            return "redirect:/production";
+        }else{
+            logger.info("ProductionController:Adding Machine "+mid+" is failed");
+            machineRegistData.setMachineExists(false);
+            model.addAttribute("machineRegistData", machineRegistData);
+            model.addAttribute("failedReason","Duplicated machine id");
+            return "production/machineRegistration";
+        }
     }
 
     @GetMapping("/getAll")

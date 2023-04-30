@@ -168,6 +168,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
 <script th:inline="javascript" >
     /*<![CDATA[*/
+    <!--Production에서 사용하는 경고 알림, model에 "failedReason" attribute를 추가하면 작동함.-->
+(()=>{
+    var failedReason= /*[[${failedReason}]]*/;
+    if(failedReason!==null){
+        alert("registration fail cause of fallow reason :\n"+failedReason);
+    }
+})()
 (() => {
   'use strict'
 

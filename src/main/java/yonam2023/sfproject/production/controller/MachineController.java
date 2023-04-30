@@ -4,10 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import yonam2023.sfproject.production.domain.MachineData;
+import yonam2023.sfproject.production.domain.MachineRegistData;
 import yonam2023.sfproject.production.service.MachineService;
 
 
@@ -23,23 +23,30 @@ public class MachineController {
 
 
 
-    @GetMapping("/chkMachine/{McId}")
+    @GetMapping("/chk/{McId}")
     @ResponseBody
-    public void checkMachine(@PathVariable("McId") int mid){
-        //del Machine code
+    public String checkMachine(@PathVariable("McId") int mid){
+        //check Machine code
         logger.info("MachineController:check Machine "+mid+" exists");
-        ms.checkMachine(mid);
+        boolean result = ms.checkMachine(mid);
+        return Boolean.toString(result);
     }
 
-    @GetMapping("/addMachine/{McId}")
-    @ResponseBody
-    public void addMachine(@PathVariable("McId") int mid){
+    @GetMapping("/add/{McId}")
+    public String addMachine(@PathVariable("McId") int mid){
         //add Machine code
         logger.info("MachineController:attempt add Machine "+mid);
-        ms.addMachine(mid);
+        if(ms.addMachine(mid)){
+            logger.info("MachineController:Adding Machine "+mid+" is successfully done");
+            return "redirect:/production";
+        }else{
+            logger.info("MachineController:Adding Machine "+mid+" is failed");
+            return "production/machineRegistration";
+        }
+
     }
 
-    @GetMapping("/delMachine/{McId}")
+    @GetMapping("/del/{McId}")
     @ResponseBody
     public void delMachine(@PathVariable("McId") int mid){
         //del Machine code
@@ -47,7 +54,7 @@ public class MachineController {
         ms.delMachine(mid);
     }
 
-    @GetMapping("/runMachine/{McId}")
+    @GetMapping("/run/{McId}")
     @ResponseBody
     public void runMachine(@PathVariable("McId") int mid){
         //add Machine code
@@ -55,7 +62,7 @@ public class MachineController {
         ms.runMachine(mid);
     }
 
-    @GetMapping("/stopMachine/{McId}")
+    @GetMapping("/stop/{McId}")
     @ResponseBody
     public void stopMachine(@PathVariable("McId") int mid){
         //stop code
@@ -63,7 +70,7 @@ public class MachineController {
         ms.stopMachine(mid);
     }
 
-    @GetMapping("/checkMcState/{McId}")
+    @GetMapping("/checkState/{McId}")
     @ResponseBody
     public void checkMachineStateGet(@PathVariable("McId") int mid){
         //check Machine State code

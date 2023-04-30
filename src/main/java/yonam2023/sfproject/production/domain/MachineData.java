@@ -23,13 +23,26 @@ public class MachineData {
     @Column(name = "NAME")
     String name;
 
-    @Column(name = "STATUS")
-    boolean status;
+    @Column(name = "MAX")
+    int max;
+
+    @Column(name = "MIN")
+    int min;
+
+    @Column(name = "STATE")
+    boolean state;
+
+    @Column(name = "FATAL")
+    boolean fatal;
+
+    @Column(name = "DESCRIPTION")
+    String description;
 
     @Builder
-    public MachineData(int mid,String name, boolean status){
+    public MachineData(int mid,String name, boolean state, String description){
         this.mid = mid;
         this.name = name;
-        this.status = status;
+        this.state = state;
+        this.description = description;
     }
 }
