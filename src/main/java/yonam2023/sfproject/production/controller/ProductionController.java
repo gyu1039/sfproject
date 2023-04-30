@@ -32,12 +32,15 @@ public class ProductionController {
     @Autowired
     FactoryService fs;
 
+    //주로 뷰 관리 코드를 위치 시킬것.
+    /*
     @GetMapping
     public String initGet(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         logger.info("ProductionController:Factory Connection State:"+fs.getFactoryConnectionState());
         if(!fs.getFactoryConnectionState()){
             return "production/connectionCheck";
         }
+
         Page<Production> all = pr.findAll(pageable);
         List<Production> graph = pr.findTop10ByOrderByIdDesc();
         List<String> ids = new ArrayList<String>();
@@ -55,6 +58,26 @@ public class ProductionController {
         model.addAttribute("gValues", values);
 
         return "production/init";
+    }
+     */
+    @GetMapping
+    public String initGet() {
+        logger.info("ProductionController:Factory Connection State:"+fs.getFactoryConnectionState());
+        if(!fs.getFactoryConnectionState()){
+            return "production/connectionCheck";
+        }
+        return "production/machineOverview";
+    }
+
+    @GetMapping("/factoryManagement")
+    public String factoryManagementPage(){
+        logger.info("ProductionController:factoryManagementPage called");
+        return "production/factoryManagement";
+    }
+    @GetMapping("/machineRegistration")
+    public String machineRegistrationPage(){
+        logger.info("ProductionController:machineRegistration called");
+        return "production/machineRegistration";
     }
 
     @GetMapping("/getAll")
