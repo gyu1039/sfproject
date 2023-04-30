@@ -71,6 +71,19 @@ public class FactoryService {
         }
     }
 
+    public boolean getFactoryOperationState(){
+        logger.info("MachineService:check Factory Operation State");
+        try {
+            String res = httpPS.sendGet(machineURL + "chkOperation/");
+            logger.info("MachineService:receive {"+res+"}");
+            return Boolean.valueOf(res);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     public boolean getFactoryConnectionState(){
         return this.isConnected;
     }

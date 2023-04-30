@@ -71,9 +71,13 @@ public class ProductionController {
         if(!fs.getFactoryConnectionState()){
             return "production/connectionCheck";
         }else{
-            model.addAttribute("factoryState", "Connected");
+            model.addAttribute("factoryConnectionState", "Connected");
         }
-
+        if(fs.getFactoryOperationState()){
+            model.addAttribute("factoryOperationState", "In Operation");
+        }else{
+            model.addAttribute("factoryOperationState", "Stopped");
+        }
 
         Page<MachineData> all = mr.findAll(pageable);
 
