@@ -126,6 +126,21 @@ public class ProductionController {
             return "redirect:/production";
         }
         MachineData machineData = mr.findByMid(mid);
+        //graphData
+        List<Production> graph = pr.findTop10ByMidOrderByIdDesc(mid);
+        List<String> ids = new ArrayList<String>();
+        List<Integer> values = new ArrayList<Integer>();
+
+        for(int i = graph.size()-1; i>=0; i--){
+            Production p = graph.get(i);
+            ids.add(Long.toString(p.getId()));
+            values.add(p.getSvalue());
+        }
+
+        model.addAttribute("sType", "testSensor");
+        model.addAttribute("gIds", ids);
+        model.addAttribute("gValues", values);
+
         model.addAttribute("machineData", machineData);
         return "production/machineDetail";
     }

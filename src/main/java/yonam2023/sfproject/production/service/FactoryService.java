@@ -10,6 +10,8 @@ import java.net.ConnectException;
 @Service
 public class FactoryService {
     private boolean isConnected = false;
+
+    private boolean workingOn = false;
     //공장 접속 여부 식별
     private static final String machineURL="http://localhost:8085/";
     private Logger logger = LoggerFactory.getLogger(FactoryService.class);
@@ -40,7 +42,11 @@ public class FactoryService {
         try {
             String res = httpPS.sendGet(machineURL + "turnOn/");
             logger.info("MachineService:receive {"+res+"}");
-            return true;
+            boolean result = Boolean.valueOf(res);
+            if(result){//ture일때만 값 변동. 이미켜져있으면 값 변동 없음.
+                this.workingOn = true;
+            }
+            return workingOn;
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -76,7 +82,8 @@ public class FactoryService {
         try {
             String res = httpPS.sendGet(machineURL + "chkOperation/");
             logger.info("MachineService:receive {"+res+"}");
-            return Boolean.valueOf(res);
+            this.workingOn=Boolean.valueOf(res);
+            return workingOn;
         }catch (Exception e){
             e.printStackTrace();
             return false;

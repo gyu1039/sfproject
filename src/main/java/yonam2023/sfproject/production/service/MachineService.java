@@ -98,12 +98,20 @@ public class MachineService {
         try {
             //기계 작동
             String res = httpPS.sendGet(machineURL + "runMachine/"+mid);
-            logger.info("MachineService:Machine "+mid+" Run Result : "+res);
+            if(Boolean.valueOf(res)){
+                logger.info("MachineService:Machine "+mid+" Run Successful : "+res);
+                md.setState(true);
+                md.setFatal(false);
+                mr.save(md);
+                return true;
+            }else{
+                logger.info("MachineService:Machine "+mid+" failed to start up : "+res);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        return true;
+        return false;
     }
 
     public boolean stopMachine(int mid){
@@ -119,6 +127,13 @@ public class MachineService {
             //기계 작동
             String res = httpPS.sendGet(machineURL + "stopMachine/"+mid);
             logger.info("MachineService:Machine "+mid+" Stop Result : "+res);
+            if(Boolean.valueOf(res)){
+                logger.info("MachineService:Machine "+mid+" Stop Successful : "+res);
+                md.setState(false);
+                mr.save(md);
+            }else{
+                logger.info("MachineService:Machine "+mid+" failed to stop : "+res);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -128,7 +143,7 @@ public class MachineService {
     public boolean checkMachineState(int mid){
         //check Machine State code
         logger.info("MachineService:check Machine "+mid+" exists");
-        if(isMachineInDB(mid)){
+        if(!isMachineInDB(mid)){
             //db에 없는 기계임
             logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
             return false;
@@ -160,11 +175,11 @@ public class MachineService {
         return false;
     }
 
-    public boolean isMachineInDB(int mid){
+    public boolean isMachineInDB(int mid) {
         MachineData md = mr.findByMid(mid);
-        if(md!=null){
+        if (md != null) {
             //db에 이미 등록된 기계임
-            logger.warn("MachineService:DB:Machine "+mid+" Exists in DB");
+            logger.warn("MachineService:DB:Machine " + mid + " Exists in DB");
             return true;
         }
         return false;
@@ -193,6 +208,10 @@ public class MachineService {
     }
 
     public void fatalState(int mid){
+        MachineData md = mr.findByMid(mid);
+        md.setState(false);
+        md.setFatal(true);
+        mr.save(md);
         logger.error("Fatal Received "+mid);
     }
 }

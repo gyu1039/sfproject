@@ -55,10 +55,10 @@ public class MachineController {
 
     @GetMapping("/run/{McId}")
     @ResponseBody
-    public void runMachine(@PathVariable("McId") int mid){
+    public String runMachine(@PathVariable("McId") int mid){
         //add Machine code
         logger.info("MachineController:attempt run Machine "+mid);
-        ms.runMachine(mid);
+        return Boolean.toString(ms.runMachine(mid));
     }
 
     @GetMapping("/stop/{McId}")
@@ -73,7 +73,7 @@ public class MachineController {
     @ResponseBody
     public void checkMachineStateGet(@PathVariable("McId") int mid){
         //check Machine State code
-        logger.info("MachineController:check Machine "+mid);
+        logger.info("MachineController:check Machine state"+mid);
         ms.checkMachineState(mid);
     }
 

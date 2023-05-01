@@ -29,35 +29,43 @@ function doShutdownFactory(){
          method: "GET"
     }).then((response) => console.log(response));
 }
-function doCheckMachine(){
+function doCheckMachine0(){
     fetch("http://localhost:8080/machine/chk/0", {
           method: "GET"
     }).then((response) => console.log(response));
 }
-function doAddMachine(){
+function doAddMachine0(){
     fetch("http://localhost:8080/machine/add/0", {
            method: "GET"
     }).then((response) => console.log(response));
 }
-function doDelMachine(){
+function doDelMachine0(){
     fetch("http://localhost:8080/machine/del/0", {
             method: "GET"
     }).then((response) => console.log(response));
 }
-function doRunMachine(){
-    fetch("http://localhost:8080/machine/run/0", {
-            method: "GET"
-    }).then((response) => console.log(response));
-}
-function doStopMachine(){
+
+function doStopMachine0(){
     fetch("http://localhost:8080/machine/stop/0", {
             method: "GET"
     }).then((response) => console.log(response));
 }
-function doCheckMcState(){
+function doCheckMcState0(){
     fetch("http://localhost:8080/machine/checkMcState/0", {
             method: "GET"
     }).then((response) => console.log(response));
+}
+
+function doRunMachine(mid){
+    fetch("http://localhost:8080/machine/run/"+mid, {
+            method: "GET"
+    }).then((response) => response.json())
+    .then((response) => {
+        console.log(response);
+        if(response){
+            document.getElementById('opState').innerText=response;
+        }
+    });
 }
 
 function doCheckMachineAtRegistration(){
