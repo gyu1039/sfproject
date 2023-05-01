@@ -28,7 +28,7 @@
       <tr th:each="e : ${list}">
         <td><span th:text="${e.mid}"></span></td>
         <td><a th:href="'/production/machineDetail/'+${e.mid}" th:text="${e.name}"></a></td>
-        <td>Temporary Value</td>
+        <td><span th:text="${e.recentData}"></span></td>
         <td><span th:text="${e.state}"></span></td>
         <td><span th:text="${e.fatal}"></span></td>
       </tr>
@@ -78,8 +78,8 @@
       </ul>
     </nav>
   </div>
-  <a href="/production/factoryManagement">공장 관리</a></br>
-  <a href="/production/machineRegistration">기계 등록</a></br>
+  <button onclick="location.href ='/production/machineRegistration'">기계 등록</button>
+  <button onclick="location.href ='/production/factoryManagement'">공장 관리</button>
 
 </section>
 

@@ -29,6 +29,9 @@ public class MachineData {
     @Column(name = "MIN")
     int min;
 
+    @Column(name = "RDATA")
+    int recentData=-1;
+
     @Column(name = "STATE")
     boolean state;
 

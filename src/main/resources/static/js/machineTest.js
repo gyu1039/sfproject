@@ -89,6 +89,30 @@ function doRunMachine(mid){
         }
     });
 }
+//올바르게 동작하지않음.
+function doDelMachine(mid){
+    if(confirm("기계를 삭제합니까?\n저장 된 정보가 지워집니다."))
+    {
+        //fetch("http://localhost:8080/machine/del/"+mid, {
+        //        method: "GET"
+        //}).then((response) => console.log(response));
+        //window.location.href='/production';
+        location.href='/machine/del/'+mid;
+        //document.location.reload();
+    }
+}
+
+function doStopMachine(mid){
+    fetch("http://localhost:8080/machine/stop/"+mid, {
+            method: "GET"
+    }).then((response) => response.json())
+    .then((response) => {
+         console.log(response);
+         if(!response){
+             document.getElementById('opState').innerText=response;
+         }
+    });
+}
 
 function doCheckMachineAtRegistration(){
     const mid = Number(document.getElementById('mid').value);

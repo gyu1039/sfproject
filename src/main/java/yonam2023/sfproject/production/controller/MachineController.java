@@ -1,8 +1,5 @@
 package yonam2023.sfproject.production.controller;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +43,12 @@ public class MachineController {
     }
 
     @GetMapping("/del/{McId}")
-    @ResponseBody
-    public void delMachine(@PathVariable("McId") int mid){
+    public String delMachine(@PathVariable("McId") int mid){
         //del Machine code
         logger.info("MachineController:attempt del Machine "+mid);
         ms.delMachine(mid);
+
+        return "redirect:/production";
     }
 
     @GetMapping("/run/{McId}")
@@ -63,10 +61,11 @@ public class MachineController {
 
     @GetMapping("/stop/{McId}")
     @ResponseBody
-    public void stopMachine(@PathVariable("McId") int mid){
+    public String stopMachine(@PathVariable("McId") int mid){
         //stop code
         logger.info("MachineController:attempt stop Machine "+mid);
-        ms.stopMachine(mid);
+        boolean result = ms.stopMachine(mid);
+        return Boolean.toString(!result);//가동 상태를 반환. 즉 정지가 성공하면 true를 보내야함.
     }
 
     @GetMapping("/checkState/{McId}")

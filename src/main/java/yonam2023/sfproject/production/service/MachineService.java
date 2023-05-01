@@ -74,6 +74,7 @@ public class MachineService {
     @Transactional
     public boolean delMachine(int mid){
         //del machine code
+        //삭제 절차 : 확인, 정지, 삭제
         logger.info("MachineService:check Machine "+mid+" exists");
         MachineData md = mr.findByMid(mid);
         if(md==null){
@@ -81,7 +82,12 @@ public class MachineService {
             logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
             return false;
         }
-        mr.delete(md);
+        if(md.isState()){
+            //기계가 작동중임.
+            stopMachine(mid);
+        }
+        mr.delete(md);//기계 목록에서 제거
+        //production에서는 유지함.
         logger.info("MachineService:Machine "+mid+" was successfully delete from DB");
         return true;
     }
@@ -124,15 +130,17 @@ public class MachineService {
             return false;
         }
         try {
-            //기계 작동
+            //기계 중지
             String res = httpPS.sendGet(machineURL + "stopMachine/"+mid);
             logger.info("MachineService:Machine "+mid+" Stop Result : "+res);
             if(Boolean.valueOf(res)){
                 logger.info("MachineService:Machine "+mid+" Stop Successful : "+res);
                 md.setState(false);
                 mr.save(md);
+                return true;
             }else{
                 logger.info("MachineService:Machine "+mid+" failed to stop : "+res);
+                return true;//정지 불가능 오류에 대해 고려할 필요 있음.
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -197,11 +205,16 @@ public class MachineService {
         for (int i = 0; i<jsonArray.size();i++){
             JSONObject jo = (JSONObject) jsonArray.get(i);
             logger.info("MachineService:InsertData:"+jo.toString());
+            int mid = ((Long)jo.get("mid")).intValue();
+            int value = ((Long)jo.get("value")).intValue();
             Production production = Production.builder()
-                    .mid(Integer.parseInt(jo.get("mid").toString()))
-                    .svalue(Integer.parseInt(jo.get("value").toString()))
+                    .mid(mid)
+                    .svalue(value)
                     .build();
             pr.save(production);
+            MachineData machineData = mr.findByMid(mid);
+            machineData.setRecentData(value);
+            mr.save(machineData);
         }
 
 

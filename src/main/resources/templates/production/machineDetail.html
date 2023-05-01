@@ -8,12 +8,13 @@
 <body>
 
 <section>
-  MachineDetail</br>
+  <h3>MachineDetail</h3>
   Machine Id:<span th:text="${machineData.mid}"></span></br>
   Machine Name:<span th:text="${machineData.name}"></span></br>
-  Operation State:<span id="opState" th:text="${machineData.state}"></span><button th:onclick="doRunMachine([[${machineData.mid}]])">run</button></br>
+  Operation State:<span id="opState" th:text="${machineData.state}"></span></br>
   Fatal Error:<span th:text="${machineData.fatal}"></span></br>
-  Description:</br><textarea cols="50" rows="10" th:text="${machineData.description}"></textarea></br>
+  Description:</br><textarea cols="50" rows="5" th:text="${machineData.description}"></textarea></br>
+  <button th:onclick="doRunMachine([[${machineData.mid}]])">run</button><button th:onclick="doStopMachine([[${machineData.mid}]])">Stop</button><button th:onclick="doDelMachine([[${machineData.mid}]])">DELETE</button><button onclick="location.href ='/production'">목록으로</button></br>
   <canvas class="my-4 w-100" id="productionChart" width="1000" height="500"></canvas>
 </section>
 
