@@ -58,7 +58,7 @@ public class FactoryService {
         try {
             String res = httpPS.sendGet(machineURL + "pause/");
             logger.info("MachineService:receive {"+res+"}");
-            return true;
+            return Boolean.valueOf(res);
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -70,6 +70,7 @@ public class FactoryService {
         try {
             String res = httpPS.sendGet(machineURL + "shutdown/");
             logger.info("MachineService:receive {"+res+"}");
+            this.isConnected=false;
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -94,4 +95,5 @@ public class FactoryService {
     public boolean getFactoryConnectionState(){
         return this.isConnected;
     }
+
 }

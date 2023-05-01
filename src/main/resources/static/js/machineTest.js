@@ -17,17 +17,39 @@ function doCheckFactory(){
 function doStartupFactory(){
     fetch("http://localhost:8080/factory/startup", {
         method: "GET"
-    }).then((response) => console.log(response));
+    }).then((response) =>response.json())
+    .then((response)=>{
+        console.log(response);
+         if(response){
+            document.getElementById('factoryOperation').innerText="In Operation";
+         }
+    });
 }
 function doPauseFactory(){
     fetch("http://localhost:8080/factory/pause", {
-          method: "GET"
-    }).then((response) => console.log(response));
+         method: "GET"
+    }).then((response) => response.json())
+    .then((response)=>{
+         console.log(response);
+         if(response){
+            document.getElementById('factoryOperation').innerText="Stopped";
+         }
+    });
 }
 function doShutdownFactory(){
-    fetch("http://localhost:8080/factory/shutdown", {
-         method: "GET"
-    }).then((response) => console.log(response));
+    if(confirm("공장을 정지합니까?\n재가동을 위해서는 공장의 재부팅이 필요합니다."))
+    {
+        fetch("http://localhost:8080/factory/shutdown", {
+             method: "GET"
+        }).then((response) => response.json())
+        .then((response)=>{
+            console.log(response);
+            if(response){
+                document.getElementById('factoryConnection').innerText="Disconnected";
+                document.getElementById('factoryOperation').innerText="Stopped";
+            }
+        });
+    }
 }
 function doCheckMachine0(){
     fetch("http://localhost:8080/machine/chk/0", {

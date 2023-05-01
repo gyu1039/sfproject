@@ -86,8 +86,19 @@ public class ProductionController {
     }
 
     @GetMapping("/factoryManagement")
-    public String factoryManagementPage(){
+    public String factoryManagementPage(Model model){
         logger.info("ProductionController:factoryManagementPage called");
+        if(!fs.getFactoryConnectionState()){
+            return "production/connectionCheck";
+        }else{
+            model.addAttribute("factoryConnectionState", "Connected");
+        }
+        if(fs.getFactoryOperationState()){
+            model.addAttribute("factoryOperationState", "In Operation");
+        }else{
+            model.addAttribute("factoryOperationState", "Stopped");
+        }
+
         return "production/factoryManagement";
     }
     @GetMapping("/machineRegistration")

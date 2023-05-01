@@ -36,29 +36,37 @@ public class FactoryController {
 
     @GetMapping("/startup")
     @ResponseBody
-    public void startupFactoryStub(){
+    public String startupFactoryStub(){
         //run Factory code
         /*
         Thread ProductionStub = new FactoryStub();
         ProductionStub.run();
          */
         logger.info("FactoryController:attempt wake up Factory");
-        fs.startupFactory();
+        boolean result=fs.startupFactory();
+
+        if(result){
+            return "true";
+        }else {
+            return "false";
+        }
     }
 
     @GetMapping("/pause")
     @ResponseBody
-    public void pauseFactoryStub(){
+    public String pauseFactoryStub(){
         //stop Factory code
         logger.info("FactoryController:attempt pause Factory");
-        fs.pauseFactory();
+        boolean result = fs.pauseFactory();
+        return Boolean.toString(result);
     }
 
     @GetMapping("/shutdown")
     @ResponseBody
-    public void shutdownFactoryStub(){
+    public String shutdownFactoryStub(){
         //stop Factory code
         logger.info("FactoryController:attempt shut down Factory");
         fs.shutdownFactory();
+        return "true";
     }
 }

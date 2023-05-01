@@ -8,7 +8,13 @@
 <body>
 
 <section>
-  Factory Management</br>
+  <h3>Factory Management-Yay</h3>
+  Factory Connection:<span id="factoryConnection" th:text="${factoryConnectionState}"></span></br>
+  Factory Operation:<span id="factoryOperation" th:text="${factoryOperationState}"></span></br>
+  <button onclick="doStartupFactory()">StartUp</button></br>
+  <button onclick="doPauseFactory()">Pause</button></br>
+  <button onclick="doShutdownFactory()">ShutDown</button></br>
+
 </section>
 
 </body>
