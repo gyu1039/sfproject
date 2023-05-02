@@ -171,6 +171,12 @@
 (() => {
   'use strict'
 
+  //Production에서 사용하는 경고 알림, model에 "failedReason" attribute를 추가하면 작동함.
+  var failedReason= /*[[${failedReason}]]*/;
+  if(failedReason!==null){
+      alert("registration fail cause of fallow reason :\n"+failedReason);
+  }
+
   feather.replace({ 'aria-hidden': 'true' })
 
   // Graphs

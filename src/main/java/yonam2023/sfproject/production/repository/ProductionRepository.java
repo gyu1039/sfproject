@@ -12,5 +12,6 @@ import java.util.List;
 public interface ProductionRepository extends JpaRepository<Production, Long> {
     public Page<Production> findAll(Pageable pageable);
     public List<Production> findTop10ByOrderByIdDesc();
+    public List<Production> findTop10ByMidOrderByIdDesc(int mid);
 }
 

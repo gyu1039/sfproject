@@ -1,15 +1,19 @@
 package yonam2023.sfproject.production.service;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yonam2023.sfproject.production.domain.MachineData;
+import yonam2023.sfproject.production.domain.MachineRegistData;
+import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
+import yonam2023.sfproject.production.repository.ProductionRepository;
 
-import java.net.ConnectException;
 
 @Service
 public class MachineService {
@@ -19,51 +23,16 @@ public class MachineService {
     @Autowired
     MachineDataRepository mr;
 
+    @Autowired
+    ProductionRepository pr;
+
     private Logger logger = LoggerFactory.getLogger(MachineService.class);
     private static final String machineURL="http://localhost:8085/";
 
-    public boolean checkFactory(){
-        logger.info("MachineService:check Factory Connection");
-        try {
-            String res = httpPS.sendGet(machineURL + "cntCheck/");
-            return Boolean.valueOf(res);
-        }catch(ConnectException e){
-            logger.warn("MachineService:Factory Connection failed");
-            return false;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean wakeFactory(){
-        logger.info("MachineService:attempt startup Factory");
-        try {
-            String res = httpPS.sendGet(machineURL + "turnOn/");
-            logger.info("MachineService:receive {"+res+"}");
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean stopFactory(){
-        logger.info("MachineService:attempt shut down Factory");
-        try {
-            String res = httpPS.sendGet(machineURL + "turnOff/");
-            logger.info("MachineService:receive {"+res+"}");
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     public boolean addMachine(int mid){
-        logger.info("MachineService:check Machine "+mid+" exists");
-        MachineData md = mr.findByMid(mid);
-        if(md!=null){
+        logger.info("MachineService:attempt to add Machine "+mid+" by mid");
+        if(isMachineInDB(mid)){
             //db에 이미 등록된 기계임
             logger.warn("MachineService:Machine "+mid+" is Already in DB");
             return false;
@@ -73,7 +42,30 @@ public class MachineService {
             logger.warn("MachineService:Machine "+mid+" is not exists");
             return false;
         }
-        MachineData smd = MachineData.builder().mid(mid).name("temp").status(true).build();
+        MachineData smd = MachineData.builder().mid(mid).name("temp").state(true).build();
+        mr.save(smd);
+        logger.info("MachineService:Machine "+mid+" is now registered");
+        return true;
+    }
+    public boolean addMachine(MachineRegistData machineRegistData){
+        int mid = machineRegistData.getMid();
+        logger.info("MachineService:attempt to add Machine "+mid+" by Data");
+        if(isMachineInDB(mid)){
+            //db에 이미 등록된 기계임
+            logger.warn("MachineService:Machine "+mid+" is Already in DB");
+            return false;
+        }
+        if(!checkMachine(mid)){
+            //기계가 존재하지 않음
+            logger.warn("MachineService:Machine "+mid+" is not exists");
+            return false;
+        }
+        MachineData smd = MachineData.builder()
+                .mid(machineRegistData.getMid())
+                .name(machineRegistData.getName())
+                .state(false)
+                .description(machineRegistData.getDescription())
+                .build();
         mr.save(smd);
         logger.info("MachineService:Machine "+mid+" is now registered");
         return true;
@@ -82,6 +74,7 @@ public class MachineService {
     @Transactional
     public boolean delMachine(int mid){
         //del machine code
+        //삭제 절차 : 확인, 정지, 삭제
         logger.info("MachineService:check Machine "+mid+" exists");
         MachineData md = mr.findByMid(mid);
         if(md==null){
@@ -89,7 +82,12 @@ public class MachineService {
             logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
             return false;
         }
-        mr.delete(md);
+        if(md.isState()){
+            //기계가 작동중임.
+            stopMachine(mid);
+        }
+        mr.delete(md);//기계 목록에서 제거
+        //production에서는 유지함.
         logger.info("MachineService:Machine "+mid+" was successfully delete from DB");
         return true;
     }
@@ -106,12 +104,20 @@ public class MachineService {
         try {
             //기계 작동
             String res = httpPS.sendGet(machineURL + "runMachine/"+mid);
-            logger.info("MachineService:Machine "+mid+" Run Result : "+res);
+            if(Boolean.valueOf(res)){
+                logger.info("MachineService:Machine "+mid+" Run Successful : "+res);
+                md.setState(true);
+                md.setFatal(false);
+                mr.save(md);
+                return true;
+            }else{
+                logger.info("MachineService:Machine "+mid+" failed to start up : "+res);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        return true;
+        return false;
     }
 
     public boolean stopMachine(int mid){
@@ -124,9 +130,18 @@ public class MachineService {
             return false;
         }
         try {
-            //기계 작동
+            //기계 중지
             String res = httpPS.sendGet(machineURL + "stopMachine/"+mid);
             logger.info("MachineService:Machine "+mid+" Stop Result : "+res);
+            if(Boolean.valueOf(res)){
+                logger.info("MachineService:Machine "+mid+" Stop Successful : "+res);
+                md.setState(false);
+                mr.save(md);
+                return true;
+            }else{
+                logger.info("MachineService:Machine "+mid+" failed to stop : "+res);
+                return true;//정지 불가능 오류에 대해 고려할 필요 있음.
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -136,8 +151,7 @@ public class MachineService {
     public boolean checkMachineState(int mid){
         //check Machine State code
         logger.info("MachineService:check Machine "+mid+" exists");
-        MachineData md = mr.findByMid(mid);
-        if(md==null){
+        if(!isMachineInDB(mid)){
             //db에 없는 기계임
             logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
             return false;
@@ -169,7 +183,48 @@ public class MachineService {
         return false;
     }
 
+    public boolean isMachineInDB(int mid) {
+        MachineData md = mr.findByMid(mid);
+        if (md != null) {
+            //db에 이미 등록된 기계임
+            logger.warn("MachineService:DB:Machine " + mid + " Exists in DB");
+            return true;
+        }
+        return false;
+    }
+
+    public void insertSensorData(String data){
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray;
+        try {
+            jsonArray = (JSONArray) parser.parse(data);
+        }catch (Exception e){
+            e.printStackTrace();
+            return;
+        }
+        for (int i = 0; i<jsonArray.size();i++){
+            JSONObject jo = (JSONObject) jsonArray.get(i);
+            logger.info("MachineService:InsertData:"+jo.toString());
+            int mid = ((Long)jo.get("mid")).intValue();
+            int value = ((Long)jo.get("value")).intValue();
+            Production production = Production.builder()
+                    .mid(mid)
+                    .svalue(value)
+                    .build();
+            pr.save(production);
+            MachineData machineData = mr.findByMid(mid);
+            machineData.setRecentData(value);
+            mr.save(machineData);
+        }
+
+
+    }
+
     public void fatalState(int mid){
+        MachineData md = mr.findByMid(mid);
+        md.setState(false);
+        md.setFatal(true);
+        mr.save(md);
         logger.error("Fatal Received "+mid);
     }
 }

@@ -20,9 +20,7 @@ public class Production {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "McId")
-    private int machineId;
-    @Column(name = "STYPE")
-    private String stype;
+    private int mid;
 
     @Column(name = "SVALUE")
     private int svalue;
@@ -32,9 +30,8 @@ public class Production {
     private Date otime;
 
     @Builder
-    public Production(int mcId, String stype, int svalue){
-        this.machineId = mcId;
-        this.stype = stype;
+    public Production(int mid, int svalue){
+        this.mid = mid;
         this.svalue = svalue;
     }
 }
