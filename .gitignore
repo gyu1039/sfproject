@@ -32,7 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-pom.xml
 application.properties
 persistence.xml
 .jpb/
