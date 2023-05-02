@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,8 @@ public class EmployeeController {
     private final EmployeeService es;
 
     @GetMapping
-    public String totalList(Model model, @PageableDefault Pageable pageable) {
+    public String totalList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
         Page<Employee> all = es.findAll(pageable);
         model.addAttribute("list", all);
         return "employee/init";
@@ -59,7 +61,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/bydepartment")
-    public String byDepartment(@ModelAttribute DepartmentTO departmentTO, @PageableDefault Pageable pageable, Model model) {
+    public String byDepartment(@ModelAttribute DepartmentTO departmentTO, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
 
         Iterable<Employee> byDepartment = es.findByDepartment(departmentTO, pageable);
         model.addAttribute("list", byDepartment);

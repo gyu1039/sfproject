@@ -8,10 +8,17 @@
 <body>
 
 <h1>로그인</h1>
-<form th:action method="post">
-    <input type="text" name="name" placeholder="id를 입력하세요">
-    <input type="password" name="password" placeholder="password를 입력하세요">
-    <button type="submit">로그인</button>
+<div th:if="${param.error}"> <!-- 타임리프로 에러시 보여주는 메세지 -->
+    Invalid username and password.
+</div>
+<div th:if="${param.logout}"> <!-- 타임리프로 로그아웃시 보여주는 메세지 -->
+    You have been logged out.
+</div>
+<form th:action="@{/login}" method="post">
+    <div><label> UserName : <input type="text" name="username" required/> </label></div>
+    <div><label> Password: <input type="password" name="password" required/> </label></div>
+    <div><input type="submit" value="Sign In"/></div>
 </form>
+
 </body>
 </html>

@@ -51,4 +51,13 @@ public class EmployeeService {
 
         return er.findByDepartment(departmentTO.getDepartmentType(), pageable);
     }
+
+    public Employee findByName(String id) {
+
+        if(er.findByName(id) != null) {
+            return er.findByName(id);
+        }
+
+        return null;
+    }
 }
