@@ -3,15 +3,15 @@ package yonam2023.sfproject.production.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.production.service.MachineService;
 
+import java.util.HashMap;
+
+
 @Controller
+@RequestMapping("/machine")
 public class MachineController {
 
     @Autowired
@@ -19,86 +19,60 @@ public class MachineController {
 
     private Logger logger = LoggerFactory.getLogger(MachineController.class);
 
-    @GetMapping("/checkFactory")
+    @GetMapping("/chk/{McId}")
     @ResponseBody
-    public void checkFactory(){
-        //check Factory Connect code
-        logger.info("MachineController:check Factory Connection");
-        boolean res = ms.checkFactory();
-        if(res){
-            //Connection ok
-            logger.info("MachineController:Factory Connection ok");
-        }else{
-            //Connection failed
-            logger.info("MachineController:Factory Connection failed");
-        }
-    }
-
-    @GetMapping("/wakeStub")
-    @ResponseBody
-    public void runFactoryStub(){
-        //run Factory code
-        /*
-        Thread ProductionStub = new FactoryStub();
-        ProductionStub.run();
-         */
-        logger.info("MachineController:attempt wake up Factory");
-        ms.wakeFactory();
-    }
-    @GetMapping("/stopStub")
-    @ResponseBody
-    public void stopFactoryStub(){
-        //stop Factory code
-        logger.info("MachineController:attempt shut down Factory");
-        ms.stopFactory();
-    }
-
-
-    @GetMapping("/chkMachine/{McId}")
-    @ResponseBody
-    public void checkMachine(@PathVariable("McId") int mid){
-        //del Machine code
+    public String checkMachine(@PathVariable("McId") int mid){
+        //check Machine code
         logger.info("MachineController:check Machine "+mid+" exists");
-        ms.checkMachine(mid);
+        boolean result = ms.checkMachine(mid);
+        return Boolean.toString(result);
     }
 
-    @GetMapping("/addMachine/{McId}")
-    @ResponseBody
-    public void addMachine(@PathVariable("McId") int mid){
+    @GetMapping("/add/{McId}")
+    public String addMachine(@PathVariable("McId") int mid){
         //add Machine code
         logger.info("MachineController:attempt add Machine "+mid);
-        ms.addMachine(mid);
+        if(ms.addMachine(mid)){
+            logger.info("MachineController:Adding Machine "+mid+" is successfully done");
+            return "redirect:/production";
+        }else{
+            logger.info("MachineController:Adding Machine "+mid+" is failed");
+            return "production/machineRegistration";
+        }
+
     }
 
-    @GetMapping("/delMachine/{McId}")
-    @ResponseBody
-    public void delMachine(@PathVariable("McId") int mid){
+    @GetMapping("/del/{McId}")
+    public String delMachine(@PathVariable("McId") int mid){
         //del Machine code
         logger.info("MachineController:attempt del Machine "+mid);
         ms.delMachine(mid);
+
+        return "redirect:/production";
     }
 
-    @GetMapping("/runMachine/{McId}")
+    @GetMapping("/run/{McId}")
     @ResponseBody
-    public void runMachine(@PathVariable("McId") int mid){
+    public String runMachine(@PathVariable("McId") int mid){
         //add Machine code
         logger.info("MachineController:attempt run Machine "+mid);
-        ms.runMachine(mid);
+        return Boolean.toString(ms.runMachine(mid));
     }
 
-    @GetMapping("/stopMachine/{McId}")
+    @GetMapping("/stop/{McId}")
     @ResponseBody
-    public void stopMachine(@PathVariable("McId") int mid){
+    public String stopMachine(@PathVariable("McId") int mid){
         //stop code
         logger.info("MachineController:attempt stop Machine "+mid);
-        ms.stopMachine(mid);
+        boolean result = ms.stopMachine(mid);
+        return Boolean.toString(!result);//가동 상태를 반환. 즉 정지가 성공하면 true를 보내야함.
     }
 
-    @GetMapping("/checkMcState/{McId}")
+    @GetMapping("/checkState/{McId}")
     @ResponseBody
     public void checkMachineStateGet(@PathVariable("McId") int mid){
         //check Machine State code
-        logger.info("MachineController:check Machine "+mid);
+        logger.info("MachineController:check Machine state"+mid);
         ms.checkMachineState(mid);
     }
 
@@ -113,5 +87,12 @@ public class MachineController {
     @GetMapping("/mctest")
     public String mcTestPage(){
         return "production/machineTest";
+    }
+
+    @PostMapping("/insertData")
+    @ResponseBody
+    public void insertSensorData(@RequestBody String data){
+        logger.info("MachineController:Receive data:"+data);
+        ms.insertSensorData(data);
     }
 }
