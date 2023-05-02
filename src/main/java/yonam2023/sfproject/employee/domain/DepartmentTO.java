@@ -4,6 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class DepartmentDTO {
+public class DepartmentTO {
     private DepartmentType departmentType;
 }

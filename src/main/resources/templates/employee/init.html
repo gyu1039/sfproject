@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout ('index', '직원관리1', '직원관리2', '직원관리3', ~{::section})}"
+      th:replace="~{layout/base :: layout ('index', '구', '현', '중', ~{::section})}"
       lang="ko">
 
 <body>
@@ -21,7 +21,7 @@
                 <td><a th:href="@{employee/edit/{id}(id=${e.id})}"><span th:text="${e.id}"></span></a></td>
                 <td><span th:text="${e.name}"></span></td>
                 <td><span th:text="${e.phoneNumber}"></span></td>
-                <td><span th:text="${e.department}"></span></td>
+                <td><span th:text="${e.department.description}"></span></td>
             </tr>
             </tbody>
         </table>
