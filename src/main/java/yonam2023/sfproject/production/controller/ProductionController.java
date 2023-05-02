@@ -106,6 +106,8 @@ public class ProductionController {
         logger.info("ProductionController:machineRegistration called");
         MachineRegistData machineRegistData = MachineRegistData.builder().mid(0).build();
         model.addAttribute("machineRegistData", machineRegistData);
+        List<Integer> midList = ms.getFactoryMidList();
+        model.addAttribute("midList", midList);
 
         return "production/machineRegistration";
     }
@@ -125,6 +127,9 @@ public class ProductionController {
             machineRegistData.setMachineExists(false);
             model.addAttribute("machineRegistData", machineRegistData);
             model.addAttribute("failedReason","Duplicated machine id");
+            List<Integer> midList = ms.getFactoryMidList();
+            model.addAttribute("midList", midList);
+
             return "production/machineRegistration";
         }
     }
@@ -153,6 +158,8 @@ public class ProductionController {
         model.addAttribute("gValues", values);
 
         model.addAttribute("machineData", machineData);
+
+
         return "production/machineDetail";
     }
 
