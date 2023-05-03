@@ -16,5 +16,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     public Page<Employee> findAll(Pageable pageable);
     public Page<Employee> findByDepartment(DepartmentType departmentType, Pageable pageable);
+    public Employee findByName(String name);
     public List<Employee> findByEmployeeType(EmployeeType employeeType);
 }

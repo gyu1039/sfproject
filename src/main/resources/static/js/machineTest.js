@@ -89,7 +89,7 @@ function doRunMachine(mid){
         }
     });
 }
-//올바르게 동작하지않음.
+//올바르게 동작하지않음. *수정됨. fetch 제거
 function doDelMachine(mid){
     if(confirm("기계를 삭제합니까?\n저장 된 정보가 지워집니다."))
     {
