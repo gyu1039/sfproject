@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.production.service.MachineService;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 
 @Controller
@@ -94,5 +94,13 @@ public class MachineController {
     public void insertSensorData(@RequestBody String data){
         logger.info("MachineController:Receive data:"+data);
         ms.insertSensorData(data);
+    }
+
+    @GetMapping("/getFactoryMidList")
+    @ResponseBody
+    public String midListGet(){
+        logger.info("MachineController:Request Machine ID List");
+        ArrayList<Integer> arrayListMids = ms.getFactoryMidList();
+        return arrayListMids.toString();
     }
 }
