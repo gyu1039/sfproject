@@ -35,9 +35,17 @@ public class SendService {
     @Transactional
     public void editSendRecord(long id, SendForm.Request sendReqForm){
         SendRecord targetRecord = sendRecordRepo.findById(id).orElseThrow();
+        StoredItem storedItem = storedItemRepo.findByName(sendReqForm.getItemName());
+
+        int previousReservedAmount = targetRecord.getAmount();
+
+        // 출고 예약 수정
         targetRecord.setAmount(sendReqForm.getAmount());
         targetRecord.setDateTime(sendReqForm.getDateTime());
 
+        //재고 수정
+        storedItem.addAmount(previousReservedAmount); //원상 복구
+        storedItem.subAmount(sendReqForm.getAmount()); //수정된 출고 amount 반영
     }
 
     @Transactional
