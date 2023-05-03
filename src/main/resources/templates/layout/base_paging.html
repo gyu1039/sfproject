@@ -4,15 +4,23 @@
       lang="ko">
 <head>
     <meta charset="utf-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.108.0">
+
     <title th:text="${title}">title</title>
+    <!-- favicon.ico 404 오류 해결   -->
+    <link rel="shortcut icon" href="#">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-messaging.js"></script>
+
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -112,8 +120,7 @@
                 <h1 class="h2" th:text="${title}">Dashboard</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" th:text="|${department} 알림 받기|" onclick="registerNotify()">XX 알림 받기</button>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                         <span data-feather="calendar" class="align-text-bottom"></span>
@@ -175,6 +182,71 @@
         </main>
     </div>
 </div>
+
+<script >
+    function registerNotify() {
+
+        // Show Notification
+        // 메시지 기능 활성화를 알림
+        const messaging = firebase.messaging();
+
+        // RequestPermission 첫 어플 시작 시 알림 허용 or 불허를 사용자에게 안내합니다.
+        // 허용하지 않을 시 알람 메시지는 가지 않습니다.
+        messaging.requestPermission()
+            .then(function() {
+                // 알람이 허용되었을 때 토큰을 반환합니다.
+                // 해당 토큰을 통해 FCM 특정 사용자에게 메시지를 보낼 수 있습니다.
+                token = messaging.getToken();
+                return token;
+            })
+            .then(async function(token) {
+                console.log("token");
+                console.log(token);
+
+                //서버로 토큰 값을 전송
+                fetch("/register", {
+                    method: "POST",
+                    body: token
+                }).then((response) => console.log(response));
+                console.log("token pushed");
+            })
+
+    }
+
+
+    const onLoadFunc = (function () {
+        async function init() {
+            let firebaseConfig = {
+                // 설정 정보 apiKey, authDomain, projectId, storageBucket messagingSenderId, appId, measurementId
+
+            };
+
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+
+
+            //포그라운드 상태의 메시지를 팝업으로 띄우는 콜백 메서드
+            firebase.messaging().onMessage(function(payload) {
+                console.log("[payload2]", payload);
+                var options = {
+                    body : payload.notification.body,
+                    title : payload.notification.title
+                }
+                var notification = new Notification(payload.notification.title, options);
+                notification.onclick= function(event){
+                    event.preventDefault();
+                }
+            });
+        }
+        return {
+            init: function () {
+                init()
+            }
+        }
+    })()
+
+    onLoadFunc.init();
+</script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="/js/logistics_app.js"></script>

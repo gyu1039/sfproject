@@ -24,7 +24,6 @@ public class SendService {
         StoredItem storedItem = storedItemRepo.findByName(sendRecord.getItemName());
 
         if(storedItem == null){
-            //todo: 재고에 없는 상품을 출고하는 경우. 나중에 처리.
             return storedItemRepo.save(new StoredItem(sendRecord.getItemName(),-sendRecord.getAmount())).getId();
         }
         else{
