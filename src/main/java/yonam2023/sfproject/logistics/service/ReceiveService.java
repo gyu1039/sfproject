@@ -29,6 +29,7 @@ public class ReceiveService {
             storedItem.addAmount(receiveRecord.getAmount());
             return storedItem.getId();
         }
+
     }
 
     @Transactional

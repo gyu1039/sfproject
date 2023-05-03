@@ -15,6 +15,9 @@ import java.io.IOException;
 public class FCMInitializer {
 
     private static final Logger logger = LoggerFactory.getLogger(FCMInitializer.class);
+    // .json 파일 위치
+    // 루트는 resources 폴더이므로 resources/aa.json일 경우 "aa.json"만 적으면 됨.
+    // json 파일에는 type,project_id,private_key_id,private_key,client_email,client_id,auth_uri,token_uri,auth_provider_x509_cert_url,client_x509_cert_url 따위가 들어있음.
     private static final String FIREBASE_CONFIG_PATH = "notification-797fc-firebase-adminsdk-4cfsn-c8c024e648.json";
 
     @PostConstruct
