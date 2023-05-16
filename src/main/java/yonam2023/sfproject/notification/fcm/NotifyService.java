@@ -41,9 +41,9 @@ public class NotifyService {
 
         notificationService.getAllTokens()
                 .forEach(token -> {
-                    System.out.println("[in notifyService] token: "+token);
+                    //System.out.println("[in notifyService] token: "+token);
                     NotificationRequest notificationRequest = NotificationRequest.builder()
-                            .title("[다중]"+title)
+                            .title("[ALL]"+title)
                             .token(token)
                             .message(message)
                             .build();

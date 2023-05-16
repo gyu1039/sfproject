@@ -227,7 +227,7 @@
 
             //포그라운드 상태의 메시지를 팝업으로 띄우는 콜백 메서드
             firebase.messaging().onMessage(function(payload) {
-                console.log("[payload2]", payload);
+                console.log("[payload]", payload);
                 var options = {
                     body : payload.notification.body,
                     title : payload.notification.title

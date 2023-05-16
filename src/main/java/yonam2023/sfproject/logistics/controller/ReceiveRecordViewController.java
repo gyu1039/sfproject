@@ -61,6 +61,7 @@ public class ReceiveRecordViewController {
     @PostMapping("/reserve")
     public String reserveItem(@ModelAttribute ReceiveForm.Request receiveReqForm) {
         receiveService.saveReceiveRecord(receiveReqForm);
+        //todo: 특정 부서의 사용자들에게만 알림을 보내도록 수정
         notifyService.allUserNotify("[입고 알림]", receiveReqForm.getItemName()+"이 입고되었습니다!");
         return "redirect:/receiveRecords";
     }
