@@ -3,9 +3,11 @@ package yonam2023.sfproject.employee;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import yonam2023.sfproject.employee.domain.DepartmentTO;
 import yonam2023.sfproject.employee.domain.Employee;
+import yonam2023.sfproject.employee.domain.Role;
 import yonam2023.sfproject.employee.domain.EmployeeTO;
 
 @Service
@@ -13,6 +15,7 @@ import yonam2023.sfproject.employee.domain.EmployeeTO;
 public class EmployeeService {
 
     private final EmployeeRepository er;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Page<Employee> findAll(Pageable pageable) {
 
@@ -21,10 +24,13 @@ public class EmployeeService {
 
     public void save(EmployeeTO e) {
 
+        String encPassword = bCryptPasswordEncoder.encode(e.getName());
         er.save(Employee.builder()
                 .name(e.getName())
+                .password(encPassword)
                 .phoneNumber(e.getPhoneNumber())
-                .department(e.getDepartment()).build());
+                .department(e.getDepartment())
+                .role("ROLE_USER").build());
     }
 
     public EmployeeTO findById(Long id) {
@@ -34,7 +40,7 @@ public class EmployeeService {
                 .name(em.getName())
                 .phoneNumber(em.getPhoneNumber())
                 .department(em.getDepartment())
-                .employeeType(em.getEmployeeType())
+                .role(em.getRole())
                 .build();
 
         return dto;
