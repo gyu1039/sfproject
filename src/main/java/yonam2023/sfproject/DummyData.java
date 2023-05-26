@@ -1,6 +1,7 @@
 package yonam2023.sfproject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import yonam2023.sfproject.employee.EmployeeRepository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
@@ -25,6 +26,9 @@ public class DummyData {
 
     @Autowired
     MachineDataRepository mr;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostConstruct
     public void initialize() {
@@ -58,7 +62,8 @@ public class DummyData {
             er.save(e);
         });
 
-        Employee gyu1039 = Employee.builder().name("gyu1039").password("gyu1039").phoneNumber("22371002").role("ROLE_ADMIN").department(DepartmentType.PERSONNEL).build();
+        String encode = bCryptPasswordEncoder.encode("gyu1039");
+        Employee gyu1039 = Employee.builder().name("gyu1039").password(encode).phoneNumber("22371002").role("ROLE_ADMIN").department(DepartmentType.PERSONNEL).build();
         er.save(gyu1039);
         Employee ghk4889 = Employee.builder().name("ghk4889").phoneNumber("22371012").role("ROLE_ADMIN").department(DepartmentType.LOGISTICS).build();
         er.save(ghk4889);

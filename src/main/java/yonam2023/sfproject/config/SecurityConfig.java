@@ -5,12 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import yonam2023.sfproject.config.auth.PrincipalDetails;
-import yonam2023.sfproject.config.auth.PrincipalDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -24,19 +20,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
+        http.csrf().disable();
         http
                 .authorizeHttpRequests((requests) -> requests
                         .mvcMatchers("/", "/hello").permitAll()
                         .anyRequest().hasRole("ADMIN")
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
-                        .permitAll()
+                        .loginPage("/loginForm")
                         .loginProcessingUrl("/login")
+                        .permitAll()
                         .defaultSuccessUrl("/index")
                         .failureUrl("/")
-                )
-                .logout((logout) -> logout.permitAll());
+                );
 
         return http.build();
     }
