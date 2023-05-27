@@ -237,6 +237,18 @@
                     event.preventDefault();
                 }
             });
+
+            //백그라운드 상태에서 메시지 수신
+            // 이유는 모르겠으나 이 코드가 없어도 백그라운드로 잘 동작할 때가 있다. (안 될 때도 있다.)
+            // 이 코드가 있으면 반드시 백그라운드 동작이 성공하는지는 확인하지 못했다.
+            //firebase.messaging().setBackgroundMessageHandler(function(payload){
+            //    const options = {
+            //        body : payload.notification.body,
+            //        title : payload.notification.title
+            //    };
+            //    return self.registration.showNotification(title,options);
+            //});
+
         }
         return {
             init: function () {
