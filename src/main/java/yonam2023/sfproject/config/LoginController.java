@@ -13,7 +13,7 @@ public class LoginController {
         return "hello";
     }
 
-    @GetMapping("/loginForm")
+    @GetMapping("/login")
     public String loginForm() {
         return "loginForm";
     }

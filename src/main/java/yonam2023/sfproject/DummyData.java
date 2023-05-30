@@ -63,11 +63,11 @@ public class DummyData {
         });
 
         String encode = bCryptPasswordEncoder.encode("gyu1039");
-        Employee gyu1039 = Employee.builder().name("gyu1039").password(encode).phoneNumber("22371002").role("ROLE_ADMIN").department(DepartmentType.PERSONNEL).build();
+        Employee gyu1039 = Employee.builder().name("gyu1039").password(encode).phoneNumber("22371002").role(Role.ROLE_ADMIN_EMP).department(DepartmentType.PERSONNEL).build();
         er.save(gyu1039);
-        Employee ghk4889 = Employee.builder().name("ghk4889").phoneNumber("22371012").role("ROLE_ADMIN").department(DepartmentType.LOGISTICS).build();
+        Employee ghk4889 = Employee.builder().name("ghk4889").phoneNumber("22371012").role(Role.ROLE_ADMIN_LO).department(DepartmentType.LOGISTICS).build();
         er.save(ghk4889);
-        Employee Ljh3141 = Employee.builder().name("Ljh3141").phoneNumber("22371018").role("ROLE_ADMIN").department(DepartmentType.PRODUCTION).build();
+        Employee Ljh3141 = Employee.builder().name("Ljh3141").phoneNumber("22371018").role(Role.ROLE_ADMIN_PRO).department(DepartmentType.PRODUCTION).build();
         er.save(Ljh3141);
     }
 

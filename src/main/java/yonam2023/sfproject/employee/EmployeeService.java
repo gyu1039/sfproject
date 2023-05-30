@@ -30,7 +30,7 @@ public class EmployeeService {
                 .password(encPassword)
                 .phoneNumber(e.getPhoneNumber())
                 .department(e.getDepartment())
-                .role("ROLE_USER").build());
+                .role(Role.ROLE_USER).build());
     }
 
     public EmployeeTO findById(Long id) {

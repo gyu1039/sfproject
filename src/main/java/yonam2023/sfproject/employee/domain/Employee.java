@@ -35,7 +35,7 @@ public class Employee implements UserDetails {
     @Column(nullable = false)
     private DepartmentType department;
 
-    private String role;
+    private Role role;
 
 
     public void employeeUpdate(EmployeeTO dto) {
@@ -46,7 +46,7 @@ public class Employee implements UserDetails {
     }
 
     @Builder
-    public Employee(DepartmentType department, String role, String name, String phoneNumber, String password) {
+    public Employee(DepartmentType department, Role role, String name, String phoneNumber, String password) {
         this.department = department;
         this.role = role;
         this.name = name;
@@ -55,14 +55,14 @@ public class Employee implements UserDetails {
     }
 
     @Transient
-    private Collection<SimpleGrantedAuthority> authorities;
+    private Collection<GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
     }
 
-    public void setAuthorities(Collection<SimpleGrantedAuthority> authorities) {
+    public void setAuthorities(Collection<GrantedAuthority> authorities) {
         this.authorities = authorities;
     }
 
