@@ -1,7 +1,8 @@
 
 
 function doCheckFactory(){
-    fetch("http://localhost:8080/factory/check", {
+    //alert(window.location.protocol+"//"+window.location.host+"/factory/check");
+    fetch(window.location.protocol+"//"+window.location.host+"/factory/check", {
         method: "GET"
     }).then((response) => response.json())
     .then((response)=>{
@@ -15,7 +16,7 @@ function doCheckFactory(){
     });
 }
 function doStartupFactory(){
-    fetch("http://localhost:8080/factory/startup", {
+    fetch(window.location.protocol+"//"+window.location.host+"/factory/startup", {
         method: "GET"
     }).then((response) =>response.json())
     .then((response)=>{
@@ -26,7 +27,7 @@ function doStartupFactory(){
     });
 }
 function doPauseFactory(){
-    fetch("http://localhost:8080/factory/pause", {
+    fetch(window.location.protocol+"//"+window.location.host+"/factory/pause", {
          method: "GET"
     }).then((response) => response.json())
     .then((response)=>{
@@ -39,7 +40,7 @@ function doPauseFactory(){
 function doShutdownFactory(){
     if(confirm("공장을 정지합니까?\n재가동을 위해서는 공장의 재부팅이 필요합니다."))
     {
-        fetch("http://localhost:8080/factory/shutdown", {
+        fetch(window.location.protocol+"//"+window.location.host+"/factory/shutdown", {
              method: "GET"
         }).then((response) => response.json())
         .then((response)=>{
@@ -52,34 +53,34 @@ function doShutdownFactory(){
     }
 }
 function doCheckMachine0(){
-    fetch("http://localhost:8080/machine/chk/0", {
+    fetch(window.location.protocol+"//"+window.location.host+"/machine/chk/0", {
           method: "GET"
     }).then((response) => console.log(response));
 }
 function doAddMachine0(){
-    fetch("http://localhost:8080/machine/add/0", {
+    fetch(window.location.protocol+"//"+window.location.host+"/machine/add/0", {
            method: "GET"
     }).then((response) => console.log(response));
 }
 function doDelMachine0(){
-    fetch("http://localhost:8080/machine/del/0", {
+    fetch(window.location.protocol+"//"+window.location.host+"/machine/del/0", {
             method: "GET"
     }).then((response) => console.log(response));
 }
 
 function doStopMachine0(){
-    fetch("http://localhost:8080/machine/stop/0", {
+    fetch(window.location.protocol+"//"+window.location.host+"/machine/stop/0", {
             method: "GET"
     }).then((response) => console.log(response));
 }
 function doCheckMcState0(){
-    fetch("http://localhost:8080/machine/checkMcState/0", {
+    fetch(window.location.protocol+"//"+window.location.host+"/checkMcState/0", {
             method: "GET"
     }).then((response) => console.log(response));
 }
 
 function doRunMachine(mid){
-    fetch("http://localhost:8080/machine/run/"+mid, {
+    fetch(window.location.protocol+"//"+window.location.host+"/machine/run/"+mid, {
             method: "GET"
     }).then((response) => response.json())
     .then((response) => {
@@ -89,7 +90,7 @@ function doRunMachine(mid){
         }
     });
 }
-//올바르게 동작하지않음.
+//올바르게 동작하지않음. *수정됨. fetch 제거
 function doDelMachine(mid){
     if(confirm("기계를 삭제합니까?\n저장 된 정보가 지워집니다."))
     {
@@ -103,7 +104,7 @@ function doDelMachine(mid){
 }
 
 function doStopMachine(mid){
-    fetch("http://localhost:8080/machine/stop/"+mid, {
+    fetch(window.location.protocol+"//"+window.location.host+"/machine/stop/"+mid, {
             method: "GET"
     }).then((response) => response.json())
     .then((response) => {
@@ -119,7 +120,7 @@ function doCheckMachineAtRegistration(){
     if(mid==NaN){
         alert("기계 번호는 숫자를 입력해주세요.");
     }else{
-        fetch("http://localhost:8080/machine/chk/"+mid, {
+        fetch(window.location.protocol+"//"+window.location.host+"/machine/chk/"+mid, {
             method: "GET"
         }).then((response) => response.json())
         .then((response)=>{

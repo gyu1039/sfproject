@@ -29,13 +29,23 @@ public class ReceiveService {
             storedItem.addAmount(receiveRecord.getAmount());
             return storedItem.getId();
         }
+
     }
 
     @Transactional
     public void editReceiveRecord(long id, ReceiveForm.Request receiveReqForm){
         ReceiveRecord targetRecord = receiveRecordRepo.findById(id).orElseThrow();
+        StoredItem storedItem = storedItemRepo.findByName(receiveReqForm.getItemName());
+
+        int previousReservedAmount = targetRecord.getAmount();
+
+        //입고 예약 수정
         targetRecord.setAmount(receiveReqForm.getAmount());
         targetRecord.setDateTime(receiveReqForm.getDateTime());
+
+        //재고 수정
+        storedItem.subAmount(previousReservedAmount);       //원상 복구
+        storedItem.addAmount(receiveReqForm.getAmount());   //수정된 입고량 반영
     }
 
     @Transactional

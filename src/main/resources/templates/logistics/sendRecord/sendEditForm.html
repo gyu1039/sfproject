@@ -9,11 +9,11 @@
         <form class="card" th:action="@{/sendRecords/{id}(id=${record.id})}" th:method="patch">
             <div class="card-body w-75">
                 <label for="itemName">예약된 물건명: </label>
-                <input class="text-secondary" id="itemName" th:value="${record.itemName}" readonly>
+                <input class="text-secondary" id="itemName" name="itemName" th:value="${record.itemName}" readonly>
                 <br/>
                 <br/>
                 <label for="destination">목적지: </label>
-                <input class="text-secondary" id="destination" th:value="${record.destination}" readonly>
+                <input class="text-secondary" id="destination" name="destination" th:value="${record.destination}" readonly>
                 <br/>
                 <br/>
                 <label class="text-danger" for="amount"><b>수량(-)</b></label>
