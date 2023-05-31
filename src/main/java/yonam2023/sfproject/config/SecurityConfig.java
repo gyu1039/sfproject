@@ -43,10 +43,11 @@ public class SecurityConfig {
                         .loginPage("/loginForm")
                         .permitAll()
                         .loginProcessingUrl("/loginForm")
-                        .successHandler(new MyLoginSuccessHandler())
                         .defaultSuccessUrl("/index")
                         .failureUrl("/loginForm")
                 )
+                .logout().logoutSuccessUrl("/")
+                .and()
                 .exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) ->
                         response.sendRedirect("/loginForm"));
 

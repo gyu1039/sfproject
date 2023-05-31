@@ -28,8 +28,8 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
         Collection<GrantedAuthority> roles = new ArrayList<>();
         authentication.getAuthorities().forEach(auth -> {
             roles.add(auth);
-            log.info("{}", auth);
         });
+        log.info("{}", roles);
 
         for(GrantedAuthority g : roles) {
            if(g.getAuthority().equals("ROLE_ADMIN_EMP")) {
@@ -42,9 +42,6 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
            } else if(g.getAuthority().equals("ROLE_ADMIN_PRO")) {
                response.sendRedirect("/production");
            }
-
-           response.sendRedirect("/");
-           return;
         }
     }
 
