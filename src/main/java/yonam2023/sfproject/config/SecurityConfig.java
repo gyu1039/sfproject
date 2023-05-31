@@ -34,18 +34,21 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .mvcMatchers("/", "/hello").permitAll()
-                        .mvcMatchers("/employee/**").hasRole("ADMIN_EMP_EMP")
-                        .mvcMatchers("/production/**").hasRole("ADMIN_EMP_PRO")
-                        .mvcMatchers("/storedItems/**", "/receiveRecords/**", "/sendRecords/**").hasRole("ADMIN_EMP_LO")
+                        .mvcMatchers("/employee/**").hasRole("ADMIN_EMP")
+                        .mvcMatchers("/production/**").hasRole("ADMIN_PRO")
+                        .mvcMatchers("/storedItems/**", "/receiveRecords/**", "/sendRecords/**").hasRole("ADMIN_LO")
+                        .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/loginForm")
-                        .loginProcessingUrl("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/index")
+                        .loginProcessingUrl("/loginForm")
                         .successHandler(new MyLoginSuccessHandler())
-                        .failureUrl("/")
-                );
+                        .defaultSuccessUrl("/index")
+                        .failureUrl("/loginForm")
+                )
+                .exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) ->
+                        response.sendRedirect("/loginForm"));
 
         return http.build();
     }

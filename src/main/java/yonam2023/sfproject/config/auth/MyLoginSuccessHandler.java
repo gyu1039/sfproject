@@ -1,19 +1,24 @@
 package yonam2023.sfproject.config.auth;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import yonam2023.sfproject.employee.domain.Role;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
+
+@Slf4j
 public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
 
 
@@ -21,11 +26,14 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         Collection<GrantedAuthority> roles = new ArrayList<>();
-        authentication.getAuthorities().forEach(auth -> roles.add(auth));
+        authentication.getAuthorities().forEach(auth -> {
+            roles.add(auth);
+            log.info("{}", auth);
+        });
 
         for(GrantedAuthority g : roles) {
-            System.out.println(g.getAuthority());
            if(g.getAuthority().equals("ROLE_ADMIN_EMP")) {
+               System.out.println(g.getAuthority());
                response.sendRedirect("/employee");
 
            } else if (g.getAuthority().equals("ROLE_ADMIN_LO")) {
@@ -35,7 +43,10 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
                response.sendRedirect("/production");
            }
 
+           response.sendRedirect("/");
            return;
         }
     }
+
+
 }

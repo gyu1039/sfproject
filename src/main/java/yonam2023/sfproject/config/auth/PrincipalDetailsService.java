@@ -26,7 +26,6 @@ public class PrincipalDetailsService implements UserDetailsService {
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(em.getRole().getRole()));
         em.setAuthorities(roles);
-        System.out.println(em);
         if(em != null) {
             return new PrincipalDetails(em);
         }
