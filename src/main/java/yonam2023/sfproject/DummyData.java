@@ -35,13 +35,13 @@ public class DummyData {
 
         DepartmentType[] dts = {DepartmentType.PERSONNEL, DepartmentType.LOGISTICS, DepartmentType.PRODUCTION};
 
-        IntStream.rangeClosed(1, 5).forEach(i -> {
+        IntStream.rangeClosed(1, 4).forEach(i -> {
             //센서 임시 추가
             MachineData m = MachineData.builder()
-                    .mid(i+1)
-                    .name("machine-"+i+1)
+                    .mid(1010+i)
+                    .name("machine-"+(1010+i))
                     .state(false)
-                    .description("machine-"+(i+1)+" description")
+                    .description("machine-"+(i+1010 )+" description")
                     .build();
             mr.save(m);
             //값 임시 추가. 제거 또는 수정 필요

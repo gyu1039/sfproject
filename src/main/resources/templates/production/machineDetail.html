@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout (~{::title}, '요약', 'stub 작동', '데이터 삭제', ~{::section})}"
+      th:replace="~{layout/base :: layout (~{::title}, '제', '작', '중', ~{::section})}"
       lang="ko">
 <head>
   <title>index</title>
@@ -13,7 +13,7 @@
   Machine Name:<span th:text="${machineData.name}"></span></br>
   Operation State:<span id="opState" th:text="${machineData.state}"></span></br>
   Fatal Error:<span th:text="${machineData.fatal}"></span></br>
-  Description:</br><textarea cols="50" rows="5" th:text="${machineData.description}"></textarea></br>
+  Description:</br><textarea cols="50" rows="5" th:text="${machineData.description}" readonly></textarea></br>
   <button th:onclick="doRunMachine([[${machineData.mid}]])">run</button><button th:onclick="doStopMachine([[${machineData.mid}]])">Stop</button><button th:onclick="doDelMachine([[${machineData.mid}]])">DELETE</button><button onclick="location.href ='/production'">목록으로</button></br>
   <canvas class="my-4 w-100" id="productionChart" width="1000" height="500"></canvas>
 </section>

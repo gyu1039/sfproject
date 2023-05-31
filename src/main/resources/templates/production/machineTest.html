@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout (~{::title}, '요약', 'stub 작동', '데이터 삭제', ~{::section})}"
+      th:replace="~{layout/base :: layout (~{::title}, '제', '작', '중', ~{::section})}"
       lang="ko">
 <head>
     <title>index</title>
@@ -20,6 +20,7 @@
     <button onclick="doRunMachine0()">click</button>run Machine 0-done</br>
     <button onclick="doStopMachine0()">click</button>stop Machine 0-done</br>
     <button onclick="doCheckMcState0()">click</button>check running state of Machine 0-done</br>
+    <button onclick="location.href ='/machine/getFactoryMidList'">기계 목록 호출</button>
 </section>
 
 </body>

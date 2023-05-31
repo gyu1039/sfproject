@@ -4,15 +4,23 @@
       lang="ko">
 <head>
     <meta charset="utf-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.108.0">
+
     <title th:text="${title}">title</title>
+    <!-- favicon.ico 404 오류 해결   -->
+    <link rel="shortcut icon" href="#">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-messaging.js"></script>
+
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -125,7 +133,40 @@
         </main>
     </div>
 </div>
+<script>
+    const onLoadFunc = (function () {
+        async function init() {
+            let firebaseConfig = {
+                // 설정 정보 apiKey, authDomain, projectId, storageBucket messagingSenderId, appId, measurementId
 
+            };
+
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+
+
+            //포그라운드 상태의 메시지를 팝업으로 띄우는 콜백 메서드
+            firebase.messaging().onMessage(function(payload) {
+                console.log("[payload2]", payload);
+                var options = {
+                    body : payload.notification.body,
+                    title : payload.notification.title
+                }
+                var notification = new Notification(payload.notification.title, options);
+                notification.onclick= function(event){
+                    event.preventDefault();
+                }
+            });
+        }
+        return {
+            init: function () {
+                init()
+            }
+        }
+    })()
+
+    onLoadFunc.init();
+</script>
 
 <script src="/js/bootstrap.bundle.min.js"></script>
 

@@ -1,6 +1,5 @@
 package yonam2023.sfproject.logistics.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -15,6 +14,7 @@ import yonam2023.sfproject.logistics.controller.form.ReceiveForm;
 import yonam2023.sfproject.logistics.domain.ReceiveRecord;
 import yonam2023.sfproject.logistics.repository.ReceiveRecordRepository;
 import yonam2023.sfproject.logistics.service.ReceiveService;
+import yonam2023.sfproject.notification.fcm.NotifyService;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
@@ -30,6 +30,7 @@ import java.util.List;
 public class ReceiveRecordViewController {
     private final ReceiveRecordRepository receiveRecordRepo;
     private final ReceiveService receiveService;
+    private final NotifyService notifyService;
 
     //더미 데이터 생성.
     @PostConstruct
@@ -58,8 +59,9 @@ public class ReceiveRecordViewController {
     }
 
     @PostMapping("/reserve")
-    public String reserveItem(@ModelAttribute ReceiveForm.Request receiveReqForm){
+    public String reserveItem(@ModelAttribute ReceiveForm.Request receiveReqForm) {
         receiveService.saveReceiveRecord(receiveReqForm);
+        notifyService.allUserNotify("[입고 알림]", receiveReqForm.getItemName()+"이 입고되었습니다!");
         return "redirect:/receiveRecords";
     }
 

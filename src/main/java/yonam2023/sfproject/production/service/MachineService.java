@@ -14,6 +14,8 @@ import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
 
+import java.util.*;
+
 
 @Service
 public class MachineService {
@@ -226,5 +228,35 @@ public class MachineService {
         md.setFatal(true);
         mr.save(md);
         logger.error("Fatal Received "+mid);
+    }
+
+    public ArrayList<Integer> getFactoryMidList(){
+        try {
+            logger.info("MachineService:Get All Machine IDs From Factory");
+            String res = httpPS.sendGet(machineURL + "getMachineIdList");
+            logger.info("MachineService:Receive Machine ID List:"+res);
+            //가공/코드를 좀 더 간단하게 작동하도록 수정할 필요 있음
+            res = res.trim().replace("[", "").replace("]","");
+            String[] arrayMids = res.split(",");
+            ArrayList<String> arrayListMids = new ArrayList<String>(Arrays.asList(arrayMids));
+
+            Iterator<String> iteratorStr = arrayListMids.iterator();
+            ArrayList<Integer> intArray = new ArrayList<Integer>();
+            while(iteratorStr.hasNext()){
+                intArray.add(Integer.parseInt(iteratorStr.next().trim()));
+            }
+            intArray.sort(Comparator.naturalOrder());
+            //ArrayList<MidDTO> midDTOArrayList = new ArrayList<>();
+            //Iterator<Integer> iteratorInt = intArray.iterator();
+            //while(iteratorInt.hasNext()){
+            //    midDTOArrayList.add(new MidDTO(iteratorInt.next()));
+            //}
+            //arrayListMids.sort(Comparator.naturalOrder());
+            //return midDTOArrayList;
+            return intArray;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
