@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PrincipalDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
     private final EmployeeRepository employeeRepository;
 
@@ -27,7 +27,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         roles.add(new SimpleGrantedAuthority(em.getRole().getRole()));
         em.setAuthorities(roles);
         if(em != null) {
-            return new PrincipalDetails(em);
+            return new MyUserDetails(em);
         }
 
         return null;

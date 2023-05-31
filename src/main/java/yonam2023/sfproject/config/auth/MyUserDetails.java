@@ -8,11 +8,11 @@ import yonam2023.sfproject.employee.domain.Employee;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class PrincipalDetails implements UserDetails {
+public class MyUserDetails implements UserDetails {
 
     private Employee employee;
 
-    public PrincipalDetails(Employee employee) {
+    public MyUserDetails(Employee employee) {
         this.employee = employee;
     }
 

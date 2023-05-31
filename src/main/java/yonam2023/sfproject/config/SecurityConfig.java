@@ -1,25 +1,19 @@
 package yonam2023.sfproject.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import yonam2023.sfproject.config.auth.MyLoginSuccessHandler;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import yonam2023.sfproject.config.auth.MySimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig {
 
     @Bean
@@ -29,8 +23,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.csrf().disable();
         http
                 .authorizeHttpRequests((requests) -> requests
                         .mvcMatchers("/", "/hello").permitAll()
@@ -42,14 +34,16 @@ public class SecurityConfig {
                 .formLogin((form) -> form
                         .loginPage("/loginForm")
                         .permitAll()
-                        .loginProcessingUrl("/loginForm")
-                        .defaultSuccessUrl("/index")
+                        .loginProcessingUrl("/login")
+                        .successHandler(myAuthenticationSuccessHandler())
                         .failureUrl("/loginForm")
-                )
-                .logout().logoutSuccessUrl("/")
+                ).exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) ->
+                        response.sendRedirect("/loginForm"))
                 .and()
-                .exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) ->
-                        response.sendRedirect("/loginForm"));
+                .logout().logoutSuccessUrl("/");
+
+
+        http.csrf().disable();
 
         return http.build();
     }
@@ -59,5 +53,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler() {
+        return new MySimpleUrlAuthenticationSuccessHandler();
+    }
 }
