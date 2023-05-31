@@ -240,5 +240,12 @@ public class ProductionController {
         return pr.findAll();
     }
 
-
+    @GetMapping("/addStockToMachine/{mid}")
+    public String addStockPage(@PathVariable int mid){
+        //머신 존재 체크 코드
+        logger.info("production : add stock page called on machine "+ mid);
+        //머신에 대한 정보를 전달 해야함.
+        //id, 상태, 소비 재고
+        return "production/machineStockAdd";
+    }
 }

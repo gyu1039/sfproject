@@ -103,4 +103,14 @@ public class MachineController {
         ArrayList<Integer> arrayListMids = ms.getFactoryMidList();
         return arrayListMids.toString();
     }
+
+    @PostMapping("/addStock")
+    @ResponseBody
+    public String addStock(){
+        //기계로 재료를 보내는 코드.
+        //생산 부서에 충분한 재고가 있는지 점검하는 코드 필요.
+        //해당 재고를 검색해서 현재 양이 얼마인지 표시하면 좋음.
+        //->별도 페이지로 구성?
+        return "";
+    }
 }
