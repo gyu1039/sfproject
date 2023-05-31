@@ -160,6 +160,7 @@ public class ProductionController {
 
         model.addAttribute("machineData", machineData);
 
+        //machine이 가진 재고와 소비량을 반환 하는 코드 필요.
 
         return "production/machineDetail";
     }

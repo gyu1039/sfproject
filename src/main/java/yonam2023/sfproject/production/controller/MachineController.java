@@ -94,6 +94,7 @@ public class MachineController {
     public void insertSensorData(@RequestBody String data){
         logger.info("MachineController:Receive data:"+data);
         ms.insertSensorData(data);
+        //재고, 소비량 데이터를 추가해야함.
     }
 
     @GetMapping("/getFactoryMidList")
