@@ -23,14 +23,15 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Employee em = employeeRepository.findByName(username);
+        if(em == null) {
+            throw new UsernameNotFoundException("사용자가 존재하지 않습니다.");
+        }
+
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(em.getRole().getRole()));
         em.setAuthorities(roles);
-        if(em != null) {
-            return new MyUserDetails(em);
-        }
 
-        return null;
+        return new MyUserDetails(em);
     }
 }
 

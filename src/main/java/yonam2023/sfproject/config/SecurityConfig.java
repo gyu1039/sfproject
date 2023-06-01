@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import yonam2023.sfproject.config.auth.MySimpleUrlAuthenticationSuccessHandler;
+import yonam2023.sfproject.config.auth.CustomFailureHandler;
+import yonam2023.sfproject.config.auth.CustomSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .mvcMatchers("/", "/hello").permitAll()
+                        .mvcMatchers("/", "/loginForm", "/fail_login").permitAll()
                         .mvcMatchers("/employee/**").hasRole("ADMIN_EMP")
                         .mvcMatchers("/production/**").hasRole("ADMIN_PRO")
                         .mvcMatchers("/storedItems/**", "/receiveRecords/**", "/sendRecords/**").hasRole("ADMIN_LO")
@@ -33,11 +35,11 @@ public class SecurityConfig {
                 )
                 .formLogin((form) -> form
                         .loginPage("/loginForm")
-                        .permitAll()
                         .loginProcessingUrl("/login")
                         .successHandler(myAuthenticationSuccessHandler())
-                        .failureUrl("/loginForm")
-                ).exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) ->
+                        .failureHandler(myAuthenticationFailureHandler())
+                )
+                .exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) ->
                         response.sendRedirect("/loginForm"))
                 .and()
                 .logout().logoutSuccessUrl("/");
@@ -55,6 +57,11 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler myAuthenticationSuccessHandler() {
-        return new MySimpleUrlAuthenticationSuccessHandler();
+        return new CustomSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler myAuthenticationFailureHandler() {
+        return new CustomFailureHandler();
     }
 }
