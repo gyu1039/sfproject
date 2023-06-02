@@ -7,6 +7,9 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,15 +23,16 @@ import java.util.Map;
 
 
 @Slf4j
-public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private RequestCache requestCache = new HttpSessionRequestCache();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("{}", "onAuthenticationSuccess method");
-        handle(request, response, authentication);
         clearAuthenticationAttributes(request);
+        handle(request, response, authentication);
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request) {
@@ -42,7 +46,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 
     private void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
-        String targetUrl = determineTargetUrl(authentication);
+        String targetUrl = determineTargetUrl(authentication, requestCache.getRequest(request, response));
 
         if(response.isCommitted()) {
             log.debug("Response has already been committed. Unable to redirect to {}", targetUrl);
@@ -52,11 +56,15 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-    private String determineTargetUrl(Authentication authentication) {
+    private String determineTargetUrl(Authentication authentication, SavedRequest savedRequest) {
+
+        if(savedRequest != null) {
+            return savedRequest.getRedirectUrl();
+        }
 
         Map<String, String> rolesTargetUrlMap = new HashMap<>();
         rolesTargetUrlMap.put("ROLE_ADMIN_EMP", "/employee");
-        rolesTargetUrlMap.put("ROLE_ADMIN_LO", "/receiveRecords");
+        rolesTargetUrlMap.put("ROLE_ADMIN_LO", "/storedItems");
         rolesTargetUrlMap.put("ROLE_ADMIN_PRO", "/production");
 
         List<GrantedAuthority> roles = new ArrayList<>();
