@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout ('index', '구', '현', '중', ~{::section})}"
+      th:replace="~{layout/base_paging :: layout ('index', 'employee', ~{::section})}"
       lang="ko">
 
 <body>
@@ -25,50 +25,7 @@
             </tr>
             </tbody>
         </table>
-        <nav th:with="
-                    pageNumber = ${list.pageable.pageNumber},
-                    pageSize = ${list.pageable.pageSize},
-                    totalPages = ${list.totalPages},
-                    startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
-                    tempEndPage = ${startPage + pageSize - 1},
-                    endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})" aria-label="Page navigation">
 
-            <ul class="pagination ">
-                <!-- 처음으로 이동 -->
-                <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="@{/employee(page=0)}">
-                        <span class="sr-only">First</span>
-                    </a>
-                </li>
-
-                <!-- 이전으로 이동 -->
-                <li th:classappend="${list.first} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="${list.first} ? '#' : @{/employee(page=${pageNumber - 1})}" aria-label="Previous">
-                        <span aria-hidden="true">&lt;</span>
-                    </a>
-                </li>
-
-                <!-- 특정 페이지로 이동 -->
-                <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
-                    <a th:text="${page}" class="page-link" th:href="@{/employee(page=${page - 1})}"></a>
-                </li>
-
-                <!-- 다음으로 이동 -->
-                <li th:classappend="${list.last} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="${list.last} ? '#' : @{/employee(page=${pageNumber + 1})}" aria-label="Next">
-                        <span aria-hidden="true">&gt;</span>
-                    </a>
-                </li>
-
-                <!-- 마지막으로 이동 -->
-                <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 < endPage} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="@{/employee(page=${totalPages - 1})}">
-                        <span class="sr-only">Last</span>
-                    </a>
-                </li>
-            </ul>
-
-        </nav>
         <div class="row gy-2 gx-3 align-items-center">
             <div class="col-sm-2">
                 <button type="button"
