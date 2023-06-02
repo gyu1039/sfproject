@@ -21,33 +21,5 @@ class EmployeeRepositoryTest {
 
     DepartmentType[] dts = {DepartmentType.PERSONNEL, DepartmentType.LOGISTICS, DepartmentType.PRODUCTION};
 
-    @BeforeAll
-    public void insertDummy() {
 
-        IntStream.rangeClosed(1, 100).forEach(i -> {
-
-            Employee e = Employee.builder()
-                    .name("test" + i)
-                    .department(dts[i % 3])
-                    .phoneNumber(i + "")
-                    .build();
-
-            em.save(e);
-        });
-
-    }
-
-    @Test
-    public void select_all() {
-
-        List<Employee> all = em.findAll();
-        all.forEach(System.out::println);
-    }
-
-    @Test
-    public void 부서별_검색() {
-
-        Iterable<Employee> byDepartment = em.findByDepartment(dts[0], PageRequest.ofSize(10));
-        byDepartment.forEach(System.out::println);
-    }
 }
