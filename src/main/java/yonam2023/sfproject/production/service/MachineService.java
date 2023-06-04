@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yonam2023.sfproject.production.domain.MachineData;
 import yonam2023.sfproject.production.domain.MachineRegistData;
+import yonam2023.sfproject.production.domain.MachineStockAddData;
 import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
@@ -258,8 +259,11 @@ public class MachineService {
         return null;
     }
 
-    public String addStockToMachine(JSONObject jsonObject){
+    public String addStockToMachine(MachineStockAddData data){
         String result = "-";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("mid", data.getMid());
+        jsonObject.put("amount", data.getAmount());
         try{
             result = httpPS.sendPost(machineURL+"addStock", jsonObject);
 
