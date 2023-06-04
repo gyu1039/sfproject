@@ -218,8 +218,6 @@ public class MachineService {
             machineData.setRecentData(value);
             mr.save(machineData);
         }
-
-
     }
 
     public void fatalState(int mid){
@@ -258,5 +256,16 @@ public class MachineService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String addStockToMachine(JSONObject jsonObject){
+        String result = "-";
+        try{
+            result = httpPS.sendPost(machineURL+"addStock", jsonObject);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
     }
 }

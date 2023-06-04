@@ -16,7 +16,7 @@ public class HttpPostService {
     private final String USER_AGENT = "Mozilla/5.0";
 
     private Logger logger = LoggerFactory.getLogger(HttpPostService.class);
-    public void sendPost(String targetUrl, JSONObject jsonObject) throws Exception {
+    public String sendPost(String targetUrl, JSONObject jsonObject) throws Exception {
 
         URL url = new URL(targetUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -45,7 +45,7 @@ public class HttpPostService {
         // print result
         logger.info("HttpPostService:HTTP 응답 코드:" + responseCode);
         logger.info("HttpPostService:HTTP body:" + response.toString());
-        System.out.println();
+        return response.toString();
 
     }
     public String sendGet(String targetUrl) throws Exception {

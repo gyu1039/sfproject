@@ -1,5 +1,6 @@
 package yonam2023.sfproject.production.controller;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,11 +108,17 @@ public class MachineController {
 
     @PostMapping("/addStock")
     @ResponseBody
-    public String addStock(){
+    public String addStock(@RequestBody JSONObject jsonObject){
         //기계로 재료를 보내는 코드.
         //생산 부서에 충분한 재고가 있는지 점검하는 코드 필요.
         //해당 재고를 검색해서 현재 양이 얼마인지 표시하면 좋음.
         //->별도 페이지로 구성?
-        return "";
+
+        //test code
+        logger.info("MachineController:Receive Add Stock :"+jsonObject.toString());
+
+        String result = ms.addStockToMachine(jsonObject);
+
+        return result;
     }
 }
