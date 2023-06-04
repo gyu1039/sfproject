@@ -1,11 +1,12 @@
 package yonam2023.sfproject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import yonam2023.sfproject.employee.EmployeeRepository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
-import yonam2023.sfproject.employee.domain.EmployeeType;
+import yonam2023.sfproject.employee.domain.Role;
 import yonam2023.sfproject.production.domain.MachineData;
 import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
@@ -25,6 +26,9 @@ public class DummyData {
 
     @Autowired
     MachineDataRepository mr;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostConstruct
     public void initialize() {
@@ -58,11 +62,16 @@ public class DummyData {
             er.save(e);
         });
 
-        Employee gyu1039 = Employee.builder().name("gyu1039").phoneNumber("22371002").employeeType(EmployeeType.MANAGER).department(DepartmentType.PERSONNEL).build();
+        String encode = bCryptPasswordEncoder.encode("gyu1039");
+        Employee gyu1039 = Employee.builder().name("gyu1039").password(encode).phoneNumber("22371002").role(Role.ROLE_ADMIN_EMP).department(DepartmentType.PERSONNEL).build();
         er.save(gyu1039);
-        Employee ghk4889 = Employee.builder().name("ghk4889").phoneNumber("22371012").employeeType(EmployeeType.MANAGER).department(DepartmentType.LOGISTICS).build();
+
+        String encode1 = bCryptPasswordEncoder.encode("ghk4889");
+        Employee ghk4889 = Employee.builder().name("ghk4889").password(encode1).phoneNumber("22371012").role(Role.ROLE_ADMIN_LO).department(DepartmentType.LOGISTICS).build();
         er.save(ghk4889);
-        Employee Ljh3141 = Employee.builder().name("Ljh3141").phoneNumber("22371018").employeeType(EmployeeType.MANAGER).department(DepartmentType.PRODUCTION).build();
+
+        String encode2 = bCryptPasswordEncoder.encode("Ljh3141");
+        Employee Ljh3141 = Employee.builder().name("Ljh3141").password(encode2).phoneNumber("22371018").role(Role.ROLE_ADMIN_PRO).department(DepartmentType.PRODUCTION).build();
         er.save(Ljh3141);
     }
 

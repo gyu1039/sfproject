@@ -90,27 +90,7 @@
     <div class="row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-3 sidebar-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" th:href="@{/employee}">
-                            <span data-feather="home" class="align-text-bottom"></span>
-                            직원 관리
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/production}">
-                            <span data-feather="file" class="align-text-bottom"></span>
-                            생산 관리
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/storedItems">
-                            <span data-feather="shopping-cart" class="align-text-bottom"></span>
-                            재고 관리
-                        </a>
-                    </li>
-                </ul>
-                <div th:replace="~{|${department}/fragment_ojh| :: subSidebar}"></div>
+                <div th:replace="~{|layout/fragment_ojh| :: ${department}/subSidebar}"></div>
             </div>
         </nav>
 
