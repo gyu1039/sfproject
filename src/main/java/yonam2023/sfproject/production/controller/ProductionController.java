@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.production.domain.MachineData;
 import yonam2023.sfproject.production.domain.MachineRegistData;
+import yonam2023.sfproject.production.domain.MachineRegistDataBuilder;
 import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
@@ -104,7 +105,7 @@ public class ProductionController {
     @GetMapping("/machineRegistration")
     public String machineRegistrationPage(Model model){
         logger.info("ProductionController:machineRegistration called");
-        MachineRegistData machineRegistData = MachineRegistData.builder().mid(0).build();
+        MachineRegistData machineRegistData = new MachineRegistDataBuilder().mid(0).build();
         model.addAttribute("machineRegistData", machineRegistData);
         List<Integer> midList = ms.getFactoryMidList();
         model.addAttribute("midList", midList);
@@ -159,6 +160,7 @@ public class ProductionController {
 
         model.addAttribute("machineData", machineData);
 
+        //machine이 가진 재고와 소비량을 반환 하는 코드 필요.
 
         return "production/machineDetail";
     }
@@ -239,5 +241,12 @@ public class ProductionController {
         return pr.findAll();
     }
 
-
+    @GetMapping("/addStockToMachine/{mid}")
+    public String addStockPage(@PathVariable int mid){
+        //머신 존재 체크 코드
+        logger.info("production : add stock page called on machine "+ mid);
+        //머신에 대한 정보를 전달 해야함.
+        //id, 상태, 소비 재고
+        return "production/machineStockAdd";
+    }
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ko">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+  <section>
+      재고 추가 임시 페이지.</br>
+      <form th:object="${machineStockAddData}" method="post">
+          기계번호 :<input type="number" id="mid" placeholder="기계 번호" th:field="*{mid}" th:value="*{mid}"/></br>
+          양 : <input type="number" id="amount" placeholder="양" th:field="*{amount}" th:value="*{amount}"/></br>
+          <button id="btn_submit" type="submit" >등록</button>
+      </form>
+  </section>
+</body>
+</html>

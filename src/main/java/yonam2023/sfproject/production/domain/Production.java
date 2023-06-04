@@ -25,13 +25,17 @@ public class Production {
     @Column(name = "SVALUE")
     private int svalue;
 
+    @Column(name = "USED")
+    private int used;
+
     @Column(name = "OTIME")
     @CreatedDate
     private Date otime;
 
     @Builder
-    public Production(int mid, int svalue){
+    public Production(int mid, int svalue, int used){
         this.mid = mid;
         this.svalue = svalue;
+        this.used = used;
     }
 }

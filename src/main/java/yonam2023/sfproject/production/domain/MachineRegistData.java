@@ -24,7 +24,6 @@ public class MachineRegistData {
         this.machineExists = machineExists;
     }
 
-    @Builder
     public MachineRegistData(int mid,String name,String description){
         this.mid = mid;
         this.name = name;

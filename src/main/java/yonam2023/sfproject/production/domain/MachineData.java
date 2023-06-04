@@ -32,7 +32,7 @@ public class MachineData {
     @Column(name = "RDATA")
     int recentData=-1;
 
-    @Column(name = "STATE")
+    @Column(name = "STATE") //ErrorCode로 변경해야 할 수 있음.
     boolean state;
 
     @Column(name = "FATAL")

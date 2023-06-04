@@ -1,10 +1,13 @@
 package yonam2023.sfproject.production.controller;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import yonam2023.sfproject.production.domain.MachineStockAddData;
 import yonam2023.sfproject.production.service.MachineService;
 
 import java.util.ArrayList;
@@ -94,6 +97,7 @@ public class MachineController {
     public void insertSensorData(@RequestBody String data){
         logger.info("MachineController:Receive data:"+data);
         ms.insertSensorData(data);
+        //재고, 소비량 데이터를 추가해야함.
     }
 
     @GetMapping("/getFactoryMidList")
@@ -102,5 +106,32 @@ public class MachineController {
         logger.info("MachineController:Request Machine ID List");
         ArrayList<Integer> arrayListMids = ms.getFactoryMidList();
         return arrayListMids.toString();
+    }
+
+    @GetMapping("/addStock")
+    public String addStockGet(Model model){
+        model.addAttribute("machineStockAddData", new MachineStockAddData(1010, 100));
+        return "production/machineStockAdd";
+    }
+
+    @PostMapping("/addStock")
+    public String addStockPost(@ModelAttribute("machineStockAddData") MachineStockAddData data, Model model){
+        //기계로 재료를 보내는 코드.
+        //생산 부서에 충분한 재고가 있는지 점검하는 코드 필요.
+        //해당 재고를 검색해서 현재 양이 얼마인지 표시하면 좋음.
+        //->별도 페이지로 구성?
+
+        //test code
+        logger.info("MachineController:Receive Add Stock :"+data.getAmount()+" to "+data.getMid());
+        String result = ms.addStockToMachine(data);
+        if(result.equals("Machine Not Found")){
+            logger.info("Machine Not Found");
+            model.addAttribute("machineStockAddData", data);
+            return "production/machineStockAdd";
+        }
+        //추후 수정 필요
+        logger.info("MachineController:Stock Successfully Added : "+result);
+        model.addAttribute("machineStockAddData", data);
+        return "production/machineStockAdd";
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yonam2023.sfproject.production.domain.MachineData;
 import yonam2023.sfproject.production.domain.MachineRegistData;
+import yonam2023.sfproject.production.domain.MachineStockAddData;
 import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
@@ -209,17 +210,17 @@ public class MachineService {
             logger.info("MachineService:InsertData:"+jo.toString());
             int mid = ((Long)jo.get("mid")).intValue();
             int value = ((Long)jo.get("value")).intValue();
+            int used = ((Long)jo.get("used")).intValue();
             Production production = Production.builder()
                     .mid(mid)
                     .svalue(value)
+                    .used(used)
                     .build();
             pr.save(production);
             MachineData machineData = mr.findByMid(mid);
             machineData.setRecentData(value);
             mr.save(machineData);
         }
-
-
     }
 
     public void fatalState(int mid){
@@ -258,5 +259,19 @@ public class MachineService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String addStockToMachine(MachineStockAddData data){
+        String result = "-";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("mid", data.getMid());
+        jsonObject.put("amount", data.getAmount());
+        try{
+            result = httpPS.sendPost(machineURL+"addStock", jsonObject);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
     }
 }
