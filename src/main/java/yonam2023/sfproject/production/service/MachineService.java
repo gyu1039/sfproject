@@ -210,9 +210,11 @@ public class MachineService {
             logger.info("MachineService:InsertData:"+jo.toString());
             int mid = ((Long)jo.get("mid")).intValue();
             int value = ((Long)jo.get("value")).intValue();
+            int used = ((Long)jo.get("used")).intValue();
             Production production = Production.builder()
                     .mid(mid)
                     .svalue(value)
+                    .used(used)
                     .build();
             pr.save(production);
             MachineData machineData = mr.findByMid(mid);
