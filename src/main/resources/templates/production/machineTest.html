@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout (~{::title}, '제', '작', '중', ~{::section})}"
+      th:replace="~{layout/base_form :: layout ('machine test', 'production', ~{::section})}"
       lang="ko">
 <head>
     <title>index</title>
@@ -8,7 +8,7 @@
 <body>
 
 <section>
-    machine test</br>
+    </br>
     <a href="http://localhost:8085">factory control page</a>done</br>
     <button onclick="doCheckFactory()">click</button>check factory connection-done</br>
     <button onclick="doStartupFactory()">click</button>run factory-done</br>

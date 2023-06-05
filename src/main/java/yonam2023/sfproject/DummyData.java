@@ -35,7 +35,7 @@ public class DummyData {
 
         DepartmentType[] dts = {DepartmentType.PERSONNEL, DepartmentType.LOGISTICS, DepartmentType.PRODUCTION};
 
-        IntStream.rangeClosed(1, 4).forEach(i -> {
+        IntStream.rangeClosed(1, 50).forEach(i -> {
             //센서 임시 추가
             MachineData m = MachineData.builder()
                     .mid(1010+i)

@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout (~{::title}, '제', '작', '중', ~{::section})}"
+      th:replace="~{layout/base_form :: layout ('Machine Detail', 'production', ~{::section})}"
       lang="ko">
 <head>
   <title>index</title>
@@ -8,7 +8,6 @@
 <body>
 
 <section>
-  <h3>MachineDetail</h3>
   Machine Id:<span th:text="${machineData.mid}"></span></br>
   Machine Name:<span th:text="${machineData.name}"></span></br>
   Operation State:<span id="opState" th:text="${machineData.state}"></span></br>
