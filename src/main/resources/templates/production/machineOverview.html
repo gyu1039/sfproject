@@ -29,6 +29,38 @@
       document.getElementById('factoryConnection').innerText=t[0];
       document.getElementById('factoryOperation').innerText=t[1];
     });
+    sse.addEventListener('mdata', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let t = receiveData.split(',');
+
+      t.forEach(mdata=>{
+          let updateData = mdata.split(':');
+          let target = document.getElementById('data_'+updateData[0]);
+          if(target!= null){
+              target.innerText=updateData[1];
+          }
+      });
+    });
+    sse.addEventListener('mstate', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      console.log("server event data",receiveData);
+      let updateData = receiveData.split(':');
+      let target = document.getElementById('state_'+updateData[0]);
+      if(target!= null){
+          target.innerText=updateData[1];
+      }
+    });
+    sse.addEventListener('mfatal', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let updateData = receiveData.split(':');
+      let target = document.getElementById('fatal_'+updateData[0]);
+      if(target!= null){
+          target.innerText=updateData[1];
+      }
+    });
   </script>
   Factory Connection:<span id="factoryConnection" th:text="${factoryConnectionState}"></span></br>
   Factory Operation:<span id="factoryOperation" th:text="${factoryOperationState}"></span></br>
@@ -49,9 +81,9 @@
       <tr th:each="e : ${pageObj}">
         <td><span th:text="${e.mid}"></span></td>
         <td><a th:href="'/production/machineDetail/'+${e.mid}" th:text="${e.name}"></a></td>
-        <td><span th:text="${e.recentData}"></span></td>
-        <td><span th:text="${e.state}"></span></td>
-        <td><span th:text="${e.fatal}"></span></td>
+        <td><span th:id="'data_'+${e.mid}"th:text="${e.recentData}"></span></td>
+        <td><span th:id="'state_'+${e.mid}"th:text="${e.state}"></span></td>
+        <td><span th:id="'fatal_'+${e.mid}"th:text="${e.fatal}"></span></td>
       </tr>
       </tbody>
     </table>

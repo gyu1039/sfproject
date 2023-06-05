@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.production.domain.MachineStockAddData;
 import yonam2023.sfproject.production.service.MachineService;
+import yonam2023.sfproject.production.service.SseService;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,9 @@ public class MachineController {
 
     @Autowired
     MachineService ms;
+
+    @Autowired
+    SseService se;
 
     private Logger logger = LoggerFactory.getLogger(MachineController.class);
 
@@ -97,7 +101,7 @@ public class MachineController {
     public void insertSensorData(@RequestBody String data){
         logger.info("MachineController:Receive data:"+data);
         ms.insertSensorData(data);
-        //재고, 소비량 데이터를 추가해야함.
+        //SSE 변화된 값만 부분 전송할 것.
     }
 
     @GetMapping("/getFactoryMidList")
@@ -107,5 +111,4 @@ public class MachineController {
         ArrayList<Integer> arrayListMids = ms.getFactoryMidList();
         return arrayListMids.toString();
     }
-
 }

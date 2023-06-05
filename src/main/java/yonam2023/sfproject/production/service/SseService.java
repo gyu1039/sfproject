@@ -30,6 +30,7 @@ public class SseService {
 
         return emitter;
     }
+    //모든 이벤트를 통합할 지 고려
     public void call() {
         //모든 등록한 브라우저에 called 데이터를 전송
         emitters.forEach(emitter -> {
@@ -48,6 +49,40 @@ public class SseService {
             try {
                 emitter.send(SseEmitter.event()
                         .name("server")
+                        .data(str));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void updateMachineData(String str){
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("mdata")
+                        .data(str));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    public void updateMachineState(String str){
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("mstate")
+                        .data(str));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    public void updateMachineFatal(String str){
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("mfatal")
                         .data(str));
             } catch (IOException e) {
                 e.printStackTrace();
