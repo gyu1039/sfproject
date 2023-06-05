@@ -10,10 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import yonam2023.sfproject.production.domain.MachineData;
-import yonam2023.sfproject.production.domain.MachineRegistData;
-import yonam2023.sfproject.production.domain.MachineRegistDataBuilder;
-import yonam2023.sfproject.production.domain.Production;
+import yonam2023.sfproject.production.domain.*;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
 import yonam2023.sfproject.production.service.FactoryService;
@@ -241,12 +238,31 @@ public class ProductionController {
         return pr.findAll();
     }
 
-    @GetMapping("/addStockToMachine/{mid}")
-    public String addStockPage(@PathVariable int mid){
-        //머신 존재 체크 코드
-        logger.info("production : add stock page called on machine "+ mid);
-        //머신에 대한 정보를 전달 해야함.
-        //id, 상태, 소비 재고
+    //추후 id에 따른 재고 추가 구현해야함.
+    @GetMapping("/addStock")
+    public String addStockGet(Model model){
+        model.addAttribute("machineStockAddData", new MachineStockAddData(1010, 100));
+        return "production/machineStockAdd";
+    }
+
+    @PostMapping("/addStock")
+    public String addStockPost(@ModelAttribute("machineStockAddData") MachineStockAddData data, Model model){
+        //기계로 재료를 보내는 코드.
+        //생산 부서에 충분한 재고가 있는지 점검하는 코드 필요.
+        //해당 재고를 검색해서 현재 양이 얼마인지 표시하면 좋음.
+        //->별도 페이지로 구성?
+
+        //test code
+        logger.info("MachineController:Receive Add Stock :"+data.getAmount()+" to "+data.getMid());
+        String result = ms.addStockToMachine(data);
+        if(result.equals("Machine Not Found")){
+            logger.info("Machine Not Found");
+            model.addAttribute("machineStockAddData", data);
+            return "production/machineStockAdd";
+        }
+        //추후 수정 필요
+        logger.info("MachineController:Stock Successfully Added : "+result);
+        model.addAttribute("machineStockAddData", data);
         return "production/machineStockAdd";
     }
 }

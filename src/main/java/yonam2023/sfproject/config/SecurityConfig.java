@@ -25,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .mvcMatchers("/", "/hello").permitAll()
+                        .mvcMatchers("/", "/hello","/machine/**").permitAll()
                         .mvcMatchers("/employee/**").hasRole("ADMIN_EMP")
                         .mvcMatchers("/production/**").hasRole("ADMIN_PRO")
                         .mvcMatchers("/storedItems/**", "/receiveRecords/**", "/sendRecords/**").hasRole("ADMIN_LO")

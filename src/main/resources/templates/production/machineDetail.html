@@ -15,6 +15,7 @@
   Description:</br><textarea cols="50" rows="5" th:text="${machineData.description}" readonly></textarea></br>
   <button th:onclick="doRunMachine([[${machineData.mid}]])">run</button><button th:onclick="doStopMachine([[${machineData.mid}]])">Stop</button><button th:onclick="doDelMachine([[${machineData.mid}]])">DELETE</button><button onclick="location.href ='/production'">목록으로</button></br>
   <canvas class="my-4 w-100" id="productionChart" width="1000" height="500"></canvas>
+
 </section>
 
 </body>
