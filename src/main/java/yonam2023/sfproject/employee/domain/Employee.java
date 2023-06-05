@@ -32,7 +32,6 @@ public class Employee implements UserDetails {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
     private DepartmentType department;
 
     private Role role;

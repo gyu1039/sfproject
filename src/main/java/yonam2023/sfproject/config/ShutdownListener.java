@@ -18,10 +18,7 @@ public class ShutdownListener implements HttpSessionListener {
         HttpSession session = httpSessionEvent.getSession();
         HttpServletRequest request = (HttpServletRequest) session.getAttribute("request");
         HttpServletResponse response = (HttpServletResponse) session.getAttribute("response");
-        deleteJSESSIONIDCookie(request, response);
-    }
 
-    private void deleteJSESSIONIDCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -34,5 +31,4 @@ public class ShutdownListener implements HttpSessionListener {
             }
         }
     }
-
 }

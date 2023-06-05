@@ -1,4 +1,4 @@
-package yonam2023.sfproject.config.auth;
+package yonam2023.sfproject.config.security;
 
 
 import org.springframework.security.core.GrantedAuthority;

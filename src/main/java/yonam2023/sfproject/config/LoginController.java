@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -14,7 +13,7 @@ public class LoginController {
     @GetMapping("/")
     public String init() {
 
-        return "hello";
+        return "redirect:/loginForm";
     }
 
     @GetMapping("/loginForm")
@@ -33,5 +32,4 @@ public class LoginController {
     public String index() {
         return "index";
     }
-
 }

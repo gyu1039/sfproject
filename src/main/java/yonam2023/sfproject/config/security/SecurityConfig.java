@@ -1,4 +1,4 @@
-package yonam2023.sfproject.config;
+package yonam2023.sfproject.config.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import yonam2023.sfproject.config.auth.CustomAccessDeniedHandler;
-import yonam2023.sfproject.config.auth.CustomFailureHandler;
-import yonam2023.sfproject.config.auth.CustomSuccessHandler;
+import yonam2023.sfproject.config.security.CustomAccessDeniedHandler;
+import yonam2023.sfproject.config.security.CustomFailureHandler;
+import yonam2023.sfproject.config.security.CustomSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -22,23 +22,21 @@ import yonam2023.sfproject.config.auth.CustomSuccessHandler;
 public class SecurityConfig {
 
     @Bean
-    public WebSecurityCustomizer configure() {
-        return (web) -> web.ignoring().mvcMatchers("/css/**", "/js/**");
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .mvcMatchers("/", "/fail_login").permitAll()
+                        .mvcMatchers("/", "/fail_login", "/css/**", "/js/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/loginForm").hasRole("ANONYMOUS")
-                        .mvcMatchers("/employee/**").hasRole("ADMIN_EMP")
-                        .mvcMatchers("/production/**").hasRole("ADMIN_PRO")
-                        .mvcMatchers("/storedItems/**", "/receiveRecords/**", "/sendRecords/**").hasRole("ADMIN_LO")
+                        .mvcMatchers("/index").hasRole("ADMIN")
+                        .mvcMatchers("/employee/**").hasAnyRole("ADMIN_EMP", "ADMIN")
+                        .mvcMatchers("/production/**").hasAnyRole("ADMIN_PRO", "ADMIN")
+                        .mvcMatchers("/storedItems/**", "/receiveRecords/**", "/sendRecords/**").hasAnyRole("ADMIN_LO", "ADMIN")
                         .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form
                         .loginPage("/loginForm")
+                        .usernameParameter("name")
+                        .passwordParameter("password")
                         .loginProcessingUrl("/login")
                         .permitAll()
                         .successHandler(myAuthenticationSuccessHandler())

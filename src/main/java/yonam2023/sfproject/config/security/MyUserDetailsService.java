@@ -1,4 +1,4 @@
-package yonam2023.sfproject.config.auth;
+package yonam2023.sfproject.config.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

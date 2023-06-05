@@ -1,4 +1,4 @@
-package yonam2023.sfproject.config.auth;
+package yonam2023.sfproject.config.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -66,6 +66,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         rolesTargetUrlMap.put("ROLE_ADMIN_EMP", "/employee");
         rolesTargetUrlMap.put("ROLE_ADMIN_LO", "/storedItems");
         rolesTargetUrlMap.put("ROLE_ADMIN_PRO", "/production");
+        rolesTargetUrlMap.put("ADMIN", "/index");
 
         List<GrantedAuthority> roles = new ArrayList<>();
         authentication.getAuthorities().forEach(r -> roles.add(r));
