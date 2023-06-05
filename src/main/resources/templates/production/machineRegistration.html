@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout (~{::title}, '제', '작', '중', ~{::section})}"
+      th:replace="~{layout/base_form :: layout ('Machine Registration', 'production', ~{::section})}"
       lang="ko">
 <head>
   <title>index</title>
@@ -8,7 +8,7 @@
 <body>
 
 <section>
-  MachineRegistration</br>
+  </br>
   <form th:object="${machineRegistData}" method="post">
     기계번호 :
       <select id="mid" style="width:100px" th:field="*{mid}" >

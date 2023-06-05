@@ -90,7 +90,7 @@
     <div class="row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-3 sidebar-sticky">
-                <div th:replace="~{|layout/fragment_ojh| :: ${department}/subSidebar}"></div>
+                <div th:replace="~{|${department}/fragment_ojh| :: subSidebar}"></div>
             </div>
         </nav>
 
@@ -147,6 +147,53 @@
 
     onLoadFunc.init();
 </script>
+<script th:inline="javascript" >
+    /*<![CDATA[*/
+(() => {
+  'use strict'
+
+  //Production에서 사용하는 경고 알림, model에 "failedReason" attribute를 추가하면 작동함.
+  var failedReason= /*[[${failedReason}]]*/;
+  if(failedReason!==null){
+      alert("registration fail cause of fallow reason :\n"+failedReason);
+  }
+
+  feather.replace({ 'aria-hidden': 'true' })
+
+  // Graphs
+  const ctx1 = document.getElementById('productionChart')
+  // eslint-disable-next-line no-unused-vars
+  const myChart1 = new Chart(ctx1, {
+    type: 'line',
+    data: {
+      label: /*[[${sType}]]*/,
+      labels: /*[[${gIds}]]*/,
+      datasets: [{
+        data: /*[[${gValues}]]*/,
+        lineTension: 0,
+        backgroundColor: 'transparent',
+        borderColor: '#0000ff',
+        borderWidth: 4,
+        pointBackgroundColor: '#00ff00'
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      },
+      legend: {
+        display: true
+      }
+    }
+  })
+})()
+/*]]>*/
+</script>
+<script src="/js/machineTest.js"></script><!--production-->
 
 <script src="/js/bootstrap.bundle.min.js"></script>
 

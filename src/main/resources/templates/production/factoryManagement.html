@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout (~{::title}, '제', '작', '중', ~{::section})}"
+      th:replace="~{layout/base_form :: layout ('Factory Management', 'production', ~{::section})}"
       lang="ko">
 <head>
   <title>index</title>
@@ -8,7 +8,7 @@
 <body>
 
 <section>
-  <h3>Factory Management-Yay</h3>
+  <h3>Yay</h3>
   Factory Connection:<span id="factoryConnection" th:text="${factoryConnectionState}"></span></br>
   Factory Operation:<span id="factoryOperation" th:text="${factoryOperationState}"></span></br>
   <button onclick="doStartupFactory()">StartUp</button></br>

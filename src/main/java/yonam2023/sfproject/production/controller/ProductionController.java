@@ -82,7 +82,7 @@ public class ProductionController {
 
         Page<MachineData> all = mr.findAll(pageable);
 
-        model.addAttribute("list", all);
+        model.addAttribute("pageObj", all);
         return "production/machineOverview";
     }
 
