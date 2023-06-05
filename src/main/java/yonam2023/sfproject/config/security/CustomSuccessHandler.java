@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.security.web.savedrequest.SimpleSavedRequest;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             log.debug("Response has already been committed. Unable to redirect to {}", targetUrl);
             return;
         }
+
 
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }

@@ -21,11 +21,16 @@
         <div class="row justify-content-center align-items-center">
             <a th:href="@{/employee}" class="list-group-item list-group-item-action">직원</a>
             <a th:href="@{/production}" class="list-group-item list-group-item-action">생산</a>
-            <ul>
-                <li class="list-group-item"><a th:href="@{/storedItems}">총 재고</a></li>
-                <li class="list-group-item"><a th:href="@{/receiveRecords}">입고</a></li>
-                <li class="list-group-item"><a th:href="@{/sendRecords}">출고</a></li>
-            </ul>
+
+
+            <div class="list-group-item list-group-item-action">물류
+                <div class="list-group">
+                    <li class="list-group-item list-group-item-action"><a th:href="@{/storedItems}">총 재고</a></li>
+                    <li class="list-group-item list-group-item-action"><a th:href="@{/receiveRecords}">입고</a></li>
+                    <li class="list-group-item list-group-item-action"><a th:href="@{/sendRecords}">출고</li></li>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

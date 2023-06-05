@@ -6,15 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import yonam2023.sfproject.config.security.CustomAccessDeniedHandler;
-import yonam2023.sfproject.config.security.CustomFailureHandler;
-import yonam2023.sfproject.config.security.CustomSuccessHandler;
+import org.springframework.security.web.header.HeaderWriterFilter;
 
 @Configuration
 @EnableWebSecurity
