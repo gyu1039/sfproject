@@ -113,42 +113,7 @@
         </li>
 
     </ul>
-    <script th:inline="javascript" >
-    /*<![CDATA[*/
-(() => {
-  // Graphs
-  const ctx1 = document.getElementById('productionChart');
-  // eslint-disable-next-line no-unused-vars
-  const myChart1 = new Chart(ctx1, {
-    type: 'line',
-    data: {
-      label: /*[[${sType}]]*/,
-      labels: /*[[${gIds}]]*/,
-      datasets: [{
-        data: /*[[${gValues}]]*/,
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#0000ff',
-        borderWidth: 4,
-        pointBackgroundColor: '#00ff00'
-      }]
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      },
-      legend: {
-        display: true
-      }
-    }
-  })
-})()
-  /*]]>*/
-  </script>
+
 </div>
 
 <div th:fragment="bottomScript">
