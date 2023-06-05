@@ -1,16 +1,16 @@
-package yonam2023.sfproject.production.sse;
+package yonam2023.sfproject.production.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@Component
+@Service
 @Slf4j
-public class SseEmitters {
+public class SseService {
     //브라우저 연결 데이터를 저장하는 객체
     //멀티스레딩에 안전한 리스트 형식이어야함.
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
@@ -37,6 +37,18 @@ public class SseEmitters {
                 emitter.send(SseEmitter.event()
                         .name("called")
                         .data("yay"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void updateServerState(String str){
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("server")
+                        .data(str));
             } catch (IOException e) {
                 e.printStackTrace();
             }

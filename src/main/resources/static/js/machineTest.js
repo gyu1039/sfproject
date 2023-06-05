@@ -33,7 +33,7 @@ function doPauseFactory(){
     .then((response)=>{
          console.log(response);
          if(response){
-            document.getElementById('factoryOperation').innerText="Stopped";
+            document.getElementById('factoryOperation').innerText="Paused";
          }
     });
 }

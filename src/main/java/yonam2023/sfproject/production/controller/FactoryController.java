@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import yonam2023.sfproject.production.service.FactoryService;
+import yonam2023.sfproject.production.service.SseService;
 
 @Controller
 @RequestMapping("/factory")
@@ -16,6 +17,9 @@ public class FactoryController {
     private Logger logger = LoggerFactory.getLogger(FactoryController.class);
     @Autowired
     FactoryService fs;
+
+    @Autowired
+    SseService se;
 
     @GetMapping("/check")
     @ResponseBody
@@ -46,6 +50,7 @@ public class FactoryController {
         boolean result=fs.startupFactory();
 
         if(result){
+            se.updateServerState("Connected,In Operation");
             return "true";
         }else {
             return "false";
@@ -58,6 +63,8 @@ public class FactoryController {
         //stop Factory code
         logger.info("FactoryController:attempt pause Factory");
         boolean result = fs.pauseFactory();
+        se.updateServerState("Connected,Paused");
+
         return Boolean.toString(result);
     }
 
@@ -67,6 +74,7 @@ public class FactoryController {
         //stop Factory code
         logger.info("FactoryController:attempt shut down Factory");
         fs.shutdownFactory();
+        se.updateServerState("Disconnected,Stopped");
         return "true";
     }
 }

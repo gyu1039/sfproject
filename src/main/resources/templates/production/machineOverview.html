@@ -22,9 +22,16 @@
       console.log("event data",receiveData);
 
     });
+    sse.addEventListener('server', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let t = receiveData.split(',');
+      document.getElementById('factoryConnection').innerText=t[0];
+      document.getElementById('factoryOperation').innerText=t[1];
+    });
   </script>
-  Factory Connection:<span th:text="${factoryConnectionState}"></span></br>
-  Factory Operation:<span id="FactoryOpState" th:text="${factoryOperationState}"></span></br>
+  Factory Connection:<span id="factoryConnection" th:text="${factoryConnectionState}"></span></br>
+  Factory Operation:<span id="factoryOperation" th:text="${factoryOperationState}"></span></br>
   Machine List:</br>
 
   <div class="table-responsive">
