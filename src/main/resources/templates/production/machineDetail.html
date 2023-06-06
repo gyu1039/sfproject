@@ -10,8 +10,8 @@
 <section>
   Machine Id:<span th:text="${machineData.mid}"></span></br>
   Machine Name:<span th:text="${machineData.name}"></span></br>
-  Operation State:<span id="opState" th:text="${machineData.state}"></span></br>
-  Fatal Error:<span th:text="${machineData.fatal}"></span></br>
+  Operation State:<span th:id="'mdstate_'+${machineData.mid}" th:text="${machineData.state}"></span></br>
+  Fatal Error:<span th:id="'mdfatal_'+${machineData.mid}" th:text="${machineData.fatal}"></span></br>
   Description:</br><textarea cols="50" rows="5" th:text="${machineData.description}" readonly></textarea></br>
   <button th:onclick="doRunMachine([[${machineData.mid}]])">run</button><button th:onclick="doStopMachine([[${machineData.mid}]])">Stop</button><button th:onclick="doDelMachine([[${machineData.mid}]])">DELETE</button><button onclick="location.href ='/production'">목록으로</button></br>
   <canvas class="my-4 w-100" id="productionChart" width="1000" height="500"></canvas>
@@ -51,6 +51,38 @@
   })
 })()
   /*]]>*/
+  </script>
+  <script>
+    const sse = new EventSource(window.location.protocol+"//"+window.location.host+"/sse/connect");
+
+    sse.addEventListener('connect', (e) => {
+	  const { data: receivedConnectData } = e;
+	  console.log('connect event data: ',receivedConnectData);
+    });
+    sse.addEventListener('called', e => {
+      const { data: receiveData } = e;
+      console.log("event data",receiveData);
+
+    });
+    //Machine Detail state
+    sse.addEventListener('mdstate', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let updateData = receiveData.split(':');
+      let target = document.getElementById('mdstate_'+updateData[0]);
+      if(target!= null){
+          target.innerText=updateData[1];
+      }
+    });
+    sse.addEventListener('mdfatal', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let updateData = receiveData.split(':');
+      let target = document.getElementById('mdfatal_'+updateData[0]);
+      if(target!= null){
+          target.innerText=updateData[1];
+      }
+    });
   </script>
 </section>
 

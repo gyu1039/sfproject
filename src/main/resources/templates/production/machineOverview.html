@@ -45,7 +45,6 @@
     sse.addEventListener('mstate', e => {
       const { data: receiveData } = e;
       console.log("server event data",receiveData);
-      console.log("server event data",receiveData);
       let updateData = receiveData.split(':');
       let target = document.getElementById('state_'+updateData[0]);
       if(target!= null){

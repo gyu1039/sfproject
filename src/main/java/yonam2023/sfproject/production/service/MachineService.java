@@ -118,6 +118,8 @@ public class MachineService {
                 //SSE
                 se.updateMachineState(mid+":Running");//command 패턴 적용 가능?
                 se.updateMachineFatal(mid+":Normal");
+                se.updateMachineDetailState(mid+":Running");
+                se.updateMachineDetailFatal(mid+":Normal");
                 return true;
             }else{
                 logger.info("MachineService:Machine "+mid+" failed to start up : "+res);
@@ -148,6 +150,7 @@ public class MachineService {
                 mr.save(md);
                 //SSE
                 se.updateMachineState(mid+":Stopped");
+                se.updateMachineDetailState(mid+":Stopped");
                 return true;
             }else{
                 logger.info("MachineService:Machine "+mid+" failed to stop : "+res);
@@ -178,7 +181,7 @@ public class MachineService {
     }
 
     public void getMachineInfo(int mid){
-
+        //기계 데이터 갱신에 관한 코드
     }
 
     public boolean checkMachine(int mid){
@@ -235,6 +238,7 @@ public class MachineService {
         //SSE
         if(sb.length()>0) sb.deleteCharAt(sb.length()-1);
         se.updateMachineData(sb.toString());
+        //MachineDetail 페이지 데이터 갱신고려
     }
 
     public void fatalState(int mid){
@@ -246,6 +250,8 @@ public class MachineService {
         //SSE
         se.updateMachineFatal(mid+":Error");
         se.updateMachineState(mid+":Stopped");
+        se.updateMachineDetailFatal(mid+":Error");
+        se.updateMachineDetailState(mid+":Stopped");
     }
 
     public ArrayList<Integer> getFactoryMidList(){

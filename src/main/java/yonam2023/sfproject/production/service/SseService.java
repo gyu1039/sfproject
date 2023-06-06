@@ -89,4 +89,26 @@ public class SseService {
             }
         });
     }
+    public void updateMachineDetailState(String str){
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("mdstate")
+                        .data(str));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    public void updateMachineDetailFatal(String str){
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("mdfatal")
+                        .data(str));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 }
