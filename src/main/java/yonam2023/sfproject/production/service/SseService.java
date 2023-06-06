@@ -1,16 +1,27 @@
 package yonam2023.sfproject.production.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import yonam2023.sfproject.production.domain.MachineData;
+import yonam2023.sfproject.production.domain.Production;
+import yonam2023.sfproject.production.repository.MachineDataRepository;
+import yonam2023.sfproject.production.repository.ProductionRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 @Slf4j
 public class SseService {
+    @Autowired
+    ProductionRepository pr;
+    @Autowired
+    MachineDataRepository mr;
+
     //브라우저 연결 데이터를 저장하는 객체
     //멀티스레딩에 안전한 리스트 형식이어야함.
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
@@ -106,6 +117,37 @@ public class SseService {
                 emitter.send(SseEmitter.event()
                         .name("mdfatal")
                         .data(str));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void updateMachineDetailGraph(int mid){
+
+        MachineData machineData = mr.findByMid(mid);
+        //graphData
+        List<Production> graph = pr.findTop10ByMidOrderByIdDesc(mid);
+        StringBuilder sbId = new StringBuilder();
+        StringBuilder sbValues = new StringBuilder();
+        sbId.append(mid+":");
+
+        for(int i = graph.size()-1; i>=0; i--){
+            Production p = graph.get(i);
+            sbId.append(Long.toString(p.getId())+",");
+            sbValues.append(p.getSvalue()+",");
+        }
+        //끝의 ,를 제거
+        if(sbId.length()>0) sbId.deleteCharAt(sbId.length()-1);
+        if(sbValues.length()>0) sbValues.deleteCharAt(sbValues.length()-1);
+
+        sbId.append(":"+sbValues);
+
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("updateGraph")
+                        .data(sbId.toString()));//id,id,id:v,v,v 형태의 자료. 최대 10개
             } catch (IOException e) {
                 e.printStackTrace();
             }

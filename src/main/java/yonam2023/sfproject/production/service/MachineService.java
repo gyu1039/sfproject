@@ -234,6 +234,8 @@ public class MachineService {
             mr.save(machineData);
 
             sb.append(mid+":"+value+",");
+            //SSE
+            se.updateMachineDetailGraph(mid);
         }
         //SSE
         if(sb.length()>0) sb.deleteCharAt(sb.length()-1);
