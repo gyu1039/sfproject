@@ -28,6 +28,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     private RequestCache requestCache = new HttpSessionRequestCache();
+    private TargetUrlFactory targetUrlFactory = new RoleBasedTargetUrlFactory();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -64,23 +65,36 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             return savedRequest.getRedirectUrl();
         }
 
-        Map<String, String> rolesTargetUrlMap = new HashMap<>();
+        return targetUrlFactory.createTargetUrl(authentication);
+    }
+
+}
+
+interface TargetUrlFactory {
+    String createTargetUrl(Authentication authentication);
+}
+
+class RoleBasedTargetUrlFactory implements TargetUrlFactory {
+    private Map<String, String> rolesTargetUrlMap = new HashMap<>();
+
+    public RoleBasedTargetUrlFactory() {
         rolesTargetUrlMap.put("ROLE_ADMIN_EMP", "/employee");
         rolesTargetUrlMap.put("ROLE_ADMIN_LO", "/storedItems");
         rolesTargetUrlMap.put("ROLE_ADMIN_PRO", "/production");
         rolesTargetUrlMap.put("ADMIN", "/index");
+    }
 
-        List<GrantedAuthority> roles = new ArrayList<>();
-        authentication.getAuthorities().forEach(r -> roles.add(r));
+    @Override
+    public String createTargetUrl(Authentication authentication) {
+        List<GrantedAuthority> roles = new ArrayList<>(authentication.getAuthorities());
 
-        for(GrantedAuthority g : roles){
-            String auth = g.getAuthority();
-            if(rolesTargetUrlMap.containsKey(auth)) {
-                return rolesTargetUrlMap.get(auth);
+        for (GrantedAuthority authority : roles) {
+            String role = authority.getAuthority();
+            if (rolesTargetUrlMap.containsKey(role)) {
+                return rolesTargetUrlMap.get(role);
             }
-
         }
 
-        return "/index";
+        return "/";
     }
 }
