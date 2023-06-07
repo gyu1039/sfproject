@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base_form :: layout ('Factory Management', 'production', ~{::section})}"
       lang="ko">
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,7 +9,6 @@
 <body>
 
   <section>
-      재고 추가 임시 페이지.</br>
       <form th:object="${machineStockAddData}" method="post">
           기계번호 :<input type="number" id="mid" placeholder="기계 번호" th:field="*{mid}" th:value="*{mid}"/></br>
           양 : <input type="number" id="amount" placeholder="양" th:field="*{amount}" th:value="*{amount}"/></br>

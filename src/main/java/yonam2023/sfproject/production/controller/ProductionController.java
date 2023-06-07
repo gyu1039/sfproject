@@ -265,4 +265,44 @@ public class ProductionController {
         model.addAttribute("machineStockAddData", data);
         return "production/machineStockAdd";
     }
+    @GetMapping("/addStock/{mid}")
+    public String addStockGetByMid(@PathVariable("mid")int mid, Model model){
+        //mid로 여는 재고 페이지
+        //페이지 열때 해당 mid의 기계가 있는지 체크
+
+        logger.info("ProductionController:Adding Stock Resources to Machine "+mid+" Page");
+        if(!ms.isMachineInDB(mid)){
+            logger.info("ProductionController:Requested Machine "+mid+" is not registered");
+            return "redirect:/production";
+        }
+        //기계 정보를 받아오는 코드 작성 요
+        //MachineData machineData = mr.findByMid(mid);
+        
+        model.addAttribute("machineStockAddData", new MachineStockAddData(mid, 100));
+        return "production/machineStockAdd";
+    }
+    @PostMapping("/addStock/{mid}")
+    public String addStockPost(@PathVariable("mid")int mid, @ModelAttribute("machineStockAddData") MachineStockAddData data, Model model){
+        //mid로 여는 재고 페이지
+        //페이지 열때 해당 mid의 기계가 있는지 체크
+        logger.info("ProductionController:Adding Stock Resources to Machine "+mid);
+        if(!ms.isMachineInDB(mid)){
+            logger.info("ProductionController:Requested Machine "+mid+" is not registered");
+            return "redirect:/production";
+        }
+        MachineData machineData = mr.findByMid(mid);
+
+        //test code
+        logger.info("MachineController:Receive Add Stock :"+data.getAmount()+" to "+data.getMid());
+        String result = ms.addStockToMachine(data);
+        if(result.equals("Machine Not Found")){
+            logger.info("Machine Not Found");
+            model.addAttribute("machineStockAddData", data);
+            return "production/machineStockAdd";
+        }
+        //추후 수정 필요
+        logger.info("MachineController:Stock Successfully Added : "+result);
+        model.addAttribute("machineStockAddData", data);
+        return "production/machineStockAdd";
+    }
 }

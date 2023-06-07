@@ -80,9 +80,15 @@
       <tr th:each="e : ${pageObj}">
         <td><span th:text="${e.mid}"></span></td>
         <td><a th:href="'/production/machineDetail/'+${e.mid}" th:text="${e.name}"></a></td>
-        <td><span th:id="'data_'+${e.mid}"th:text="${e.recentData}"></span></td>
-        <td><span th:id="'state_'+${e.mid}"th:text="${e.state}"></span></td>
-        <td><span th:id="'fatal_'+${e.mid}"th:text="${e.fatal}"></span></td>
+        <td><span th:id="'data_'+${e.mid}" th:text="${e.recentData}"></span></td>
+        <td>
+          <span th:id="'state_'+${e.mid}" th:if="${e.state==true}">In Operation</span>
+          <span th:id="'state_'+${e.mid}" th:if="${e.state==false}">Stopped</span>
+        </td>
+        <td>
+          <span th:id="'fatal_'+${e.mid}"th:if="${e.fatal==false}">Normal</span>
+          <span th:id="'fatal_'+${e.mid}"th:if="${e.fatal==true}">Error</span>
+        </td>
       </tr>
       </tbody>
     </table>
