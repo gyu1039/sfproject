@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout('직원 수정', '직원 관리1', '직원 관리2', '직원 관리3', ~{::section})}"
+      th:replace="~{layout/base_form :: layout('직원 수정', 'employee', ~{::section})}"
       lang="ko">
 
 <section>
@@ -31,10 +31,12 @@
             </select>
         </div>
         <div class="'d-grid gap-2 d-md-block">
-            <button type="submit" class="btn btn-primary">수정하기</button>
+            <button type="submit" class="btn btn-primary">수정</button>
         </div>
     </form>
-
+    <form th:action="@{/employees/delete/${e.id}}" method="post">
+        <button type="submit" class="btn btn-danger">삭제</button>
+    </form>
 
 </section>
 

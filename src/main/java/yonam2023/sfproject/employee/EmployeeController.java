@@ -27,7 +27,7 @@ public class EmployeeController {
     public String totalList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<Employee> all = es.findAll(pageable);
-        model.addAttribute("list", all);
+        model.addAttribute("pageObj", all);
         return "employee/init";
     }
 
@@ -64,12 +64,21 @@ public class EmployeeController {
     public String byDepartment(@ModelAttribute DepartmentTO departmentTO, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
 
         Iterable<Employee> byDepartment = es.findByDepartment(departmentTO, pageable);
-        model.addAttribute("list", byDepartment);
+        model.addAttribute("pageObj", byDepartment);
         return "employee/init";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteEmployee(@PathVariable Long id) {
+
+        es.deleteEmployeeById(id);
+
+        return "redirect:/employee";
     }
 
     @ModelAttribute("d")
     public DepartmentTO d() {
+
         return new DepartmentTO();
     }
 
