@@ -74,7 +74,7 @@ interface TargetUrlFactory {
     String createTargetUrl(Authentication authentication);
 }
 
-@Log4j2
+@Slf4j
 class RoleBasedTargetUrlFactory implements TargetUrlFactory {
     private Map<String, String> rolesTargetUrlMap = new HashMap<>();
 
