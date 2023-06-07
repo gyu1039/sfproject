@@ -29,6 +29,9 @@ public class MachineService {
     @Autowired
     ProductionRepository pr;
 
+    @Autowired
+    SseService se;
+
     private Logger logger = LoggerFactory.getLogger(MachineService.class);
     private static final String machineURL="http://localhost:8085/";
 
@@ -112,6 +115,11 @@ public class MachineService {
                 md.setState(true);
                 md.setFatal(false);
                 mr.save(md);
+                //SSE
+                se.updateMachineState(mid+":Running");//command 패턴 적용 가능?
+                se.updateMachineFatal(mid+":Normal");
+                se.updateMachineDetailState(mid+":Running");
+                se.updateMachineDetailFatal(mid+":Normal");
                 return true;
             }else{
                 logger.info("MachineService:Machine "+mid+" failed to start up : "+res);
@@ -140,6 +148,9 @@ public class MachineService {
                 logger.info("MachineService:Machine "+mid+" Stop Successful : "+res);
                 md.setState(false);
                 mr.save(md);
+                //SSE
+                se.updateMachineState(mid+":Stopped");
+                se.updateMachineDetailState(mid+":Stopped");
                 return true;
             }else{
                 logger.info("MachineService:Machine "+mid+" failed to stop : "+res);
@@ -170,7 +181,7 @@ public class MachineService {
     }
 
     public void getMachineInfo(int mid){
-
+        //기계 데이터 갱신에 관한 코드
     }
 
     public boolean checkMachine(int mid){
@@ -205,11 +216,12 @@ public class MachineService {
             e.printStackTrace();
             return;
         }
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i<jsonArray.size();i++){
             JSONObject jo = (JSONObject) jsonArray.get(i);
             logger.info("MachineService:InsertData:"+jo.toString());
-            int mid = ((Long)jo.get("mid")).intValue();
-            int value = ((Long)jo.get("value")).intValue();
+            int mid = ((Long)jo.get("mid")).intValue();//mid 추출
+            int value = ((Long)jo.get("value")).intValue();//현재값 추출
             int used = ((Long)jo.get("used")).intValue();
             Production production = Production.builder()
                     .mid(mid)
@@ -220,7 +232,15 @@ public class MachineService {
             MachineData machineData = mr.findByMid(mid);
             machineData.setRecentData(value);
             mr.save(machineData);
+
+            sb.append(mid+":"+value+",");
+            //SSE
+            se.updateMachineDetailGraph(mid);
         }
+        //SSE
+        if(sb.length()>0) sb.deleteCharAt(sb.length()-1);
+        se.updateMachineData(sb.toString());
+        //MachineDetail 페이지 데이터 갱신고려
     }
 
     public void fatalState(int mid){
@@ -229,6 +249,11 @@ public class MachineService {
         md.setFatal(true);
         mr.save(md);
         logger.error("Fatal Received "+mid);
+        //SSE
+        se.updateMachineFatal(mid+":Error");
+        se.updateMachineState(mid+":Stopped");
+        se.updateMachineDetailFatal(mid+":Error");
+        se.updateMachineDetailState(mid+":Stopped");
     }
 
     public ArrayList<Integer> getFactoryMidList(){

@@ -33,7 +33,7 @@ function doPauseFactory(){
     .then((response)=>{
          console.log(response);
          if(response){
-            document.getElementById('factoryOperation').innerText="Stopped";
+            document.getElementById('factoryOperation').innerText="Paused";
          }
     });
 }
@@ -85,9 +85,10 @@ function doRunMachine(mid){
     }).then((response) => response.json())
     .then((response) => {
         console.log(response);
-        if(response){
-            document.getElementById('opState').innerText=response;
-        }
+        //이제 SSE로 구현됨
+        //if(response){
+        //    document.getElementById('opState').innerText=response;
+        //}
     });
 }
 //올바르게 동작하지않음. *수정됨. fetch 제거
