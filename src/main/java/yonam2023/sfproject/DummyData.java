@@ -1,5 +1,6 @@
 package yonam2023.sfproject;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import javax.annotation.PostConstruct;
 import java.util.stream.IntStream;
 
 @Component
+@Slf4j
 public class DummyData {
 
     @Autowired
@@ -73,6 +75,10 @@ public class DummyData {
         String encode2 = bCryptPasswordEncoder.encode("Ljh3141");
         Employee Ljh3141 = Employee.builder().name("Ljh3141").password(encode2).phoneNumber("22371018").role(Role.ROLE_ADMIN_PRO).department(DepartmentType.PRODUCTION).build();
         er.save(Ljh3141);
+
+        String encode3 = bCryptPasswordEncoder.encode("test");
+        Employee admin = Employee.builder().name("test").password(encode3).phoneNumber("0000").department(DepartmentType.TEST).role(Role.ROLE_ADMIN).build();
+        er.save(admin);
     }
 
 

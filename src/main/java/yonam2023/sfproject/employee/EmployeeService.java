@@ -58,12 +58,8 @@ public class EmployeeService {
         return er.findByDepartment(departmentTO.getDepartmentType(), pageable);
     }
 
-    public Employee findByName(String id) {
+    public void deleteEmployeeById(Long id) {
 
-        if(er.findByName(id) != null) {
-            return er.findByName(id);
-        }
-
-        return null;
+         er.deleteById(id);
     }
 }
