@@ -153,4 +153,17 @@ public class SseService {
             }
         });
     }
+
+    public void updateMachineDetailStock(String str){
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("mdstock")
+                        .data(str));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
 }

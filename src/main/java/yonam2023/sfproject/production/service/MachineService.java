@@ -66,11 +66,17 @@ public class MachineService {
             logger.warn("MachineService:Machine "+mid+" is not exists");
             return false;
         }
+        //기계로부터 데이터 받아옴.
+        MachineData receiveData = getMachineInfo(mid);
+
         MachineData smd = MachineData.builder()
                 .mid(machineRegistData.getMid())
                 .name(machineRegistData.getName())
                 .state(false)
                 .description(machineRegistData.getDescription())
+                .min(receiveData.getMin())
+                .max(receiveData.getMax())
+                .stock(receiveData.getStock())
                 .build();
         mr.save(smd);
         logger.info("MachineService:Machine "+mid+" is now registered");
@@ -180,8 +186,32 @@ public class MachineService {
         return true;
     }
 
-    public void getMachineInfo(int mid){
+    public MachineData getMachineInfo(int mid){
         //기계 데이터 갱신에 관한 코드
+        String res;
+        JSONObject jo;
+        try{
+            //최신값 받아오기.
+            res = httpPS.sendGet(machineURL + "getMachineData/"+mid);
+            logger.info("MachineService:Machine "+mid+" Data : "+res);
+            JSONParser parser = new JSONParser();
+            jo = (JSONObject) parser.parse(res);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        MachineData machineData = MachineData.builder()
+                .mid(((Long)jo.get("mid")).intValue())
+                .name((String)jo.get("name"))
+                .max(((Long)jo.get("max")).intValue())
+                .min(((Long)jo.get("min")).intValue())
+                .recentData(((Long)jo.get("current")).intValue())
+                .state((Boolean)jo.get("state"))
+                .stock(((Long)jo.get("stock")).intValue())
+                .build();
+        //fatal 값이 없음에 주의.
+        return machineData;
     }
 
     public boolean checkMachine(int mid){
@@ -222,7 +252,8 @@ public class MachineService {
             logger.info("MachineService:InsertData:"+jo.toString());
             int mid = ((Long)jo.get("mid")).intValue();//mid 추출
             int value = ((Long)jo.get("value")).intValue();//현재값 추출
-            int used = ((Long)jo.get("used")).intValue();
+            int used = ((Long)jo.get("used")).intValue();//사용량
+            int stock = ((Long)jo.get("stock")).intValue();//남은 재료
             Production production = Production.builder()
                     .mid(mid)
                     .svalue(value)
@@ -231,11 +262,13 @@ public class MachineService {
             pr.save(production);
             MachineData machineData = mr.findByMid(mid);
             machineData.setRecentData(value);
+            machineData.setStock(stock);
             mr.save(machineData);
 
-            sb.append(mid+":"+value+",");
+            sb.append(mid+":"+value+":"+stock+",");
             //SSE
             se.updateMachineDetailGraph(mid);
+            se.updateMachineDetailStock(mid+":"+stock);
         }
         //SSE
         if(sb.length()>0) sb.deleteCharAt(sb.length()-1);

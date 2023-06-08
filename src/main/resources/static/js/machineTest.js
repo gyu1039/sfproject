@@ -110,9 +110,10 @@ function doStopMachine(mid){
     }).then((response) => response.json())
     .then((response) => {
          console.log(response);
-         if(!response){
-             document.getElementById('opState').innerText=response;
-         }
+         //이제 SSE로 구현됨
+         //if(!response){
+         //    document.getElementById('opState').innerText=response;
+         //}
     });
 }
 

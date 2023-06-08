@@ -132,14 +132,19 @@ public class ProductionController {
         }
     }
 
-    @GetMapping("/machineDetail/{McId}")
-    public String machineDetailGet(@PathVariable("McId") int mid, Model model){
+    @GetMapping("/machineDetail/{mid}")
+    public String machineDetailGet(@PathVariable("mid") int mid, Model model){
         logger.info("ProductionController:Request Machine "+mid+" detail");
         if(!ms.isMachineInDB(mid)){
             logger.info("ProductionController:Requested Machine "+mid+" is not registered");
             return "redirect:/production";
         }
+        //기계 데이터를 요청해서 최신 데이터로 받아올 필요가 있음.
+        //ex)Min, Max 값, Stock 최대치, Stock 현재치 등등.
+        MachineData newData = ms.getMachineInfo(mid);
         MachineData machineData = mr.findByMid(mid);
+        //갱신
+        machineData.setStock(newData.getStock());
         //graphData
         List<Production> graph = pr.findTop10ByMidOrderByIdDesc(mid);
         List<String> ids = new ArrayList<String>();
@@ -290,6 +295,8 @@ public class ProductionController {
             logger.info("ProductionController:Requested Machine "+mid+" is not registered");
             return "redirect:/production";
         }
+        //재고량 체크후 초과일때 되돌리는 코드도 여기 포함하면 됨
+
         MachineData machineData = mr.findByMid(mid);
 
         //test code
@@ -300,9 +307,9 @@ public class ProductionController {
             model.addAttribute("machineStockAddData", data);
             return "production/machineStockAdd";
         }
-        //추후 수정 필요
+
         logger.info("MachineController:Stock Successfully Added : "+result);
         model.addAttribute("machineStockAddData", data);
-        return "production/machineStockAdd";
+        return "redirect:/production/machineDetail/"+mid;
     }
 }

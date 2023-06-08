@@ -8,12 +8,37 @@
 <body>
 
 <section>
-  Machine Id:<span th:id="'id_'+${machineData.mid}" th:text="${machineData.mid}"></span></br>
-  Machine Name:<span th:text="${machineData.name}"></span></br>
-  Operation State:<span th:id="'mdstate_'+${machineData.mid}" th:text="${machineData.state}"></span></br>
-  Fatal Error:<span th:id="'mdfatal_'+${machineData.mid}" th:text="${machineData.fatal}"></span></br>
-  Description:</br><textarea cols="50" rows="5" th:text="${machineData.description}" readonly></textarea></br>
-  <button th:onclick="doRunMachine([[${machineData.mid}]])">run</button><button th:onclick="doStopMachine([[${machineData.mid}]])">Stop</button><button th:onclick="doDelMachine([[${machineData.mid}]])">DELETE</button><button onclick="location.href ='/production'">목록으로</button></br>
+  <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <th>Machine Id</th>
+        <td><span th:id="'id_'+${machineData.mid}" th:text="${machineData.mid}"></span></td>
+        <th>Machine Name</th>
+        <td><span th:text="${machineData.name}"></span></td>
+      </tr>
+      <tr>
+        <th>Operation State</th>
+        <td><span th:id="'mdstate_'+${machineData.mid}" th:text="${machineData.state}"></span></td>
+        <th>Fatal State</th>
+        <td><span th:id="'mdfatal_'+${machineData.mid}" th:text="${machineData.fatal}"></span></td>
+      </tr>
+      <tr>
+        <th>Max Value</th>
+        <td><span th:text="${machineData.max}"></span></td>
+        <th>Min Value</th>
+        <td><span th:text="${machineData.min}"></span></td>
+      </tr>
+      <tr>
+        <th>Remain Stock Amount</th>
+        <td colspan="3"><span th:id="'mdstock_'+${machineData.mid}" th:text="${machineData.stock}"></span></td>
+      </tr>
+    </tbody>
+  </table>
+  <h6 class="h5">Description</h6><textarea class="form-control col-sm-5" rows="3" th:text="${machineData.description}" readonly></textarea></br>
+  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doRunMachine([[${machineData.mid}]])">가동</button>
+  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doStopMachine([[${machineData.mid}]])">정지</button>
+  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="location.href ='/production/addStock/'+[[${machineData.mid}]]">재고 추가</button>
+  <button type="button" class="btn btn-sm btn-outline-danger" th:onclick="doDelMachine([[${machineData.mid}]])">제거</button>
   <canvas class="my-4 w-100" id="productionChart" width="1000" height="500"></canvas>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   <script th:inline="javascript" >
@@ -96,8 +121,19 @@
 
         myChart1.update('none');
       }
-
     });
+    sse.addEventListener('mdstock',e=>{
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let updateData = receiveData.split(':');
+
+      let target = document.getElementById('id_'+updateData[0]);
+      if(target!= null){
+          let stock = document.getElementById('mdstock_'+updateData[0]);
+          stock.innerText=updateData[1];
+      }
+    });
+
   </script>
 </section>
 

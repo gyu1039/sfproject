@@ -41,11 +41,23 @@ public class MachineData {
     @Column(name = "DESCRIPTION")
     String description;
 
+    @Column(name = "STOCK")
+    int stock;
+
+    @Column(name = "MAXSTOCK")
+    int maxStock;
+
     @Builder
-    public MachineData(int mid,String name, boolean state, String description){
+    public MachineData(int mid, String name, int max, int min, int recentData,boolean state, boolean fatal, String description, int stock, int maxStock){
         this.mid = mid;
         this.name = name;
+        this.max = max;
+        this.min = min;
+        this.recentData = recentData;
         this.state = state;
+        this.fatal = fatal;
         this.description = description;
+        this.stock = stock;
+        this.maxStock = maxStock;
     }
 }

@@ -44,6 +44,7 @@ public class DummyData {
                     .name("machine-"+(1010+i))
                     .state(false)
                     .description("machine-"+(i+1010 )+" description")
+                    .recentData(-1)
                     .build();
             mr.save(m);
             //값 임시 추가. 제거 또는 수정 필요
