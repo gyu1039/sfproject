@@ -15,6 +15,7 @@ import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
 import yonam2023.sfproject.production.service.FactoryService;
 import yonam2023.sfproject.production.service.MachineService;
+import yonam2023.sfproject.production.service.SseService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,8 @@ public class ProductionController {
     FactoryService fs;
     @Autowired
     MachineService ms;
+    @Autowired
+    SseService se;
 
     //주로 뷰 관리 코드를 위치 시킬것.
     /*
@@ -111,7 +114,7 @@ public class ProductionController {
     }
 
     @PostMapping("/machineRegistration")
-    public String addMachinePost(@ModelAttribute(name = "machineRegistData") MachineRegistData machineRegistData, Model model){
+    public String addMachinePost(@ModelAttribute  MachineRegistData machineRegistData, Model model){
         //add Machine code
         logger.info("ProductionController:attempt add Machine\n\tMachine id : "+machineRegistData.getMid()+"\n\tMachine name : "+machineRegistData.getName()+"\n\tMachine description:"+machineRegistData.getDescription());
         //logger.info("MachineController:attempt add Machine "+mid);
@@ -289,12 +292,12 @@ public class ProductionController {
     @PostMapping("/addStock/{mid}")
     public String addStockPost(@PathVariable("mid")int mid, @ModelAttribute("machineStockAddData") MachineStockAddData data, Model model){
         //mid로 여는 재고 페이지
-        //페이지 열때 해당 mid의 기계가 있는지 체크
-        logger.info("ProductionController:Adding Stock Resources to Machine "+mid);
-        if(!ms.isMachineInDB(mid)){
-            logger.info("ProductionController:Requested Machine "+mid+" is not registered");
-            return "redirect:/production";
-        }
+        //지정 불가능이므로 생략
+        //logger.info("ProductionController:Adding Stock Resources to Machine "+mid);
+        //if(!ms.isMachineInDB(mid)){
+        //    logger.info("ProductionController:Requested Machine "+mid+" is not registered");
+        //    return "redirect:/production";
+        //}
         //재고량 체크후 초과일때 되돌리는 코드도 여기 포함하면 됨
 
         MachineData machineData = mr.findByMid(mid);
@@ -310,6 +313,7 @@ public class ProductionController {
 
         logger.info("MachineController:Stock Successfully Added : "+result);
         model.addAttribute("machineStockAddData", data);
-        return "redirect:/production/machineDetail/"+mid;
+        model.addAttribute("flag", "close");
+        return "production/machineStockAdd";
     }
 }

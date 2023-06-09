@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base_form :: layout ('Factory Management', 'production', ~{::section})}"
       lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -9,11 +8,37 @@
 <body>
 
   <section>
-      <form th:object="${machineStockAddData}" method="post">
-          기계번호 :<input type="number" id="mid" placeholder="기계 번호" th:field="*{mid}" th:value="*{mid}"/></br>
+      <h3>재고 추가</h3>
+      <form id="addForm" th:object="${machineStockAddData}" onsubmit="submitForm()" method="post">
+          기계번호 : <span th:text="*{mid}"></span><input type="hidden" id="mid" placeholder="기계 번호" th:field="*{mid}" th:value="*{mid}"/></br>
           양 : <input type="number" id="amount" placeholder="양" th:field="*{amount}" th:value="*{amount}"/></br>
-          <button id="btn_submit" type="submit" >등록</button>
+          <button type="submit" >추가</button>
       </form>
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script th:inline="javascript">
+          window.onload = function(){
+              let flag = [[${flag}]];
+              if(flag != null){
+                  self.close();
+              }
+          }
+          function submitForm(){
+               axios.post(window.location.href,{
+                      mid: document.mid.value(),
+                      amount:document.amount.value
+                  })
+                  .then((response) =>response.json())
+                   .then((response) => {
+                      console.log(response);
+                      //window.open("about:blank", "_self").close();//정상 통신 후 응답된 메시지 출력
+                      //self.close();
+                  })
+                  .catch((error)=>{
+                      console.log(error);				//오류발생시 실행
+                  })
+               //self.close();
+          }
+      </script>
   </section>
 </body>
 </html>

@@ -101,7 +101,7 @@ public class MachineController {
         //SSE 변화된 값만 부분 전송할 것.
     }
 
-    @GetMapping("/getFactoryMidList")
+    @GetMapping("/getFactoryMi  dList")
     @ResponseBody
     public String midListGet(){
         logger.info("MachineController:Request Machine ID List");

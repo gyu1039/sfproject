@@ -77,6 +77,7 @@ public class MachineService {
                 .min(receiveData.getMin())
                 .max(receiveData.getMax())
                 .stock(receiveData.getStock())
+                .maxStock(receiveData.getMaxStock())
                 .build();
         mr.save(smd);
         logger.info("MachineService:Machine "+mid+" is now registered");
@@ -209,6 +210,7 @@ public class MachineService {
                 .recentData(((Long)jo.get("current")).intValue())
                 .state((Boolean)jo.get("state"))
                 .stock(((Long)jo.get("stock")).intValue())
+                .maxStock(((Long)jo.get("maxStock")).intValue())
                 .build();
         //fatal 값이 없음에 주의.
         return machineData;
@@ -325,8 +327,13 @@ public class MachineService {
         jsonObject.put("mid", data.getMid());
         jsonObject.put("amount", data.getAmount());
         try{
+            //result에 적재하지 못한 만큼의 재고가 반환됨.
             result = httpPS.sendPost(machineURL+"addStock", jsonObject);
-
+            //DB에 반영
+            MachineData machineData = mr.findByMid(data.getMid());
+            machineData.setStock(machineData.getStock()+data.getAmount()>machineData.getMaxStock()? machineData.getMaxStock() : machineData.getStock()+ data.getAmount());
+            mr.save(machineData);
+            se.updateMachineDetailStock(data.getMid()+":"+machineData.getStock());
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -1,15 +1,19 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base_form :: layout ('Machine Detail', 'production', ~{::section})}"
+      th:replace="~{layout/base_form :: layout ('Machine Detail : '+${machineData.name}, 'production', ~{::section})}"
       lang="ko">
 <head>
   <title>index</title>
 </head>
 <body>
-
 <section>
-  <table class="table table-bordered">
-    <tbody>
+  <div class = "d-sm-flex flex-sm-wrap">
+    <div class="w-auto">
+      <canvas class="my-4 w-auto h-auto" id="productionChart" width="800" height="400"></canvas>
+    </div>
+    <div class="w-auto">
+    <table class="table table-bordered mh-100">
+      <tbody>
       <tr>
         <th>Machine Id</th>
         <td><span th:id="'id_'+${machineData.mid}" th:text="${machineData.mid}"></span></td>
@@ -32,15 +36,20 @@
         <th>Remain Stock Amount</th>
         <td colspan="3"><span th:id="'mdstock_'+${machineData.mid}" th:text="${machineData.stock}"></span></td>
       </tr>
-    </tbody>
-  </table>
-  <h6 class="h5">Description</h6><textarea class="form-control col-sm-5" rows="3" th:text="${machineData.description}" readonly></textarea></br>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <div>
+  <h6 class="h5">Description</h6>
+  <textarea class="form-control col-sm-5" rows="3" th:text="${machineData.description}" readonly></textarea></br>
+
   <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doRunMachine([[${machineData.mid}]])">가동</button>
   <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doStopMachine([[${machineData.mid}]])">정지</button>
-  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="location.href ='/production/addStock/'+[[${machineData.mid}]]">재고 추가</button>
-  <button type="button" class="btn btn-sm btn-outline-danger" th:onclick="doDelMachine([[${machineData.mid}]])">제거</button>
-  <canvas class="my-4 w-100" id="productionChart" width="1000" height="500"></canvas>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="popup([[${machineData.mid}]])">재고 추가</button>
+  <button type="button" class="btn btn-sm btn-outline-danger" th:onclick="doDelMachine([[${machineData.mid}]])">제거</button><br/>
+  </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   <script th:inline="javascript" >
     /*<![CDATA[*/
     let myChart1;
@@ -133,7 +142,12 @@
           stock.innerText=updateData[1];
       }
     });
-
+    function popup(mid){
+      var url  = "/production/addStock/"+mid;
+      var name = "Add Stock";
+      var option = "width = 400, height = 500, top= 100, left = 200, location = no";
+      window.open(url, name, option);
+    }
   </script>
 </section>
 
