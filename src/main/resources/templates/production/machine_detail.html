@@ -16,15 +16,15 @@
       <tbody>
       <tr>
         <th>Machine Id</th>
-        <td><span th:id="'id_'+${machineData.mid}" th:text="${machineData.mid}"></span></td>
+        <td><span th:id="'id_'+${machineData.machineId}" th:text="${machineData.machineId}"></span></td>
         <th>Machine Name</th>
         <td><span th:text="${machineData.name}"></span></td>
       </tr>
       <tr>
         <th>Operation State</th>
-        <td><span th:id="'mdstate_'+${machineData.mid}" th:text="${machineData.state}"></span></td>
+        <td><span th:id="'mdstate_'+${machineData.machineId}" th:text="${machineData.state}"></span></td>
         <th>Fatal State</th>
-        <td><span th:id="'mdfatal_'+${machineData.mid}" th:text="${machineData.fatal}"></span></td>
+        <td><span th:id="'mdfatal_'+${machineData.machineId}" th:text="${machineData.fatal}"></span></td>
       </tr>
       <tr>
         <th>Max Value</th>
@@ -34,7 +34,7 @@
       </tr>
       <tr>
         <th colspan="2">Remain Stock / Max Stock</th>
-        <td colspan="2"><span th:id="'mdstock_'+${machineData.mid}" th:text="${machineData.stock}+'/'+${machineData.maxStock}"></span></td>
+        <td colspan="2"><span th:id="'mdstock_'+${machineData.machineId}" th:text="${machineData.stock}+'/'+${machineData.maxStock}"></span></td>
       </tr>
       </tbody>
     </table>
@@ -44,10 +44,10 @@
   <h6 class="h5">Description</h6>
   <textarea class="form-control col-sm-5" rows="3" th:text="${machineData.description}" readonly></textarea><br/>
 
-  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doRunMachine([[${machineData.mid}]])">가동</button>
-  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doStopMachine([[${machineData.mid}]])">정지</button>
-  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="popup([[${machineData.mid}]])">재고 추가</button>
-  <button type="button" class="btn btn-sm btn-outline-danger" th:onclick="doDelMachine([[${machineData.mid}]])">제거</button><br/>
+  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doRunMachine([[${machineData.machineId}]])">가동</button>
+  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doStopMachine([[${machineData.machineId}]])">정지</button>
+  <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="popup([[${machineData.machineId}]])">재고 추가</button>
+  <button type="button" class="btn btn-sm btn-outline-danger" th:onclick="doDelMachine([[${machineData.machineId}]])">제거</button><br/>
   </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   <script th:inline="javascript" >
@@ -143,7 +143,7 @@
       }
     });
     function popup(mid){
-      var url  = "/production/addStock/"+mid;
+      var url  = "/production/stock-add/"+mid;
       var name = "Add Stock";
       var option = "width = 400, height = 500, top= 100, left = 200, location = no";
       window.open(url, name, option);

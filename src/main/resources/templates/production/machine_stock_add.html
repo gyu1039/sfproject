@@ -9,9 +9,9 @@
 <body>
 
   <section>
-      <template id="_preDefined">
-          <slot name="flag" th:data-value="${flag}"></slot>
-      </template>
+<!--      <template id="_preDefined">-->
+<!--          <slot name="flag" th:data-value="${flag}"></slot>-->
+<!--      </template>-->
       <form id="add_form" th:object="${machineStockAddData}" onsubmit="return onSubmit(event)" method="post">
           <table class="table w-100 table-bordered"  style="table-layout:fixed">
               <thead>
@@ -22,7 +22,7 @@
               <tbody>
                 <tr>
                     <td align="center"><span>기계 번호</span></td>
-                    <td><span th:text="*{mid}"/></td>
+                    <td><span th:text="*{machineId}"/></td>
                 </tr>
                 <tr>
                     <td align="center"><span>최대 재고량</span></td>
@@ -37,7 +37,7 @@
                 </tr>
               </tbody>
           </table>
-          <input type="hidden" name="mid" placeholder="기계 번호" th:field="*{mid}" th:value="*{mid}"/>
+          <input type="hidden" name="machineId" placeholder="기계 번호" th:field="*{machineId}" th:value="*{machineId}"/>
       </form>
       <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
       <script>
@@ -53,7 +53,7 @@
           async function submit(){
                try{
                     const response = await axios.post(location.href,{
-                        mid: add_form.mid.value,
+                        machineId: add_form.machineId.value,
                         amount: add_form.amount.valueAsNumber
                     });
                     console.log(response.data);

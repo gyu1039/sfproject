@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MachineRegistData {
-    int mid;
+    int machineId;
     String name;
     String description;
 
@@ -24,8 +24,8 @@ public class MachineRegistData {
         this.machineExists = machineExists;
     }
 
-    public MachineRegistData(int mid,String name,String description){
-        this.mid = mid;
+    public MachineRegistData(int machineId,String name,String description){
+        this.machineId = machineId;
         this.name = name;
         this.description = description;
     }

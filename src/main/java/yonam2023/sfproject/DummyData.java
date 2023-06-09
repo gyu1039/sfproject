@@ -40,7 +40,7 @@ public class DummyData {
         IntStream.rangeClosed(1, 50).forEach(i -> {
             //센서 임시 추가
             MachineData m = MachineData.builder()
-                    .mid(1010+i)
+                    .machineId(1010+i)
                     .name("machine-"+(1010+i))
                     .state(false)
                     .description("machine-"+(i+1010 )+" description")

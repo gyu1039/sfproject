@@ -11,12 +11,12 @@
   <br/>
   <form th:object="${machineRegistData}" method="post">
     기계번호 :
-      <select id="mid" style="width:100px" th:field="*{mid}" >
+      <select id="machineId" style="width:100px" th:field="*{machineId}" >
         <option th:each="e : ${midList}" th:value="${e}" th:text="${e}">MId</option>
       </select>
     <!--<input type="number" id="mid" placeholder="기계 번호" th:value="*{mid}"/>-->
     <button type="button" onclick="doCheckMachineAtRegistration()">연결점검</button><span id="mcExist"></span><br/>
-    기계이름 : <input type="text" id="name" th:field="*{name}" placeholder="기계 이름"/><input type="text" id="confirmMid" th:field="*{mid}" readonly><input type="text" id="confirmExist" th:field="*{machineExists}" readonly><br/>
+    기계이름 : <input type="text" id="name" th:field="*{name}" placeholder="기계 이름"/><input type="text" id="confirmMid" th:field="*{machineId}" readonly><input type="text" id="confirmExist" th:field="*{machineExists}" readonly><br/>
     기계설명 : <br/>
     <textarea id="description" th:field="*{description}"cols="50" rows="10" placeholder="기계 장치에 대한 설명"></textarea><br/>
     <button id="btn_submit"type="submit" disabled>등록</button>

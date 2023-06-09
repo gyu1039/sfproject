@@ -1,13 +1,13 @@
 package yonam2023.sfproject.production.domain;
 
 public class MachineRegistDataBuilder {
-    int mid;
+    int machineId;
     String name;
     String description;
 
 
-    public MachineRegistDataBuilder mid(int mid){
-        this.mid = mid;
+    public MachineRegistDataBuilder machineId(int machineId){
+        this.machineId = machineId;
         return this;
     }
 
@@ -22,7 +22,7 @@ public class MachineRegistDataBuilder {
     }
 
     public MachineRegistData build(){
-        return new MachineRegistData(mid, name, description);
+        return new MachineRegistData(machineId, name, description);
     }
 
 }
