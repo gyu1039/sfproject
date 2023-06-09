@@ -44,6 +44,10 @@ public class DummyData {
                     .name("machine-"+(1010+i))
                     .state(false)
                     .description("machine-"+(i+1010 )+" description")
+                    .stock(100)
+                    .min(50)
+                    .max(150)
+                    .maxStock(1000)
                     .recentData(-1)
                     .build();
             mr.save(m);

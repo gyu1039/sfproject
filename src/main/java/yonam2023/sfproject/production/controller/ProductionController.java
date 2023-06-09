@@ -249,7 +249,7 @@ public class ProductionController {
     //추후 id에 따른 재고 추가 구현해야함.
     @GetMapping("/addStock")
     public String addStockGet(Model model){
-        model.addAttribute("machineStockAddData", new MachineStockAddData(1010, 100));
+        model.addAttribute("machineStockAddData", new MachineStockAddData(1010, 100, 1000));
         return "production/machineStockAdd";
     }
 
@@ -284,9 +284,9 @@ public class ProductionController {
             return "redirect:/production";
         }
         //기계 정보를 받아오는 코드 작성 요
-        //MachineData machineData = mr.findByMid(mid);
+        MachineData machineData = mr.findByMid(mid);
         
-        model.addAttribute("machineStockAddData", new MachineStockAddData(mid, 100));
+        model.addAttribute("machineStockAddData", new MachineStockAddData(mid, 100, machineData.getMaxStock()));
         return "production/machineStockAdd";
     }
     @PostMapping("/addStock/{mid}")

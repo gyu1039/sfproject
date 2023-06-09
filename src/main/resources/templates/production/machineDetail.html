@@ -7,11 +7,11 @@
 </head>
 <body>
 <section>
-  <div class = "d-sm-flex flex-sm-wrap">
-    <div class="w-auto">
-      <canvas class="my-4 w-auto h-auto" id="productionChart" width="800" height="400"></canvas>
+  <div class = "d-sm-flex flex-sm-wrap flex-sm-row vh-60">
+    <div class="w-50 float-md-start col-6">
+      <canvas class="w-100 h-100" id="productionChart" width="700" height="500"></canvas>
     </div>
-    <div class="w-auto">
+    <div class="w-auto float-md-start col-6">
     <table class="table table-bordered mh-100">
       <tbody>
       <tr>
@@ -33,8 +33,8 @@
         <td><span th:text="${machineData.min}"></span></td>
       </tr>
       <tr>
-        <th>Remain Stock Amount</th>
-        <td colspan="3"><span th:id="'mdstock_'+${machineData.mid}" th:text="${machineData.stock}"></span></td>
+        <th colspan="2">Remain Stock / Max Stock</th>
+        <td colspan="2"><span th:id="'mdstock_'+${machineData.mid}" th:text="${machineData.stock}+'/'+${machineData.maxStock}"></span></td>
       </tr>
       </tbody>
     </table>
@@ -80,7 +80,7 @@
         }]
       },
       legend: {
-        display: true
+        display: false
       }
     }
   })

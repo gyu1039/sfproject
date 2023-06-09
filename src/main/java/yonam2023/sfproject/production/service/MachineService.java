@@ -270,7 +270,7 @@ public class MachineService {
             sb.append(mid+":"+value+":"+stock+",");
             //SSE
             se.updateMachineDetailGraph(mid);
-            se.updateMachineDetailStock(mid+":"+stock);
+            se.updateMachineDetailStock(mid+":"+stock+"/"+machineData.getMaxStock());
         }
         //SSE
         if(sb.length()>0) sb.deleteCharAt(sb.length()-1);
@@ -333,7 +333,7 @@ public class MachineService {
             MachineData machineData = mr.findByMid(data.getMid());
             machineData.setStock(machineData.getStock()+data.getAmount()>machineData.getMaxStock()? machineData.getMaxStock() : machineData.getStock()+ data.getAmount());
             mr.save(machineData);
-            se.updateMachineDetailStock(data.getMid()+":"+machineData.getStock());
+            se.updateMachineDetailStock(data.getMid()+":"+machineData.getStock()+"/"+machineData.getMaxStock());
         }catch (Exception e){
             e.printStackTrace();
         }

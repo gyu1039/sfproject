@@ -3,16 +3,38 @@
       lang="ko">
 <head>
     <meta charset="UTF-8">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <title>Title</title>
 </head>
 <body>
 
   <section>
-      <h3>재고 추가</h3>
       <form id="addForm" th:object="${machineStockAddData}" onsubmit="submitForm()" method="post">
-          기계번호 : <span th:text="*{mid}"></span><input type="hidden" id="mid" placeholder="기계 번호" th:field="*{mid}" th:value="*{mid}"/></br>
-          양 : <input type="number" id="amount" placeholder="양" th:field="*{amount}" th:value="*{amount}"/></br>
-          <button type="submit" >추가</button>
+          <table class="table w-100 table-bordered"  style="table-layout:fixed">
+              <thead>
+                <tr>
+                    <td colspan="2" align="center">재고 보충</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td align="center">기계 번호</td>
+                    <td><span th:text="*{mid}"/></td>
+                </tr>
+                <tr>
+                    <td align="center">최대 재고량</td>
+                    <td><span th:text="*{maxStock}"/></td>
+                </tr>
+                <tr>
+                    <td align="center">보충량</td>
+                    <td><input type="number" id="amount" class="w-100" placeholder="양" th:field="*{amount}" th:value="*{amount}"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><button type="submit" class="btn btn-sm btn-outline-dark">추가</button></td>
+                </tr>
+              </tbody>
+          </table>
+          <input type="hidden" id="mid" placeholder="기계 번호" th:field="*{mid}" th:value="*{mid}"/>
       </form>
       <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
       <script th:inline="javascript">

@@ -12,8 +12,11 @@ public class MachineStockAddData {
 
     int amount;
 
-    public MachineStockAddData(int mid, int amount){
+    int maxStock;
+
+    public MachineStockAddData(int mid, int amount, int maxStock){
         this.mid = mid;
         this.amount = amount;
+        this.maxStock = maxStock;
     }
 }
