@@ -9,7 +9,10 @@
 <body>
 
   <section>
-      <form id="addForm" th:object="${machineStockAddData}" onsubmit="submitForm()" method="post">
+      <template id="_preDefined">
+          <slot name="flag" th:data-value="${flag}"></slot>
+      </template>
+      <form id="add_form" th:object="${machineStockAddData}" onsubmit="return onSubmit(event)" method="post">
           <table class="table w-100 table-bordered"  style="table-layout:fixed">
               <thead>
                 <tr>
@@ -18,48 +21,48 @@
               </thead>
               <tbody>
                 <tr>
-                    <td align="center">기계 번호</td>
+                    <td align="center"><span>기계 번호</span></td>
                     <td><span th:text="*{mid}"/></td>
                 </tr>
                 <tr>
-                    <td align="center">최대 재고량</td>
+                    <td align="center"><span>최대 재고량</span></td>
                     <td><span th:text="*{maxStock}"/></td>
                 </tr>
                 <tr>
-                    <td align="center">보충량</td>
-                    <td><input type="number" id="amount" class="w-100" placeholder="양" th:field="*{amount}" th:value="*{amount}"/></td>
+                    <td align="center"><span>보충량</span></td>
+                    <td><input class="w-100" type="number" name="amount" placeholder="양" th:field="*{amount}" th:value="*{amount}"/></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center"><button type="submit" class="btn btn-sm btn-outline-dark">추가</button></td>
                 </tr>
               </tbody>
           </table>
-          <input type="hidden" id="mid" placeholder="기계 번호" th:field="*{mid}" th:value="*{mid}"/>
+          <input type="hidden" name="mid" placeholder="기계 번호" th:field="*{mid}" th:value="*{mid}"/>
       </form>
       <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-      <script th:inline="javascript">
-          window.onload = function(){
-              let flag = [[${flag}]];
-              if(flag != null){
-                  self.close();
-              }
+      <script>
+          //const pd = _preDefined;
+          //const flag = pd.content.querySelector("[name=flag]").dataset.value;
+
+          function onSubmit(e){
+            e.preventDefault();
+            submit();
+            return false;
           }
-          function submitForm(){
-               axios.post(window.location.href,{
-                      mid: document.mid.value(),
-                      amount:document.amount.value
-                  })
-                  .then((response) =>response.json())
-                   .then((response) => {
-                      console.log(response);
-                      //window.open("about:blank", "_self").close();//정상 통신 후 응답된 메시지 출력
-                      //self.close();
-                  })
-                  .catch((error)=>{
-                      console.log(error);				//오류발생시 실행
-                  })
-               //self.close();
+
+          async function submit(){
+               try{
+                    const response = await axios.post(location.href,{
+                        mid: add_form.mid.value,
+                        amount: add_form.amount.valueAsNumber
+                    });
+                    console.log(response.data);
+                    self.close();
+               } catch (error) {
+                    console.error(error);
+               }
           }
+
       </script>
   </section>
 </body>

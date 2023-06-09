@@ -331,7 +331,7 @@ public class MachineService {
             result = httpPS.sendPost(machineURL+"addStock", jsonObject);
             //DB에 반영
             MachineData machineData = mr.findByMid(data.getMid());
-            machineData.setStock(machineData.getStock()+data.getAmount()>machineData.getMaxStock()? machineData.getMaxStock() : machineData.getStock()+ data.getAmount());
+            machineData.setStock(machineData.getStock()+data.getAmount()>machineData.getMaxStock() ? machineData.getMaxStock() : machineData.getStock()+ data.getAmount());
             mr.save(machineData);
             se.updateMachineDetailStock(data.getMid()+":"+machineData.getStock()+"/"+machineData.getMaxStock());
         }catch (Exception e){

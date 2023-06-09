@@ -42,7 +42,7 @@
   </div>
   <div>
   <h6 class="h5">Description</h6>
-  <textarea class="form-control col-sm-5" rows="3" th:text="${machineData.description}" readonly></textarea></br>
+  <textarea class="form-control col-sm-5" rows="3" th:text="${machineData.description}" readonly></textarea><br/>
 
   <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doRunMachine([[${machineData.mid}]])">가동</button>
   <button type="button" class="btn btn-sm btn-outline-dark" th:onclick="doStopMachine([[${machineData.mid}]])">정지</button>

@@ -66,6 +66,7 @@ public class ProductionController {
         return "production/init";
     }
      */
+
     @GetMapping
     public String initGet(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         logger.info("ProductionController:Factory Connection State:"+fs.getFactoryConnectionState());
@@ -102,6 +103,7 @@ public class ProductionController {
 
         return "production/factoryManagement";
     }
+
     @GetMapping("/machineRegistration")
     public String machineRegistrationPage(Model model){
         logger.info("ProductionController:machineRegistration called");
@@ -290,7 +292,7 @@ public class ProductionController {
         return "production/machineStockAdd";
     }
     @PostMapping("/addStock/{mid}")
-    public String addStockPost(@PathVariable("mid")int mid, @ModelAttribute("machineStockAddData") MachineStockAddData data, Model model){
+    public String addStockPost(@PathVariable("mid")int mid, @RequestBody MachineStockAddData data, Model model){
         //mid로 여는 재고 페이지
         //지정 불가능이므로 생략
         //logger.info("ProductionController:Adding Stock Resources to Machine "+mid);
