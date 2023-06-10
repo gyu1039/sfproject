@@ -1,5 +1,6 @@
 package yonam2023.sfproject.config.security;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,7 +11,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
-import org.springframework.security.web.savedrequest.SimpleSavedRequest;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +28,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     private RequestCache requestCache = new HttpSessionRequestCache();
+    private TargetUrlFactory targetUrlFactory = new RoleBasedTargetUrlFactory();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -64,23 +65,38 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             return savedRequest.getRedirectUrl();
         }
 
-        Map<String, String> rolesTargetUrlMap = new HashMap<>();
+        return targetUrlFactory.createTargetUrl(authentication);
+    }
+
+}
+
+interface TargetUrlFactory {
+    String createTargetUrl(Authentication authentication);
+}
+
+@Slf4j
+class RoleBasedTargetUrlFactory implements TargetUrlFactory {
+    private Map<String, String> rolesTargetUrlMap = new HashMap<>();
+
+    public RoleBasedTargetUrlFactory() {
         rolesTargetUrlMap.put("ROLE_ADMIN_EMP", "/employee");
         rolesTargetUrlMap.put("ROLE_ADMIN_LO", "/storedItems");
         rolesTargetUrlMap.put("ROLE_ADMIN_PRO", "/production");
-        rolesTargetUrlMap.put("ADMIN", "/index");
+        rolesTargetUrlMap.put("ROLE_ADMIN", "/index");
+    }
 
-        List<GrantedAuthority> roles = new ArrayList<>();
-        authentication.getAuthorities().forEach(r -> roles.add(r));
-
-        for(GrantedAuthority g : roles){
-            String auth = g.getAuthority();
-            if(rolesTargetUrlMap.containsKey(auth)) {
-                return rolesTargetUrlMap.get(auth);
+    @Override
+    public String createTargetUrl(Authentication authentication) {
+        List<GrantedAuthority> roles = new ArrayList<>(authentication.getAuthorities());
+        log.info("crateTartUrl 메서드 실행");
+        for (GrantedAuthority authority : roles) {
+            log.info(authority.getAuthority());
+            String role = authority.getAuthority();
+            if (rolesTargetUrlMap.containsKey(role)) {
+                return rolesTargetUrlMap.get(role);
             }
-
         }
 
-        return "/index";
+        return "/";
     }
 }

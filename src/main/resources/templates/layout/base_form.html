@@ -102,10 +102,9 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
                         <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                        <span data-feather="calendar" class="align-text-bottom"></span>
-                        This week
-                    </button>
+                    <a th:href="@{/logout}" class="btn btn-sm btn-outline-secondary">
+                        logout
+                    </a>
                 </div>
             </div>
             <section th:replace="${section}"></section>
