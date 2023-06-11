@@ -29,7 +29,7 @@
                     <td><span th:text="*{resourceType}"/></td>
                 </tr>
                 <tr>
-                    <td align="center"><span>최대 재고량</span></td>
+                    <td align="center"><span>기계 최대 재고량</span></td>
                     <td><span th:text="*{maxStock}"/></td>
                 </tr>
                 <tr>
@@ -48,20 +48,24 @@
           //const pd = _preDefined;
           //const flag = pd.content.querySelector("[name=flag]").dataset.value;
 
-          function onSubmit(e){
+          function onSubmit(e) {
             e.preventDefault();
             submit();
             return false;
           }
 
-          async function submit(){
-               try{
+          async function submit() {
+               try {
                     const response = await axios.post(location.href,{
                         machineId: add_form.machineId.value,
                         amount: add_form.amount.valueAsNumber
                     });
                     console.log(response.data);
-                    self.close();
+                    if (response.data == "added"){
+                        self.close();
+                    }else{
+                        alert(response.data);
+                    }
                } catch (error) {
                     console.error(error);
                }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import yonam2023.sfproject.production.Exception.MachineNotFoundException;
+import yonam2023.sfproject.production.Exception.ResourceNotEnoughException;
+import yonam2023.sfproject.production.Exception.ResourceNotFoundException;
 import yonam2023.sfproject.production.domain.*;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
@@ -239,7 +241,8 @@ public class ProductionController {
         return "production/machine_stock_add";
     }
     @PostMapping("/stock-add/{machineId}")
-    public String addStockPost(@PathVariable("machineId")int machineId, @RequestBody MachineStockAddData data, Model model){
+    @ResponseBody
+    public String addStockPost (@PathVariable("machineId")int machineId, @RequestBody MachineStockAddData data, Model model){
         //mid로 여는 재고 페이지
         //지정 불가능이므로 생략
         //logger.info("ProductionController:Adding Stock Resources to Machine "+machineId);
@@ -254,25 +257,30 @@ public class ProductionController {
 
         String result;
 
+        model.addAttribute("machineStockAddData", data);
+
         try {
             result = machineService.addStockToMachine(data);
 
             logger.info("MachineController:Stock Successfully Added : "+result);
-            model.addAttribute("machineStockAddData", data);
-            return "production/machine_stock_add";
+
+            return "added";
         } catch (MachineNotFoundException e) {
             //기계가 없음
             logger.info("Machine Not Found");
 
-            model.addAttribute("machineStockAddData", data);
-
-            return "production/machine_stock_add";
-        } catch (ReflectiveOperationException e) {
+            return "Machine not found";
+        } catch (ResourceNotFoundException e) {
             //기계에 맞는 재고가 존재하지 않음.
 
+            return "No Such Resource";
+        } catch (ResourceNotEnoughException e) {
+            //재고가 부족함
+
+            return "Not Enough Resource at Storage";
         } catch (Exception e) {
             e.printStackTrace();
+            return "what happen";
         }
-        return "production/machine_stock_add"; // 임시 return;
     }
 }

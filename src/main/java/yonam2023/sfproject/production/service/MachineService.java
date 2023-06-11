@@ -21,6 +21,7 @@ import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -276,13 +277,34 @@ public class MachineService {
             int value = ((Long)jo.get("value")).intValue();//현재값 추출
             int used = ((Long)jo.get("used")).intValue();//사용량
             int stock = ((Long)jo.get("stock")).intValue();//남은 재료
+            boolean hasOutput = (boolean)jo.get("hasOutput");
+
+            if (hasOutput) {
+                //출력이 있음.
+                String outputType = "error";
+                try {
+                    outputType= new String(((String)jo.get("productType")).getBytes(StandardCharsets.UTF_8),StandardCharsets.UTF_8);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                int output = ((Long)jo.get("output")).intValue();
+                StoredItem storedItem = storedItemRepository.findByName(outputType);
+
+                if (storedItem == null) {
+                    //이러한 재고 유형이 창고에 없음.
+                    storedItemRepository.save(new StoredItem(outputType, output));
+                } else {
+                    //창고에 저장
+                    storedItem.setAmount(storedItem.getAmount() + output);
+                    storedItemRepository.save(storedItem);
+                }
+            }
 
             Production production = Production.builder()
                     .machineId(machineId)
                     .svalue(value)
                     .used(used)
                     .build();
-
             productionRepository.save(production);
 
             MachineData machineData = machineDataRepository.findByMachineId(machineId);
@@ -373,8 +395,10 @@ public class MachineService {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("mid", data.getMachineId());
             jsonObject.put("amount", data.getAmount());
+
             //result에 적재하지 못한 만큼의 재고가 반환됨.
             result = httpPS.sendPost(machineURL+"addStock", jsonObject);
+
             //DB에 반영
             machineData.setStock(machineData.getStock()+data.getAmount()>machineData.getMaxStock() ? machineData.getMaxStock() : machineData.getStock()+ data.getAmount());
             machineDataRepository.save(machineData);
