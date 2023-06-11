@@ -14,9 +14,12 @@ public class MachineStockAddData {
 
     int maxStock;
 
-    public MachineStockAddData(int machineId, int amount, int maxStock){
+    String resourceType;
+
+    public MachineStockAddData(int machineId, int amount, int maxStock, String resourceType){
         this.machineId = machineId;
         this.amount = amount;
         this.maxStock = maxStock;
+        this.resourceType = resourceType;
     }
 }

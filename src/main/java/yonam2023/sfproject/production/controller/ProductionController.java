@@ -235,7 +235,7 @@ public class ProductionController {
         //기계 정보를 받아오는 코드 작성 요
         MachineData machineData = machineDataRepository.findByMachineId(machineId);
 
-        model.addAttribute("machineStockAddData", new MachineStockAddData(machineId, 100, machineData.getMaxStock()));
+        model.addAttribute("machineStockAddData", new MachineStockAddData(machineId, 100, machineData.getMaxStock(), machineData.getResourceType()));
         return "production/machine_stock_add";
     }
     @PostMapping("/stock-add/{machineId}")
