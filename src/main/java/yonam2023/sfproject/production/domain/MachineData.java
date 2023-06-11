@@ -32,6 +32,9 @@ public class MachineData {
     @Column(name = "RDATA")
     int recentData=-1;
 
+    @Column(name = "RESOUCETYPE")
+    String resourceType;
+
     @Column(name = "STATE") //ErrorCode로 변경해야 할 수 있음.
     boolean state;
 
@@ -48,7 +51,7 @@ public class MachineData {
     int maxStock;
 
     @Builder
-    public MachineData(int machineId, String name, int max, int min, int recentData,boolean state, boolean fatal, String description, int stock, int maxStock){
+    public MachineData(int machineId, String name, int max, int min, int recentData,boolean state, boolean fatal, String description, int stock, int maxStock, String resourceType){
         this.machineId = machineId;
         this.name = name;
         this.max = max;
@@ -59,5 +62,6 @@ public class MachineData {
         this.description = description;
         this.stock = stock;
         this.maxStock = maxStock;
+        this.resourceType = resourceType;
     }
 }

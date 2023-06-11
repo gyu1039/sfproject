@@ -33,6 +33,9 @@ public class StoredItemViewController {
         for(int i = 0; i<20; i++){
             storedItems.add(new StoredItem("item "+i, 0));
         }
+        storedItems.add(new StoredItem("설탕", 10000));
+        storedItems.add(new StoredItem("캔", 10000));
+        storedItems.add(new StoredItem("제품", 0));
         storedItemRepo.saveAll(storedItems);
     }
 

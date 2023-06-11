@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import yonam2023.sfproject.production.Exception.MachineNotFoundException;
 import yonam2023.sfproject.production.domain.*;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
@@ -221,33 +222,6 @@ public class ProductionController {
         return productionRepository.findAll();
     }
 
-    //추후 id에 따른 재고 추가 구현해야함.
-    @GetMapping("/stock-add")
-    public String addStockGet(Model model){
-        model.addAttribute("machineStockAddData", new MachineStockAddData(1010, 100, 1000));
-        return "production/machine_stock_add";
-    }
-
-    @PostMapping("/stock-add")
-    public String addStockPost(@RequestBody MachineStockAddData data, Model model){
-        //기계로 재료를 보내는 코드.
-        //생산 부서에 충분한 재고가 있는지 점검하는 코드 필요.
-        //해당 재고를 검색해서 현재 양이 얼마인지 표시하면 좋음.
-        //->별도 페이지로 구성?
-
-        //test code
-        logger.info("MachineController:Receive Add Stock :"+data.getAmount()+" to "+data.getMachineId());
-        String result = machineService.addStockToMachine(data);
-        if(result.equals("Machine Not Found")){
-            logger.info("Machine Not Found");
-            model.addAttribute("machineStockAddData", data);
-            return "production/machine_stock_add";
-        }
-        //추후 수정 필요
-        logger.info("MachineController:Stock Successfully Added : "+result);
-        model.addAttribute("machineStockAddData", data);
-        return "production/machine_stock_add";
-    }
     @GetMapping("/stock-add/{machineId}")
     public String addStockGetByMid(@PathVariable("machineId")int machineId, Model model){
         //mid로 여는 재고 페이지
@@ -277,15 +251,28 @@ public class ProductionController {
 
         //test code
         logger.info("MachineController:Receive Add Stock :"+data.getAmount()+" to "+data.getMachineId());
-        String result = machineService.addStockToMachine(data);
-        if(result.equals("Machine Not Found")){
-            logger.info("Machine Not Found");
+
+        String result;
+
+        try {
+            result = machineService.addStockToMachine(data);
+
+            logger.info("MachineController:Stock Successfully Added : "+result);
             model.addAttribute("machineStockAddData", data);
             return "production/machine_stock_add";
-        }
+        } catch (MachineNotFoundException e) {
+            //기계가 없음
+            logger.info("Machine Not Found");
 
-        logger.info("MachineController:Stock Successfully Added : "+result);
-        model.addAttribute("machineStockAddData", data);
-        return "production/machine_stock_add";
+            model.addAttribute("machineStockAddData", data);
+
+            return "production/machine_stock_add";
+        } catch (ReflectiveOperationException e) {
+            //기계에 맞는 재고가 존재하지 않음.
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "production/machine_stock_add"; // 임시 return;
     }
 }
