@@ -125,9 +125,9 @@ public class SseService {
 
     public void updateMachineDetailGraph(int mid){
 
-        MachineData machineData = mr.findByMid(mid);
+        MachineData machineData = mr.findByMachineId(mid);
         //graphData
-        List<Production> graph = pr.findTop10ByMidOrderByIdDesc(mid);
+        List<Production> graph = pr.findTop10ByMachineIdOrderByIdDesc(mid);
         StringBuilder sbId = new StringBuilder();
         StringBuilder sbValues = new StringBuilder();
         sbId.append(mid+":");
@@ -152,5 +152,18 @@ public class SseService {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void updateMachineDetailStock(String str){
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("mdstock")
+                        .data(str));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 }

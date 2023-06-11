@@ -36,25 +36,25 @@ public class MachineService {
     private static final String machineURL="http://localhost:8085/";
 
 
-    public boolean addMachine(int mid){
-        logger.info("MachineService:attempt to add Machine "+mid+" by mid");
-        if(isMachineInDB(mid)){
+    public boolean addMachine(int machineId){
+        logger.info("MachineService:attempt to add Machine "+machineId+" by mid");
+        if(isMachineInDB(machineId)) {
             //db에 이미 등록된 기계임
-            logger.warn("MachineService:Machine "+mid+" is Already in DB");
+            logger.warn("MachineService:Machine "+ machineId +" is Already in DB");
             return false;
         }
-        if(!checkMachine(mid)){
+        if(!checkMachine(machineId)) {
             //기계가 존재하지 않음
-            logger.warn("MachineService:Machine "+mid+" is not exists");
+            logger.warn("MachineService:Machine "+machineId+" is not exists");
             return false;
         }
-        MachineData smd = MachineData.builder().mid(mid).name("temp").state(true).build();
+        MachineData smd = MachineData.builder().machineId(machineId).name("temp").state(true).build();
         mr.save(smd);
-        logger.info("MachineService:Machine "+mid+" is now registered");
+        logger.info("MachineService:Machine "+machineId+" is now registered");
         return true;
     }
     public boolean addMachine(MachineRegistData machineRegistData){
-        int mid = machineRegistData.getMid();
+        int mid = machineRegistData.getMachineId();
         logger.info("MachineService:attempt to add Machine "+mid+" by Data");
         if(isMachineInDB(mid)){
             //db에 이미 등록된 기계임
@@ -66,11 +66,18 @@ public class MachineService {
             logger.warn("MachineService:Machine "+mid+" is not exists");
             return false;
         }
+        //기계로부터 데이터 받아옴.
+        MachineData receiveData = getMachineInfo(mid);
+
         MachineData smd = MachineData.builder()
-                .mid(machineRegistData.getMid())
+                .machineId(machineRegistData.getMachineId())
                 .name(machineRegistData.getName())
                 .state(false)
                 .description(machineRegistData.getDescription())
+                .min(receiveData.getMin())
+                .max(receiveData.getMax())
+                .stock(receiveData.getStock())
+                .maxStock(receiveData.getMaxStock())
                 .build();
         mr.save(smd);
         logger.info("MachineService:Machine "+mid+" is now registered");
@@ -82,7 +89,7 @@ public class MachineService {
         //del machine code
         //삭제 절차 : 확인, 정지, 삭제
         logger.info("MachineService:check Machine "+mid+" exists");
-        MachineData md = mr.findByMid(mid);
+        MachineData md = mr.findByMachineId(mid);
         if(md==null){
             //db에 없는 기계임
             logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
@@ -101,7 +108,7 @@ public class MachineService {
     public boolean runMachine(int mid){
         //run some Machine
         logger.info("MachineService:check Machine "+mid+" exists");
-        MachineData md = mr.findByMid(mid);
+        MachineData md = mr.findByMachineId(mid);
         if(md==null){
             //db에 없는 기계임
             logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
@@ -134,7 +141,7 @@ public class MachineService {
     public boolean stopMachine(int mid){
         //stop Some Machine
         logger.info("MachineService:check Machine "+mid+" exists");
-        MachineData md = mr.findByMid(mid);
+        MachineData md = mr.findByMachineId(mid);
         if(md==null){
             //db에 없는 기계임
             logger.warn("MachineService:Machine "+mid+" is Not Exists in DB");
@@ -180,8 +187,33 @@ public class MachineService {
         return true;
     }
 
-    public void getMachineInfo(int mid){
+    public MachineData getMachineInfo(int mid){
         //기계 데이터 갱신에 관한 코드
+        String res;
+        JSONObject jo;
+        try{
+            //최신값 받아오기.
+            res = httpPS.sendGet(machineURL + "getMachineData/"+mid);
+            logger.info("MachineService:Machine "+mid+" Data : "+res);
+            JSONParser parser = new JSONParser();
+            jo = (JSONObject) parser.parse(res);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        MachineData machineData = MachineData.builder()
+                .machineId(((Long)jo.get("machineId")).intValue())
+                .name((String)jo.get("name"))
+                .max(((Long)jo.get("max")).intValue())
+                .min(((Long)jo.get("min")).intValue())
+                .recentData(((Long)jo.get("current")).intValue())
+                .state((Boolean)jo.get("state"))
+                .stock(((Long)jo.get("stock")).intValue())
+                .maxStock(((Long)jo.get("maxStock")).intValue())
+                .build();
+        //fatal 값이 없음에 주의.
+        return machineData;
     }
 
     public boolean checkMachine(int mid){
@@ -198,7 +230,7 @@ public class MachineService {
     }
 
     public boolean isMachineInDB(int mid) {
-        MachineData md = mr.findByMid(mid);
+        MachineData md = mr.findByMachineId(mid);
         if (md != null) {
             //db에 이미 등록된 기계임
             logger.warn("MachineService:DB:Machine " + mid + " Exists in DB");
@@ -220,22 +252,25 @@ public class MachineService {
         for (int i = 0; i<jsonArray.size();i++){
             JSONObject jo = (JSONObject) jsonArray.get(i);
             logger.info("MachineService:InsertData:"+jo.toString());
-            int mid = ((Long)jo.get("mid")).intValue();//mid 추출
+            int machineId = ((Long)jo.get("machineId")).intValue();//mid 추출
             int value = ((Long)jo.get("value")).intValue();//현재값 추출
-            int used = ((Long)jo.get("used")).intValue();
+            int used = ((Long)jo.get("used")).intValue();//사용량
+            int stock = ((Long)jo.get("stock")).intValue();//남은 재료
             Production production = Production.builder()
-                    .mid(mid)
+                    .machineId(machineId)
                     .svalue(value)
                     .used(used)
                     .build();
             pr.save(production);
-            MachineData machineData = mr.findByMid(mid);
+            MachineData machineData = mr.findByMachineId(machineId);
             machineData.setRecentData(value);
+            machineData.setStock(stock);
             mr.save(machineData);
 
-            sb.append(mid+":"+value+",");
+            sb.append(machineId+":"+value+":"+stock+",");
             //SSE
-            se.updateMachineDetailGraph(mid);
+            se.updateMachineDetailGraph(machineId);
+            se.updateMachineDetailStock(machineId+":"+stock+"/"+machineData.getMaxStock());
         }
         //SSE
         if(sb.length()>0) sb.deleteCharAt(sb.length()-1);
@@ -244,7 +279,7 @@ public class MachineService {
     }
 
     public void fatalState(int mid){
-        MachineData md = mr.findByMid(mid);
+        MachineData md = mr.findByMachineId(mid);
         md.setState(false);
         md.setFatal(true);
         mr.save(md);
@@ -289,11 +324,16 @@ public class MachineService {
     public String addStockToMachine(MachineStockAddData data){
         String result = "-";
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("mid", data.getMid());
+        jsonObject.put("mid", data.getMachineId());
         jsonObject.put("amount", data.getAmount());
         try{
+            //result에 적재하지 못한 만큼의 재고가 반환됨.
             result = httpPS.sendPost(machineURL+"addStock", jsonObject);
-
+            //DB에 반영
+            MachineData machineData = mr.findByMachineId(data.getMachineId());
+            machineData.setStock(machineData.getStock()+data.getAmount()>machineData.getMaxStock() ? machineData.getMaxStock() : machineData.getStock()+ data.getAmount());
+            mr.save(machineData);
+            se.updateMachineDetailStock(data.getMachineId()+":"+machineData.getStock()+"/"+machineData.getMaxStock());
         }catch (Exception e){
             e.printStackTrace();
         }

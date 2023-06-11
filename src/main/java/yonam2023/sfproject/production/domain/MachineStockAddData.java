@@ -8,12 +8,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MachineStockAddData {
-    int mid;
+    int machineId;
 
     int amount;
 
-    public MachineStockAddData(int mid, int amount){
-        this.mid = mid;
+    int maxStock;
+
+    public MachineStockAddData(int machineId, int amount, int maxStock){
+        this.machineId = machineId;
         this.amount = amount;
+        this.maxStock = maxStock;
     }
 }

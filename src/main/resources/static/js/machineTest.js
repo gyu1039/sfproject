@@ -53,7 +53,7 @@ function doShutdownFactory(){
     }
 }
 function doCheckMachine0(){
-    fetch(window.location.protocol+"//"+window.location.host+"/machine/chk/0", {
+    fetch(window.location.protocol+"//"+window.location.host+"/machine/check/0", {
           method: "GET"
     }).then((response) => console.log(response));
 }
@@ -95,12 +95,7 @@ function doRunMachine(mid){
 function doDelMachine(mid){
     if(confirm("기계를 삭제합니까?\n저장 된 정보가 지워집니다."))
     {
-        //fetch("http://localhost:8080/machine/del/"+mid, {
-        //        method: "GET"
-        //}).then((response) => console.log(response));
-        //window.location.href='/production';
         location.href='/machine/del/'+mid;
-        //document.location.reload();
     }
 }
 
@@ -110,24 +105,21 @@ function doStopMachine(mid){
     }).then((response) => response.json())
     .then((response) => {
          console.log(response);
-         if(!response){
-             document.getElementById('opState').innerText=response;
-         }
     });
 }
 
 function doCheckMachineAtRegistration(){
-    const mid = Number(document.getElementById('mid').value);
-    if(mid==NaN){
+    const machineId = Number(document.getElementById('machineId').value);
+    if(machineId==NaN){
         alert("기계 번호는 숫자를 입력해주세요.");
     }else{
-        fetch(window.location.protocol+"//"+window.location.host+"/machine/chk/"+mid, {
+        fetch(window.location.protocol+"//"+window.location.host+"/machine/check/"+machineId, {
             method: "GET"
         }).then((response) => response.json())
         .then((response)=>{
             if(response){
-                document.getElementById('mcExist').innerText="장치 확인됨 : "+mid;
-                document.getElementById('confirmMid').value=mid;
+                document.getElementById('mcExist').innerText="장치 확인됨 : "+machineId;
+                document.getElementById('confirmMid').value=machineId;
                 document.getElementById('confirmExist').value="true";
                 document.getElementById('btn_submit').disabled=false;
             }else{

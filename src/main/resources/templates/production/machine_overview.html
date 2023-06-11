@@ -61,16 +61,16 @@
       }
     });
   </script>
-  Factory Connection:<span id="factoryConnection" th:text="${factoryConnectionState}"></span></br>
-  Factory Operation:<span id="factoryOperation" th:text="${factoryOperationState}"></span></br>
-  Machine List:</br>
+  Factory Connection:<span id="factoryConnection" th:text="${factoryConnectionState}"></span><br/>
+  Factory Operation:<span id="factoryOperation" th:text="${factoryOperationState}"></span><br/>
+  Machine List:<br/>
 
   <div class="table-responsive">
     <table class="table table-sm">
       <thead>
       <tr>
-        <th scope="col">McId</th>
-        <th scope="col">McName</th>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
         <th scope="col">Value</th>
         <th scope="col">State</th>
         <th scope="col">Fatal</th>
@@ -78,11 +78,17 @@
       </thead>
       <tbody>
       <tr th:each="e : ${pageObj}">
-        <td><span th:text="${e.mid}"></span></td>
-        <td><a th:href="'/production/machineDetail/'+${e.mid}" th:text="${e.name}"></a></td>
-        <td><span th:id="'data_'+${e.mid}"th:text="${e.recentData}"></span></td>
-        <td><span th:id="'state_'+${e.mid}"th:text="${e.state}"></span></td>
-        <td><span th:id="'fatal_'+${e.mid}"th:text="${e.fatal}"></span></td>
+        <td><span th:text="${e.machineId}"></span></td>
+        <td><a th:href="'/production/machine-detail/'+${e.machineId}" th:text="${e.name}"></a></td>
+        <td><span th:id="'data_'+${e.machineId}" th:text="${e.recentData}"></span></td>
+        <td>
+          <span th:id="'state_'+${e.machineId}" th:if="${e.state==true}">In Operation</span>
+          <span th:id="'state_'+${e.machineId}" th:if="${e.state==false}">Stopped</span>
+        </td>
+        <td>
+          <span th:id="'fatal_'+${e.machineId}"th:if="${e.fatal==false}">Normal</span>
+          <span th:id="'fatal_'+${e.machineId}"th:if="${e.fatal==true}">Error</span>
+        </td>
       </tr>
       </tbody>
     </table>

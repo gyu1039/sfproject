@@ -18,8 +18,8 @@ public class MachineData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @Column(name="MID")
-    int mid;
+    @Column(name="MACHINEID")
+    int machineId;
     @Column(name = "NAME")
     String name;
 
@@ -41,11 +41,23 @@ public class MachineData {
     @Column(name = "DESCRIPTION")
     String description;
 
+    @Column(name = "STOCK")
+    int stock;
+
+    @Column(name = "MAXSTOCK")
+    int maxStock;
+
     @Builder
-    public MachineData(int mid,String name, boolean state, String description){
-        this.mid = mid;
+    public MachineData(int machineId, String name, int max, int min, int recentData,boolean state, boolean fatal, String description, int stock, int maxStock){
+        this.machineId = machineId;
         this.name = name;
+        this.max = max;
+        this.min = min;
+        this.recentData = recentData;
         this.state = state;
+        this.fatal = fatal;
         this.description = description;
+        this.stock = stock;
+        this.maxStock = maxStock;
     }
 }
