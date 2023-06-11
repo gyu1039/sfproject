@@ -10,6 +10,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import yonam2023.sfproject.logistics.domain.StoredItem;
+import yonam2023.sfproject.logistics.repository.StoredItemRepository;
 import yonam2023.sfproject.production.Exception.MachineNotFoundException;
 import yonam2023.sfproject.production.Exception.ResourceNotEnoughException;
 import yonam2023.sfproject.production.Exception.ResourceNotFoundException;
@@ -34,6 +36,8 @@ public class ProductionController {
     ProductionRepository productionRepository;
     @Autowired
     MachineDataRepository machineDataRepository;
+    @Autowired
+    StoredItemRepository storedItemRepository;
     @Autowired
     FactoryService factoryService;
     @Autowired
@@ -230,14 +234,20 @@ public class ProductionController {
         //페이지 열때 해당 mid의 기계가 있는지 체크
 
         logger.info("ProductionController:Adding Stock Resources to Machine "+machineId+" Page");
-        if(!machineService.isMachineInDB(machineId)){
+        if (!machineService.isMachineInDB(machineId)) {
             logger.info("ProductionController:Requested Machine "+machineId+" is not registered");
             return "redirect:/production";
         }
         //기계 정보를 받아오는 코드 작성 요
         MachineData machineData = machineDataRepository.findByMachineId(machineId);
 
-        model.addAttribute("machineStockAddData", new MachineStockAddData(machineId, 100, machineData.getMaxStock(), machineData.getResourceType()));
+        StoredItem storedItem = storedItemRepository.findByName(machineData.getResourceType());
+
+        if(storedItem == null){
+            model.addAttribute("machineStockAddData", new MachineStockAddData(machineId, 100, machineData.getMaxStock(), machineData.getResourceType(), 0));
+        } else {
+            model.addAttribute("machineStockAddData", new MachineStockAddData(machineId, 100, machineData.getMaxStock(), machineData.getResourceType(), storedItem.getAmount()));
+        }
         return "production/machine_stock_add";
     }
     @PostMapping("/stock-add/{machineId}")

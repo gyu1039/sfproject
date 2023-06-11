@@ -259,16 +259,19 @@ public class MachineService {
         return false;
     }
 
-    public void insertSensorData(String data){
+    public void insertSensorData(String data) {
         JSONParser parser = new JSONParser();
         JSONArray jsonArray;
+
         try {
             jsonArray = (JSONArray) parser.parse(data);
         } catch (Exception e) {
             e.printStackTrace();
             return;
         }
+
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i<jsonArray.size();i++) {
             JSONObject jo = (JSONObject) jsonArray.get(i);
             logger.info("MachineService:InsertData:"+jo.toString());
@@ -282,6 +285,7 @@ public class MachineService {
             if (hasOutput) {
                 //출력이 있음.
                 String outputType = "error";
+
                 try {
                     outputType= new String(((String)jo.get("productType")).getBytes(StandardCharsets.UTF_8),StandardCharsets.UTF_8);
                 } catch (Exception e){

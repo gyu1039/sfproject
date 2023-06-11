@@ -29,6 +29,13 @@
                     <td><span th:text="*{resourceType}"/></td>
                 </tr>
                 <tr>
+                    <td align="center"><span>창고 재고</span></td>
+                    <td>
+                        <span th:text="*{resourceRemain}" th:if="*{resourceRemain!=0}"/>
+                        <span th:if="*{resourceRemain==0}">재고 없음</span>
+                    </td>
+                </tr>
+                <tr>
                     <td align="center"><span>기계 최대 재고량</span></td>
                     <td><span th:text="*{maxStock}"/></td>
                 </tr>

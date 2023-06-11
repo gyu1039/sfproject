@@ -16,10 +16,13 @@ public class MachineStockAddData {
 
     String resourceType;
 
-    public MachineStockAddData(int machineId, int amount, int maxStock, String resourceType){
+    int resourceRemain;
+
+    public MachineStockAddData(int machineId, int amount, int maxStock, String resourceType, int resourceRemain){
         this.machineId = machineId;
         this.amount = amount;
         this.maxStock = maxStock;
         this.resourceType = resourceType;
+        this.resourceRemain = resourceRemain;
     }
 }
