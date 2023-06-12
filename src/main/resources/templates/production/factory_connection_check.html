@@ -1,0 +1,16 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base_form :: layout ('Connection Check', 'production', ~{::section})}"
+      lang="ko">
+<head>
+  <title>index</title>
+</head>
+<body>
+
+<section>
+  Factory Connection Check<br/>
+  <button onclick="doCheckFactory()">click</button>check factory connection<br/>
+</section>
+
+</body>
+</html>

@@ -8,6 +8,13 @@
 </head>
 <body>
 <h1>Hello World!</h1>
-<a href="/login">관리자로 로그인 하기</a>
+<div sec:authorize="isAuthenticated()" >
+    <span sec:authentication="name"></span>님 반갑습니다
+</div>
+<div sec:authorize="!isAuthenticated()" >
+    <a href="/loginForm">관리자로 로그인 하기</a>
+</div>
+
+
 </body>
 </html>

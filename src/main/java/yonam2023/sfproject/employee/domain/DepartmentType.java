@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public enum DepartmentType {
 
-    PERSONNEL("인사"), PRODUCTION("생산"), LOGISTICS("물류");
+    PERSONNEL("인사"), PRODUCTION("생산"), LOGISTICS("물류"), TEST("TEST");
 
     private final String description;
     DepartmentType(String description) {

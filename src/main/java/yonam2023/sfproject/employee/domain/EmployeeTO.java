@@ -15,7 +15,7 @@ public class EmployeeTO {
     private String password;
     private String phoneNumber;
     private DepartmentType department;
-    private EmployeeType employeeType;
+    private Role role;
 
     public Employee toEntity() {
         return new Employee();

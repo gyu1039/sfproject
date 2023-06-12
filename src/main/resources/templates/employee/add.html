@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base :: layout('직원 추가', '직원 관리1', '직원 관리2', '직원 관리3', ~{::form})}"
+      th:replace="~{layout/base_form :: layout('직원 추가', 'employee', ~{::form})}"
       lang="ko">
 
 <form action="add.html" th:action method="post" th:object="${e}" class="row g-3 align-items-center">

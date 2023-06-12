@@ -23,13 +23,14 @@ public class FactoryService {
         logger.info("MachineService:check Factory Connection");
         try {
             String res = httpPS.sendGet(machineURL + "cntCheck/");
-            logger.info("MachineService:Factory Connection Result:"+res);
+            logger.info("FactoryService:Factory Connection Result:"+res);
             if(Boolean.valueOf(res)){
                 isConnected=true;
             }
             return Boolean.valueOf(res);
         }catch(ConnectException e){
-            logger.warn("MachineService:Factory Connection failed");
+            logger.warn("FactoryService:Factory Connection failed with Exception");
+            e.printStackTrace();
             return false;
         }catch (Exception e){
             e.printStackTrace();
