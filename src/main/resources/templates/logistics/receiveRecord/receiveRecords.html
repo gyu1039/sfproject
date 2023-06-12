@@ -36,6 +36,7 @@
       </tbody>
     </table>
   </div>
+  <button  id="formBtn" th:onclick="|location.href='@{/receiveRecords/reserve}'|" class="btn btn-outline-primary">입고 예약</button>
   <script th:inline="javascript">
     function del(id) {
 
@@ -60,6 +61,5 @@
   }
   </script>
 </section>
-<button  id="formBtn" th:onclick="|location.href='@{/receiveRecords/reserve}'|" class="btn btn-outline-primary">입고 예약</button>
 </body>
 </html>
