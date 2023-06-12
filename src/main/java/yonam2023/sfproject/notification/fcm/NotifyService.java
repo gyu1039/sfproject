@@ -3,52 +3,64 @@ package yonam2023.sfproject.notification.fcm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yonam2023.sfproject.employee.EmployeeRepository;
+import yonam2023.sfproject.employee.domain.DepartmentType;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class NotifyService {
+    private final FCMService fcmService;
+    private final EmployeeRepository employeeRepository;
 
-
-    private final NotificationService notificationService;
-
-    //단일 대상 (추정)
-    public void singleTargetNotify(Long userId, String title, String message) {
-            NotificationRequest notificationRequest = NotificationRequest.builder()
-                    .title("[단일]"+title)
-                    .token(notificationService.getToken(userId))
-                    .message(message)
-                    .build();
-            notificationService.sendNotification(notificationRequest);
+    public void sendNotification(final NotificationRequest request) {
+        try {
+            fcmService.send(request);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    //다중 대상 (추정)
-    public void multiTargetNotify(List<Long> userIds, String title, String message) {
-        userIds.forEach(userId -> {
-                    NotificationRequest notificationRequest = NotificationRequest.builder()
-                            .title("[다중]"+title)
-                            .token(notificationService.getToken(userId))
-                            .message(message)
-                            .build();
-                    notificationService.sendNotification(notificationRequest);
-                });
+
+    //특정 부서의 모든 직원에게 알림을 보냄
+    public void departmentNotify(DepartmentType departmentType, String title, String message) {
+        List<String> tokens = employeeRepository.findTokensByDepartment(departmentType);
+        if (tokens != null) {
+            tokens.forEach(token -> {
+                System.out.println("[in notifyService] token: "+token);
+                NotificationRequest notificationRequest = NotificationRequest.builder()
+                        .title("[ALL]" + title)
+                        .token(token)
+                        .message(message)
+                        .build();
+                sendNotification(notificationRequest);
+            });
+        }
     }
 
-    //모든 대상 (추정)
-    public void allUserNotify(String title, String message) {
-
-        notificationService.getAllTokens()
-                .forEach(token -> {
-                    //System.out.println("[in notifyService] token: "+token);
-                    NotificationRequest notificationRequest = NotificationRequest.builder()
-                            .title("[ALL]"+title)
-                            .token(token)
-                            .message(message)
-                            .build();
-                    notificationService.sendNotification(notificationRequest);
-                });
-    }
+    //    //단일 대상 (HttpSession 또는 userId를 받아서 처리해야 함.)
+//    public void singleTargetNotify(Long userId, String title, String message) {
+//            NotificationRequest notificationRequest = NotificationRequest.builder()
+//                    .title("[단일]"+title)
+//                    .token(notificationService.getToken(userId))
+//                    .message(message)
+//                    .build();
+//            sendNotification(notificationRequest);
+//    }
+//
+//    //다중 대상 (HttpSession 또는 userId를 받아서 처리해야 함.)
+//    public void multiTargetNotify(List<Long> userIds, String title, String message) {
+//        userIds.forEach(userId -> {
+//                    NotificationRequest notificationRequest = NotificationRequest.builder()
+//                            .title("[다중]"+title)
+//                            .token(notificationService.getToken(userId))
+//                            .message(message)
+//                            .build();
+//                    sendNotification(notificationRequest);
+//                });
+//    }
 
 }
