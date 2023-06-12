@@ -48,6 +48,7 @@ public class DummyData {
                     .min(50)
                     .max(150)
                     .maxStock(1000)
+                    .resourceType("캔")
                     .recentData(-1)
                     .build();
             mr.save(m);

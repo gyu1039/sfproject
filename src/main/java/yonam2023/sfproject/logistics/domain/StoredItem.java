@@ -27,7 +27,7 @@ public class StoredItem {
     public void addAmount(int amount){
         this.amount += amount;
     }
-    public void subAmount(int amount){
+    public void subAmount (int amount){
         if (this.amount < amount){
         //todo:  throw new minusAmountException("출고량이 재고량을 초과합니다.");
         }

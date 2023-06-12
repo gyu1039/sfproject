@@ -10,6 +10,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import yonam2023.sfproject.logistics.domain.StoredItem;
+import yonam2023.sfproject.logistics.repository.StoredItemRepository;
+import yonam2023.sfproject.production.Exception.MachineNotFoundException;
+import yonam2023.sfproject.production.Exception.ResourceNotEnoughException;
+import yonam2023.sfproject.production.Exception.ResourceNotFoundException;
 import yonam2023.sfproject.production.domain.*;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
@@ -31,6 +36,8 @@ public class ProductionController {
     ProductionRepository productionRepository;
     @Autowired
     MachineDataRepository machineDataRepository;
+    @Autowired
+    StoredItemRepository storedItemRepository;
     @Autowired
     FactoryService factoryService;
     @Autowired
@@ -221,51 +228,31 @@ public class ProductionController {
         return productionRepository.findAll();
     }
 
-    //추후 id에 따른 재고 추가 구현해야함.
-    @GetMapping("/stock-add")
-    public String addStockGet(Model model){
-        model.addAttribute("machineStockAddData", new MachineStockAddData(1010, 100, 1000));
-        return "production/machine_stock_add";
-    }
-
-    @PostMapping("/stock-add")
-    public String addStockPost(@RequestBody MachineStockAddData data, Model model){
-        //기계로 재료를 보내는 코드.
-        //생산 부서에 충분한 재고가 있는지 점검하는 코드 필요.
-        //해당 재고를 검색해서 현재 양이 얼마인지 표시하면 좋음.
-        //->별도 페이지로 구성?
-
-        //test code
-        logger.info("MachineController:Receive Add Stock :"+data.getAmount()+" to "+data.getMachineId());
-        String result = machineService.addStockToMachine(data);
-        if(result.equals("Machine Not Found")){
-            logger.info("Machine Not Found");
-            model.addAttribute("machineStockAddData", data);
-            return "production/machine_stock_add";
-        }
-        //추후 수정 필요
-        logger.info("MachineController:Stock Successfully Added : "+result);
-        model.addAttribute("machineStockAddData", data);
-        return "production/machine_stock_add";
-    }
     @GetMapping("/stock-add/{machineId}")
     public String addStockGetByMid(@PathVariable("machineId")int machineId, Model model){
         //mid로 여는 재고 페이지
         //페이지 열때 해당 mid의 기계가 있는지 체크
 
         logger.info("ProductionController:Adding Stock Resources to Machine "+machineId+" Page");
-        if(!machineService.isMachineInDB(machineId)){
+        if (!machineService.isMachineInDB(machineId)) {
             logger.info("ProductionController:Requested Machine "+machineId+" is not registered");
             return "redirect:/production";
         }
         //기계 정보를 받아오는 코드 작성 요
         MachineData machineData = machineDataRepository.findByMachineId(machineId);
 
-        model.addAttribute("machineStockAddData", new MachineStockAddData(machineId, 100, machineData.getMaxStock()));
+        StoredItem storedItem = storedItemRepository.findByName(machineData.getResourceType());
+
+        if(storedItem == null){
+            model.addAttribute("machineStockAddData", new MachineStockAddData(machineId, 100, machineData.getMaxStock(), machineData.getResourceType(), 0));
+        } else {
+            model.addAttribute("machineStockAddData", new MachineStockAddData(machineId, 100, machineData.getMaxStock(), machineData.getResourceType(), storedItem.getAmount()));
+        }
         return "production/machine_stock_add";
     }
     @PostMapping("/stock-add/{machineId}")
-    public String addStockPost(@PathVariable("machineId")int machineId, @RequestBody MachineStockAddData data, Model model){
+    @ResponseBody
+    public String addStockPost (@PathVariable("machineId")int machineId, @RequestBody MachineStockAddData data, Model model){
         //mid로 여는 재고 페이지
         //지정 불가능이므로 생략
         //logger.info("ProductionController:Adding Stock Resources to Machine "+machineId);
@@ -277,15 +264,33 @@ public class ProductionController {
 
         //test code
         logger.info("MachineController:Receive Add Stock :"+data.getAmount()+" to "+data.getMachineId());
-        String result = machineService.addStockToMachine(data);
-        if(result.equals("Machine Not Found")){
-            logger.info("Machine Not Found");
-            model.addAttribute("machineStockAddData", data);
-            return "production/machine_stock_add";
-        }
 
-        logger.info("MachineController:Stock Successfully Added : "+result);
+        String result;
+
         model.addAttribute("machineStockAddData", data);
-        return "production/machine_stock_add";
+
+        try {
+            result = machineService.addStockToMachine(data);
+
+            logger.info("MachineController:Stock Successfully Added : "+result);
+
+            return "added";
+        } catch (MachineNotFoundException e) {
+            //기계가 없음
+            logger.info("Machine Not Found");
+
+            return "Machine not found";
+        } catch (ResourceNotFoundException e) {
+            //기계에 맞는 재고가 존재하지 않음.
+
+            return "No Such Resource";
+        } catch (ResourceNotEnoughException e) {
+            //재고가 부족함
+
+            return "Not Enough Resource at Storage";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "what happen";
+        }
     }
 }
