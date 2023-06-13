@@ -327,7 +327,23 @@ public class MachineService {
         //MachineDetail 페이지 데이터 갱신고려
     }
 
-    public void fatalState(int mid){
+    public void fatalState(int mid, String data){
+
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject;
+
+        try {
+            jsonObject = (JSONObject) parser.parse(data);
+        } catch (Exception e){
+            e.printStackTrace();
+            return;
+        }
+
+        String reason = (String) jsonObject.get("cause");
+
+        if(reason == null){
+            reason = "알 수 없는 이유";
+        }
 
         MachineData md = machineDataRepository.findByMachineId(mid);
 
@@ -336,13 +352,17 @@ public class MachineService {
 
         machineDataRepository.save(md);
 
-        logger.error("Fatal Received "+mid);
+        logger.error("Fatal Received "+mid+ " : "+reason);
 
         //SSE
         sseService.updateMachineFatal(mid+":Error");
         sseService.updateMachineState(mid+":Stopped");
         sseService.updateMachineDetailFatal(mid+":Error");
         sseService.updateMachineDetailState(mid+":Stopped");
+
+        //FCM
+        //아래 message를 모든 생산 부서 직원에게 전송.
+        String message = "기계 ID "+mid+"(이)가 다음의 이유로 긴급정지 했습니다.\n"+"<"+reason+">";
     }
 
     public ArrayList<Integer> getFactoryMidList(){

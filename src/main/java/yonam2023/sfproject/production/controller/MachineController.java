@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class MachineController {
 
     @Autowired
-    MachineService ms;
+    MachineService machineService;
 
     @Autowired
     SseService se;
@@ -28,7 +28,7 @@ public class MachineController {
     public String checkMachine(@PathVariable("machine_id") int machineId){
         //check Machine code
         logger.info("MachineController:check Machine "+machineId+" exists");
-        boolean result = ms.checkMachine(machineId);
+        boolean result = machineService.checkMachine(machineId);
         return Boolean.toString(result);
     }
 
@@ -36,7 +36,7 @@ public class MachineController {
     public String addMachine(@PathVariable("machine_id") int machineId){
         //add Machine code
         logger.info("MachineController:attempt add Machine "+machineId);
-        if(ms.addMachine(machineId)){
+        if(machineService.addMachine(machineId)){
             logger.info("MachineController:Adding Machine "+machineId+" is successfully done");
             return "redirect:/production";
         }else{
@@ -50,7 +50,7 @@ public class MachineController {
     public String delMachine(@PathVariable("machine_id") int machineId){
         //del Machine code
         logger.info("MachineController:attempt del Machine "+machineId);
-        ms.delMachine(machineId);
+        machineService.delMachine(machineId);
 
         return "redirect:/production";
     }
@@ -60,7 +60,7 @@ public class MachineController {
     public String runMachine(@PathVariable("machine_id") int machineId){
         //add Machine code
         logger.info("MachineController:attempt run Machine "+machineId);
-        return Boolean.toString(ms.runMachine(machineId));
+        return Boolean.toString(machineService.runMachine(machineId));
     }
 
     @GetMapping("/stop/{machine_id}")
@@ -68,7 +68,7 @@ public class MachineController {
     public String stopMachine(@PathVariable("machine_id") int machineId){
         //stop code
         logger.info("MachineController:attempt stop Machine "+machineId);
-        boolean result = ms.stopMachine(machineId);
+        boolean result = machineService.stopMachine(machineId);
         return Boolean.toString(!result);//가동 상태를 반환. 즉 정지가 성공하면 true를 보내야함.
     }
 
@@ -77,15 +77,15 @@ public class MachineController {
     public void checkMachineStateGet(@PathVariable("machine_id") int mid){
         //check Machine State code
         logger.info("MachineController:check Machine state"+mid);
-        ms.checkMachineState(mid);
+        machineService.checkMachineState(mid);
     }
 
-    @GetMapping("/halt/{machine_id}")
+    @PostMapping(value = "/halt/{machine_id}", produces = "application/json; charset=utf8")
     @ResponseBody
-    public void fatalStop(@PathVariable("machine_id")int McId){
+    public void fatalStop(@PathVariable("machine_id")int machineId, @RequestBody String data){
         //fatal code
-        logger.error("MachineController:Receive Fatal Error Occur On Machine "+McId);
-        ms.fatalState(McId);
+        logger.error("MachineController:Receive Fatal Error Occur On Machine "+machineId+" reason : "+data);
+        machineService.fatalState(machineId, data);
     }
 
     @GetMapping("/machine-test")
@@ -97,7 +97,7 @@ public class MachineController {
     @ResponseBody
     public void insertSensorData(@RequestBody String data){
         logger.info("MachineController:Receive data:"+data);
-        ms.insertSensorData(data);
+        machineService.insertSensorData(data);
         //SSE 변화된 값만 부분 전송할 것.
     }
 
@@ -105,7 +105,7 @@ public class MachineController {
     @ResponseBody
     public String machineListGet(){
         logger.info("MachineController:Request Machine ID List");
-        ArrayList<Integer> arrayListMids = ms.getFactoryMidList();
+        ArrayList<Integer> arrayListMids = machineService.getFactoryMidList();
         return arrayListMids.toString();
     }
 }
