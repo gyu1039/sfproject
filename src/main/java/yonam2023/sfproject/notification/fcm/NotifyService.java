@@ -30,7 +30,7 @@ public class NotifyService {
         List<String> tokens = employeeRepository.findTokensByDepartment(departmentType);
         if (tokens != null) {
             tokens.forEach(token -> {
-                System.out.println("[in notifyService] token: "+token);
+//                System.out.println("[in notifyService] token: "+token);
                 NotificationRequest notificationRequest = NotificationRequest.builder()
                         .title("[ALL]" + title)
                         .token(token)

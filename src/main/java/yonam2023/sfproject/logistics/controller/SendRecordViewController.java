@@ -78,7 +78,7 @@ public class SendRecordViewController {
     @DeleteMapping("/{recordId}")
     @ResponseBody
     public ResponseEntity deleteReserve(@PathVariable long recordId){
-        sendService.deleteReceiveRecord(recordId);
+        sendService.deleteSendRecord(recordId);
         return ResponseEntity.ok(recordId);
     }
 

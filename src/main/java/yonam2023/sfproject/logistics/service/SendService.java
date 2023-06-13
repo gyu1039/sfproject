@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yonam2023.sfproject.logistics.controller.form.SendForm;
-import yonam2023.sfproject.logistics.domain.ReceiveRecord;
 import yonam2023.sfproject.logistics.domain.SendRecord;
 import yonam2023.sfproject.logistics.domain.StoredItem;
 import yonam2023.sfproject.logistics.repository.SendRecordRepository;
 import yonam2023.sfproject.logistics.repository.StoredItemRepository;
 
 @RequiredArgsConstructor
-@Service
+//@Service
 public class SendService {
     private final SendRecordRepository sendRecordRepo;
     private final StoredItemRepository storedItemRepo;
@@ -49,10 +48,12 @@ public class SendService {
     }
 
     @Transactional
-    public void deleteReceiveRecord(long recordId){
+    public void deleteSendRecord(long recordId){
 
         SendRecord findRecord = sendRecordRepo.findById(recordId).orElseThrow();
         StoredItem byNameItem = storedItemRepo.findByName(findRecord.getItemName());
+        // 출고 예약을 삭제하려고 하는데 예약된 게 없는 경우 byNameItem == null이 된다. 그런데 이런 경우가
+        // 실제로 발생할 수 있을 것 같진 않다. 출고 예약 목록에 데이터가 존재해서 고객이
         if(byNameItem == null){
             storedItemRepo.save(new StoredItem(findRecord.getItemName(), findRecord.getAmount()));
         }
