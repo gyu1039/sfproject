@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import yonam2023.sfproject.production.service.SseService;
+import yonam2023.sfproject.production.sse.SseService;
 
 import java.io.IOException;
 
@@ -28,6 +28,7 @@ public class SseController {
         logger.info("SSEController:Receive Connect Request");
         SseEmitter emitter = new SseEmitter();
         sseService.add(emitter);
+
         try {
             //연결후에 아무런 데이터를 수신받지 못하면 503에러가 날 수 있으므로 던지는 connect 데이터
             emitter.send(SseEmitter.event()
@@ -36,12 +37,7 @@ public class SseController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         return ResponseEntity.ok(emitter);
     }
-    @GetMapping("/call")
-    public ResponseEntity<Void> count() {
-        sseService.call();
-        return ResponseEntity.ok().build();
-    }
-
 }
