@@ -24,10 +24,10 @@ public class FCMService {
                         .build())
                 .build();
 
-        logger.info("[FCMService] NotificationRequest:{}", notificationRequest);
+//        logger.info("[FCMService] NotificationRequest:{}", notificationRequest);
 
         String response = FirebaseMessaging.getInstance().sendAsync(message).get();
-        logger.info("Sent message: " + response);
+//        logger.info("Sent message: " + response);
     }
 
 }

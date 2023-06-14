@@ -20,7 +20,7 @@ import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
 import yonam2023.sfproject.production.service.FactoryService;
 import yonam2023.sfproject.production.service.MachineService;
-import yonam2023.sfproject.production.service.SseService;
+import yonam2023.sfproject.production.sse.SseService;
 
 import java.util.ArrayList;
 import java.util.List;

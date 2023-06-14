@@ -1,4 +1,4 @@
-package yonam2023.sfproject.production.service;
+package yonam2023.sfproject.production.sse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,6 +25,7 @@ public class SseService {
     //멀티스레딩에 안전한 리스트 형식이어야함.
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
+    //공통
     public SseEmitter add(SseEmitter emitter) {
         this.emitters.add(emitter);
         log.info("new emitter added: {}", emitter);
@@ -41,18 +41,9 @@ public class SseService {
 
         return emitter;
     }
-    //모든 이벤트를 통합할 지 고려
-    public void call() {
-        //모든 등록한 브라우저에 called 데이터를 전송
-        emitters.forEach(emitter -> {
-            try {
-                emitter.send(SseEmitter.event()
-                        .name("called")
-                        .data("yay"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+
+    public List<SseEmitter> getEmitters(){
+        return emitters;
     }
 
     public void updateServerState(String str){
@@ -66,7 +57,6 @@ public class SseService {
             }
         });
     }
-
     public void updateMachineData(String str){
         emitters.forEach(emitter -> {
             try {
@@ -78,51 +68,6 @@ public class SseService {
             }
         });
     }
-    public void updateMachineState(String str){
-        emitters.forEach(emitter -> {
-            try {
-                emitter.send(SseEmitter.event()
-                        .name("mstate")
-                        .data(str));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-    public void updateMachineFatal(String str){
-        emitters.forEach(emitter -> {
-            try {
-                emitter.send(SseEmitter.event()
-                        .name("mfatal")
-                        .data(str));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-    public void updateMachineDetailState(String str){
-        emitters.forEach(emitter -> {
-            try {
-                emitter.send(SseEmitter.event()
-                        .name("mdstate")
-                        .data(str));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-    public void updateMachineDetailFatal(String str){
-        emitters.forEach(emitter -> {
-            try {
-                emitter.send(SseEmitter.event()
-                        .name("mdfatal")
-                        .data(str));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
     public void updateMachineDetailGraph(int mid){
 
         MachineData machineData = mr.findByMachineId(mid);
@@ -153,7 +98,6 @@ public class SseService {
             }
         });
     }
-
     public void updateMachineDetailStock(String str){
         emitters.forEach(emitter -> {
             try {
@@ -164,6 +108,5 @@ public class SseService {
                 e.printStackTrace();
             }
         });
-
     }
 }

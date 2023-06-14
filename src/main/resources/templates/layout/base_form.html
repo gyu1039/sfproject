@@ -100,7 +100,7 @@
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" th:text="|${department} 알림 받기|" onclick="registerNotify()">XX 알림 받기</button>
                     </div>
                     <a th:href="@{/logout}" class="btn btn-sm btn-outline-secondary">
                         logout
@@ -113,6 +113,36 @@
     </div>
 </div>
 <script>
+    function registerNotify() {
+
+        // Show Notification
+        // 메시지 기능 활성화를 알림
+        const messaging = firebase.messaging();
+
+        // RequestPermission 첫 어플 시작 시 알림 허용 or 불허를 사용자에게 안내합니다.
+        // 허용하지 않을 시 알람 메시지는 가지 않습니다.
+        messaging.requestPermission()
+            .then(function() {
+                // 알람이 허용되었을 때 토큰을 반환합니다.
+                // 해당 토큰을 통해 FCM 특정 사용자에게 메시지를 보낼 수 있습니다.
+                token = messaging.getToken();
+                return token;
+            })
+            .then(async function(token) {
+                console.log("token");
+                console.log(token);
+
+                //서버로 토큰 값을 전송
+                fetch("/register", {
+                    method: "POST",
+                    body: token
+                }).then((response) => console.log(response));
+                console.log("token pushed");
+            })
+
+    }
+
+
     const onLoadFunc = (function () {
         async function init() {
             let firebaseConfig = {
@@ -126,7 +156,7 @@
 
             //포그라운드 상태의 메시지를 팝업으로 띄우는 콜백 메서드
             firebase.messaging().onMessage(function(payload) {
-                console.log("[payload2]", payload);
+                console.log("[payload]", payload);
                 var options = {
                     body : payload.notification.body,
                     title : payload.notification.title
@@ -136,6 +166,17 @@
                     event.preventDefault();
                 }
             });
+
+            //백그라운드 상태에서 메시지 수신
+            // 이유는 모르겠으나 이 코드가 없어도 백그라운드로 잘 동작할 때가 있다. (안 될 때도 있다.)
+            // 이 코드가 있으면 반드시 백그라운드 동작이 성공하는지는 확인하지 못했다.
+            //firebase.messaging().setBackgroundMessageHandler(function(payload){
+            //    const options = {
+            //        body : payload.notification.body,
+            //        title : payload.notification.title
+            //    };
+            //    return self.registration.showNotification(title,options);
+            //});
         }
         return {
             init: function () {

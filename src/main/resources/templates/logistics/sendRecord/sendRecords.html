@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout/base_paging :: layout ('물건 출고 기록(-)', 'logistics', ~{::section}, ~{::#formBtn})}"
+      th:replace="~{layout/base_paging :: layout ('물건 출고 기록(-)', 'logistics', ~{::section})}"
       lang="ko">
 
 <body>
@@ -59,9 +59,10 @@
       }
   }
   </script>
+
+    <button id="formBtn" th:onclick="|location.href='@{sendRecords/reserve}'|" class="btn btn-outline-primary">출고 예약</button>
 </section>
 
-<button id="formBtn" th:onclick="|location.href='@{sendRecords/reserve}'|" class="btn btn-outline-primary">출고 예약</button>
 
 </body>
 </html>

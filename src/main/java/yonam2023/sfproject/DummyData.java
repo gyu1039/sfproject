@@ -85,6 +85,19 @@ public class DummyData {
         String encode3 = bCryptPasswordEncoder.encode("test");
         Employee admin = Employee.builder().name("test").password(encode3).phoneNumber("0000").department(DepartmentType.TEST).role(Role.ROLE_ADMIN).build();
         er.save(admin);
+
+        String encode4 = bCryptPasswordEncoder.encode("testLo");
+        Employee testLo = Employee.builder().name("testLo").password(encode4).phoneNumber("2222").role(Role.ROLE_ADMIN_LO).department(DepartmentType.LOGISTICS).build();
+        er.save(testLo);
+
+        String encode5 = bCryptPasswordEncoder.encode("testPro");
+        Employee testPro = Employee.builder().name("testPro").password(encode5).phoneNumber("3333").role(Role.ROLE_ADMIN_PRO).department(DepartmentType.PRODUCTION).build();
+        er.save(testPro);
+
+        String encode6 = bCryptPasswordEncoder.encode("testEmp");
+        Employee testEmp = Employee.builder().name("testEmp").password(encode6).phoneNumber("4444").role(Role.ROLE_ADMIN_EMP).department(DepartmentType.PERSONNEL).build();
+        er.save(testEmp);
+
     }
 
 

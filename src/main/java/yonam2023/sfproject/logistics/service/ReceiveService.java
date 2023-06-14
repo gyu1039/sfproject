@@ -49,7 +49,7 @@ public class ReceiveService {
     }
 
     @Transactional
-    public void deleteReceiveRecord(long recordId){
+    public String deleteReceiveRecord(long recordId){
 
         ReceiveRecord findRecord = receiveRecordRepo.findById(recordId).orElseThrow();
         StoredItem byNameItem = storedItemRepo.findByName(findRecord.getItemName());
@@ -60,6 +60,8 @@ public class ReceiveService {
             byNameItem.subAmount(findRecord.getAmount());
         }
         receiveRecordRepo.deleteById(recordId);
+
+        return findRecord.getItemName();
     }
 
 }

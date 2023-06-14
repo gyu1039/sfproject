@@ -64,55 +64,6 @@
 
 <body>
 
-<nav th:fragment="nav" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-    <div class="position-sticky pt-3 sidebar-sticky">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
-                    <span data-feather="home" class="align-text-bottom"></span>
-                    Employee
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file" class="align-text-bottom"></span>
-                    Production
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="shopping-cart" class="align-text-bottom"></span>
-                    Logistics
-                </a>
-            </li>
-        </ul>
-        <hr>
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
-            <span>Logistics</span>
-        </h6>
-        <ul class="nav flex-column mb-2 mt-3">
-            <li class="nav-item">
-                <a class="nav-link" href="/storedItems">
-                    <span data-feather="file-text" class="align-text-bottom"></span>
-                    재고 목록
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="/receiveRecords">
-                    <span data-feather="file-text" class="align-text-bottom"></span>
-                    입고 기록
-                </a>
-                <a class="nav-link" href="/sendRecords">
-                    <span data-feather="file-text" class="align-text-bottom"></span>
-                    출고 기록
-                </a>
-            </li>
-
-        </ul>
-    </div>
-</nav>
-
 <div th:fragment="subSidebar">
     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
         <span>Logistics</span>
@@ -145,28 +96,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
     <script src="/js/dashboard.js"></script>
 </div>
-
-
-<!--검색창-->
-<form th:fragment="searchForm" id="searchForm" action="/vipposts/search" method="GET" class="form-inline p-2" role="search">
-    <input type="text" name="keyword" class="form-control" id="search" placeholder="검색">
-    <button class="btn btn-success mx-1">검색</button>
-</form>
-
-<!--회원 정보 카드-->
-<div th:fragment="userCard" class="col-3 mx-2 my-5">
-    <div class="card text-center" style="width: 15rem;">
-        <div class="card-body">
-            <h5 class="card-title">로그인 하시면 게시글 작성이 가능합니다.</h5>
-            <!--<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
-            <a href="#" class="btn btn-primary my-3">로그인</a>
-            <a href="#" class="btn btn-info">회원 가입</a>
-        </div>
-    </div>
-</div>
-
-
-
 </body>
 
 </html>

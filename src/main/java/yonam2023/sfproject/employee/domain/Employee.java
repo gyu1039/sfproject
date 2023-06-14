@@ -36,6 +36,15 @@ public class Employee implements UserDetails {
 
     private Role role;
 
+    private String token;
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void deleteToken(){
+        this.token = null;
+    }
 
     public void employeeUpdate(EmployeeTO dto) {
         this.name = dto.getName();
