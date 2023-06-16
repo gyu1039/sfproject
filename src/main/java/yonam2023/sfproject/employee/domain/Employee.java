@@ -7,16 +7,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@ToString
 public class Employee implements UserDetails {
 
     @Id
@@ -33,17 +33,23 @@ public class Employee implements UserDetails {
     private String phoneNumber;
 
     private DepartmentType department;
-
     private Role role;
+    private boolean loggedIn;
 
     private String token;
 
     public void setToken(String token) {
         this.token = token;
     }
-
     public void deleteToken(){
         this.token = null;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 
     public void employeeUpdate(EmployeeTO dto) {
@@ -65,10 +71,6 @@ public class Employee implements UserDetails {
     @Transient
     private Collection<GrantedAuthority> authorities;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
-    }
 
     public void setAuthorities(Collection<GrantedAuthority> authorities) {
         this.authorities = authorities;
@@ -78,6 +80,23 @@ public class Employee implements UserDetails {
     public String getUsername() {
         return this.name;
     }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+        for(GrantedAuthority g : this.authorities) {
+            collection.add(g);
+        }
+        return collection;
+    }
+
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -97,6 +116,17 @@ public class Employee implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", department=" + department +
+                '}';
     }
 }
 

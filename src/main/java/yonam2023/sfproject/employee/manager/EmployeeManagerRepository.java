@@ -1,4 +1,4 @@
-package yonam2023.sfproject.employee;
+package yonam2023.sfproject.employee.manager;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,13 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
-import yonam2023.sfproject.employee.domain.Role;
 
 import java.util.List;
 
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeManagerRepository extends JpaRepository<Employee, Long> {
 
     Page<Employee> findAll(Pageable pageable);
     Page<Employee> findByDepartment(DepartmentType departmentType, Pageable pageable);

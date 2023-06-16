@@ -21,12 +21,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .mvcMatchers("/", "/fail_login", "/css/**", "/js/**", "/machine/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/loginForm").hasRole("ANONYMOUS")
+                        .mvcMatchers("/fail_login", "/css/**", "/js/**", "/machine/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/loginForm", "/").hasRole("ANONYMOUS")
                         .mvcMatchers("/index").hasRole("ADMIN")
-                        .mvcMatchers("/employee/**").hasAnyRole("ADMIN_EMP", "ADMIN")
+                        .mvcMatchers("/employee-manager/**").hasAnyRole("ADMIN_EMP", "ADMIN")
                         .mvcMatchers("/production/**").hasAnyRole("ADMIN_PRO", "ADMIN")
                         .mvcMatchers("/storedItems/**", "/receiveRecords/**", "/sendRecords/**").hasAnyRole("ADMIN_LO", "ADMIN")
+                        .mvcMatchers("/employee/**").hasRole("EMPLOYEE")
                         .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form

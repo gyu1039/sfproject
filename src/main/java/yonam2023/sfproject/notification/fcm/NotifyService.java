@@ -3,7 +3,7 @@ package yonam2023.sfproject.notification.fcm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import yonam2023.sfproject.employee.EmployeeRepository;
+import yonam2023.sfproject.employee.manager.EmployeeManagerRepository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutionException;
 @Transactional
 public class NotifyService {
     private final FCMService fcmService;
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeManagerRepository employeeManagerRepository;
 
     public void sendNotification(final NotificationRequest request) {
         try {
@@ -27,7 +27,7 @@ public class NotifyService {
 
     //특정 부서의 모든 직원에게 알림을 보냄
     public void departmentNotify(DepartmentType departmentType, String title, String message) {
-        List<String> tokens = employeeRepository.findTokensByDepartment(departmentType);
+        List<String> tokens = employeeManagerRepository.findTokensByDepartment(departmentType);
         if (tokens != null) {
             tokens.forEach(token -> {
 //                System.out.println("[in notifyService] token: "+token);

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import yonam2023.sfproject.employee.EmployeeRepository;
+import yonam2023.sfproject.employee.manager.EmployeeManagerRepository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.employee.domain.Role;
@@ -21,7 +21,7 @@ import java.util.stream.IntStream;
 public class DummyData {
 
     @Autowired
-    EmployeeRepository er;
+    EmployeeManagerRepository er;
 
     @Autowired
     ProductionRepository pr;
@@ -63,6 +63,8 @@ public class DummyData {
 
             Employee e = Employee.builder()
                     .name("test" + i)
+                    .password(bCryptPasswordEncoder.encode("test"))
+                    .role(Role.ROLE_EMPLOYEE)
                     .phoneNumber(i + "")
                     .department(dts[i % 3])
                     .build();

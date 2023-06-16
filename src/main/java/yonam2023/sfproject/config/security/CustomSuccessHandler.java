@@ -1,6 +1,5 @@
 package yonam2023.sfproject.config.security;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -79,10 +78,11 @@ class RoleBasedTargetUrlFactory implements TargetUrlFactory {
     private Map<String, String> rolesTargetUrlMap = new HashMap<>();
 
     public RoleBasedTargetUrlFactory() {
-        rolesTargetUrlMap.put("ROLE_ADMIN_EMP", "/employee");
+        rolesTargetUrlMap.put("ROLE_ADMIN_EMP", "/employee-manager");
         rolesTargetUrlMap.put("ROLE_ADMIN_LO", "/storedItems");
         rolesTargetUrlMap.put("ROLE_ADMIN_PRO", "/production");
         rolesTargetUrlMap.put("ROLE_ADMIN", "/index");
+        rolesTargetUrlMap.put("ROLE_EMPLOYEE", "/employee");
     }
 
     @Override
@@ -90,7 +90,6 @@ class RoleBasedTargetUrlFactory implements TargetUrlFactory {
         List<GrantedAuthority> roles = new ArrayList<>(authentication.getAuthorities());
         log.info("crateTartUrl 메서드 실행");
         for (GrantedAuthority authority : roles) {
-            log.info(authority.getAuthority());
             String role = authority.getAuthority();
             if (rolesTargetUrlMap.containsKey(role)) {
                 return rolesTargetUrlMap.get(role);

@@ -1,4 +1,4 @@
-package yonam2023.sfproject.employee;
+package yonam2023.sfproject.employee.manager;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,9 +12,9 @@ import yonam2023.sfproject.employee.domain.EmployeeTO;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService {
+public class EmployeeManagerService {
 
-    private final EmployeeRepository er;
+    private final EmployeeManagerRepository er;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Page<Employee> findAll(Pageable pageable) {
@@ -30,7 +30,7 @@ public class EmployeeService {
                 .password(encPassword)
                 .phoneNumber(e.getPhoneNumber())
                 .department(e.getDepartment())
-                .role(Role.ROLE_USER).build());
+                .role(Role.ROLE_EMPLOYEE).build());
     }
 
     public EmployeeTO findById(Long id) {
