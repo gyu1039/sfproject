@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import yonam2023.sfproject.employee.domain.Employee;
-import yonam2023.sfproject.employee.manager.EmployeeManagerRepository;
+import yonam2023.sfproject.employee.EmployeeManagerRepository;
 
 import javax.servlet.http.HttpSession;
 

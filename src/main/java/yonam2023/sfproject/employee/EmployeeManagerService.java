@@ -1,4 +1,4 @@
-package yonam2023.sfproject.employee.manager;
+package yonam2023.sfproject.employee;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

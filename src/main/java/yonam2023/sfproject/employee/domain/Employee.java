@@ -122,10 +122,10 @@ public class Employee implements UserDetails {
     @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", department=" + department +
+                ", role=" + role +
                 '}';
     }
 }

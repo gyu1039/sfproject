@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import yonam2023.sfproject.employee.manager.EmployeeManagerRepository;
+import yonam2023.sfproject.employee.EmployeeManagerRepository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
 import yonam2023.sfproject.employee.domain.Role;

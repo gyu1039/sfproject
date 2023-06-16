@@ -3,7 +3,7 @@ package yonam2023.sfproject.notification.fcm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import yonam2023.sfproject.employee.manager.EmployeeManagerRepository;
+import yonam2023.sfproject.employee.EmployeeManagerRepository;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 
 import java.util.List;
