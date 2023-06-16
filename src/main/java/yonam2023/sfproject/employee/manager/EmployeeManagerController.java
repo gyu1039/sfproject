@@ -23,10 +23,10 @@ import yonam2023.sfproject.employee.domain.EmployeeTO;
 public class EmployeeManagerController {
 
     private final EmployeeManagerService es;
+    private final DepartmentTO departmentTO;
 
     @GetMapping
     public String totalList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-
 
         Page<Employee> all = es.findAll(pageable);
         model.addAttribute("pageObj", all);
@@ -63,10 +63,15 @@ public class EmployeeManagerController {
         return "redirect:/employee";
     }
 
-    @PostMapping("/bydepartment")
-    public String byDepartment(Model model, @ModelAttribute DepartmentTO departmentTO, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    @GetMapping("/bydepartment")
+    public String byDepartment(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                               @RequestParam(required = false) DepartmentType departmentType,
+                               Model model) {
 
-        Page<Employee> byDepartment = es.findByDepartment(departmentTO, pageable);
+        if(departmentType != null) {
+            departmentTO.setDepartmentType(departmentType);
+        }
+        Page<Employee> byDepartment = es.findByDepartment(departmentTO.getDepartmentType(), pageable);
         model.addAttribute("pageObj", byDepartment);
 
         return "employee/init";
@@ -78,12 +83,6 @@ public class EmployeeManagerController {
         es.deleteEmployeeById(id);
 
         return "redirect:/employee";
-    }
-
-    @ModelAttribute("d")
-    public DepartmentTO d() {
-
-        return new DepartmentTO();
     }
 
     @ModelAttribute("departments")
