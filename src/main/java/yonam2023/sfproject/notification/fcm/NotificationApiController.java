@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import yonam2023.sfproject.config.security.MyUserDetails;
-import yonam2023.sfproject.employee.EmployeeRepository;
 import yonam2023.sfproject.employee.domain.Employee;
+import yonam2023.sfproject.employee.EmployeeManagerRepository;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,17 +19,16 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 public class NotificationApiController {
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeManagerRepository employeeManagerRepository;
 
     @PostMapping("/register")
     @Transactional  //@Transactional이 있어야 JPA 더티체킹이 동작한다.
     public ResponseEntity register(@RequestBody String userToken, HttpSession httpSession) {
         SecurityContextImpl ssc = (SecurityContextImpl) httpSession.getAttribute("SPRING_SECURITY_CONTEXT");
-        MyUserDetails user = (MyUserDetails) ssc.getAuthentication().getPrincipal();
-//        log.info(user.getUsername());
-
-        Employee employee = employeeRepository.findByName(user.getUsername());
-//        log.info("userToken = " + userToken);
+      
+        Employee loginUser = (Employee) ssc.getAuthentication().getPrincipal();
+        Employee employee = employeeManagerRepository.findByName(loginUser.getUsername());
+      
         employee.setToken(userToken);
         return ResponseEntity.ok().build();
     }

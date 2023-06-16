@@ -5,16 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import yonam2023.sfproject.employee.domain.DepartmentTO;
-import yonam2023.sfproject.employee.domain.Employee;
-import yonam2023.sfproject.employee.domain.Role;
-import yonam2023.sfproject.employee.domain.EmployeeTO;
+import yonam2023.sfproject.employee.domain.*;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService {
+public class EmployeeManagerService {
 
-    private final EmployeeRepository er;
+    private final EmployeeManagerRepository er;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Page<Employee> findAll(Pageable pageable) {
@@ -30,7 +27,7 @@ public class EmployeeService {
                 .password(encPassword)
                 .phoneNumber(e.getPhoneNumber())
                 .department(e.getDepartment())
-                .role(Role.ROLE_USER).build());
+                .role(Role.ROLE_EMPLOYEE).build());
     }
 
     public EmployeeTO findById(Long id) {
@@ -53,9 +50,9 @@ public class EmployeeService {
         er.save(employee);
     }
 
-    public Iterable<Employee> findByDepartment(DepartmentTO departmentTO, Pageable pageable) {
+    public Page<Employee> findByDepartment(DepartmentType departmentType, Pageable pageable) {
 
-        return er.findByDepartment(departmentTO.getDepartmentType(), pageable);
+        return er.findByDepartment(departmentType, pageable);
     }
 
     public void deleteEmployeeById(Long id) {

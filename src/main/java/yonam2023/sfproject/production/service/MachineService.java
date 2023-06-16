@@ -6,7 +6,6 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yonam2023.sfproject.employee.domain.DepartmentType;
@@ -22,6 +21,14 @@ import yonam2023.sfproject.production.domain.MachineStockAddData;
 import yonam2023.sfproject.production.domain.Production;
 import yonam2023.sfproject.production.repository.MachineDataRepository;
 import yonam2023.sfproject.production.repository.ProductionRepository;
+import yonam2023.sfproject.production.sse.DetailSender;
+import yonam2023.sfproject.production.sse.OverviewSender;
+import yonam2023.sfproject.production.sse.SseSender;
+import yonam2023.sfproject.production.sse.SseService;
+import yonam2023.sfproject.production.sse.concrete.DetailFatal;
+import yonam2023.sfproject.production.sse.concrete.DetailState;
+import yonam2023.sfproject.production.sse.concrete.OverviewFatal;
+import yonam2023.sfproject.production.sse.concrete.OverviewState;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -143,10 +150,12 @@ public class MachineService {
                 md.setFatal(false);
                 machineDataRepository.save(md);
                 //SSE
-                sseService.updateMachineState(mid+":Running");//command 패턴 적용 가능?
-                sseService.updateMachineFatal(mid+":Normal");
-                sseService.updateMachineDetailState(mid+":Running");
-                sseService.updateMachineDetailFatal(mid+":Normal");
+                SseSender sseSender = new OverviewSender(sseService.getEmitters(), new OverviewFatal(), new OverviewState());
+                sseSender.sendState(mid+":Running");
+                sseSender.sendFatal(mid+":Normal");
+                sseSender = new DetailSender(sseService.getEmitters(), new DetailFatal(), new DetailState());
+                sseSender.sendState(mid+":Running");
+                sseSender.sendFatal(mid+":Normal");
                 return true;
             } else {
                 logger.info("MachineService:Machine "+mid+" failed to start up : "+res);
@@ -179,8 +188,10 @@ public class MachineService {
                 machineDataRepository.save(md);
 
                 //SSE
-                sseService.updateMachineState(mid+":Stopped");
-                sseService.updateMachineDetailState(mid+":Stopped");
+                SseSender sseSender = new OverviewSender(sseService.getEmitters(), new DetailFatal(), new DetailState());
+                sseSender.sendState(mid+":Stopped");
+                sseSender = new DetailSender(sseService.getEmitters(), new DetailFatal(), new DetailState());
+                sseSender.sendState(mid+":Stopped");
                 return true;
             } else {
                 logger.info("MachineService:Machine "+mid+" failed to stop : "+res);
@@ -360,10 +371,12 @@ public class MachineService {
         logger.error("Fatal Received "+mid+ " : "+reason);
 
         //SSE
-        sseService.updateMachineFatal(mid+":Error");
-        sseService.updateMachineState(mid+":Stopped");
-        sseService.updateMachineDetailFatal(mid+":Error");
-        sseService.updateMachineDetailState(mid+":Stopped");
+        SseSender sseSender = new OverviewSender(sseService.getEmitters(), new OverviewFatal(), new OverviewState());
+        sseSender.sendState(mid+":Stopped");
+        sseSender.sendFatal(mid+":Error");
+        sseSender = new DetailSender(sseService.getEmitters(), new DetailFatal(), new DetailState());
+        sseSender.sendState(mid+":Stopped");
+        sseSender.sendFatal(mid+":Error");
 
         //FCM
         //아래 message를 모든 생산 부서 직원에게 전송.

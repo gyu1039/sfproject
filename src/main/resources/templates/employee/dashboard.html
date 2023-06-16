@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="" name="description">
+    <meta content="Mark Otto, Jacob Thornton, and Bootstrap contributors" name="author">
+    <meta content="Hugo 0.108.0" name="generator">
+
+    <title th:text="${title}">title</title>
+    <!-- favicon.ico 404 오류 해결   -->
+    <link href="#" rel="shortcut icon">
+
+    <link href="https://getbootstrap.com/docs/5.3/examples/dashboard/" rel="canonical">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+    </style>
+</head>
+<body>
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">smart factory project</a>
+    <button aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler position-absolute d-md-none collapsed" data-bs-target="#sidebarMenu" data-bs-toggle="collapse"
+            type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</header>
+
+<div class="container-fluid">
+
+    <p class="md-4">Name: <span th:text="${employee.name}"></span></p>
+    <p class="md-4">Phone Number: <span th:text="${employee.phoneNumber}"></span></p>
+    <p class="md-4">Department: <span th:text="${employee.department}"></span></p>
+
+    <div th:if="${!employee.isLoggedIn}">
+        <button class="btn btn-primary" onclick="checkIn()">Check-In</button>
+    </div>
+
+    <div th:if="${employee.isLoggedIn}">
+        <button class="btn btn-danger" onclick="checkOut()">Check-Out</button>
+    </div>
+
+    <form action="/logout" class="mt-4" method="post">
+        <button class="btn btn-secondary" type="submit">Logout</button>
+    </form>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--<script>
+
+    function checkIn() {
+        $.ajax({
+            url: '/employee/checkin',
+            type: 'POST',
+            success: function() {
+                ${}.load();
+            }
+        });
+    }
+
+    function checkOut() {
+        $.ajax({
+            url: '/employee/checkout',
+            type: 'POST',
+            success: function() {
+                ${}.load();
+            }
+        });
+    }
+
+</script>-->
+</body>
+</html>
