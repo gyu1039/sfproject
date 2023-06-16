@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.transaction.annotation.Transactional;
-import yonam2023.sfproject.employee.EmployeeRepository;
+import yonam2023.sfproject.employee.EmployeeManagerRepository;
 import yonam2023.sfproject.employee.domain.Employee;
 
 import javax.servlet.ServletException;
@@ -28,7 +28,7 @@ import java.io.IOException;
 @Slf4j
 public class SecurityConfig {
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeManagerRepository employeeManagerRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,7 +54,8 @@ public class SecurityConfig {
                 )
                 .exceptionHandling().accessDeniedHandler(myAccessDeniedHandler())
                 .and()
-                .logout().logoutUrl("/logout").invalidateHttpSession(true).deleteCookies("JSESSIONID").logoutSuccessUrl("/loginForm").logoutSuccessHandler(myLogoutSuccessHandler(employeeRepository));
+                .logout().logoutUrl("/logout").invalidateHttpSession(true).deleteCookies("JSESSIONID").logoutSuccessHandler(myLogoutSuccessHandler(employeeManagerRepository));
+                //.logoutSuccessUrl("/loginForm")
 
 
         http.csrf().disable();
@@ -83,16 +84,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    public LogoutSuccessHandler myLogoutSuccessHandler(EmployeeRepository employeeRepository) {
+    public LogoutSuccessHandler myLogoutSuccessHandler(EmployeeManagerRepository employeeManagerRepository) {
         return new LogoutSuccessHandler() {
             @Override
             @Transactional  //@Transactional이 있어야 JPA 더티체킹이 동작한다.
-            public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-                MyUserDetails user = (MyUserDetails)authentication.getPrincipal();
-                Employee employee = employeeRepository.findByName(user.getUsername());
-                log.info("token = " + employee.getToken());
+            public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+                Employee user = (Employee)authentication.getPrincipal();
+                Employee employee = employeeManagerRepository.findByName(user.getUsername());
+                log.info("[logout success handler] 삭제 직전 token = " + employee.getToken());
                 employee.deleteToken();
-                log.info("logout success handler 완료");
+                response.sendRedirect("/loginForm");
             }
         };
     }
