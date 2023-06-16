@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import yonam2023.sfproject.employee.domain.DepartmentTO;
 import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.employee.domain.Employee;
@@ -16,7 +17,7 @@ import yonam2023.sfproject.employee.domain.EmployeeTO;
 
 
 @Controller
-@RequestMapping("/employee-manager")
+@RequestMapping("/employee")
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeManagerController {
@@ -26,23 +27,25 @@ public class EmployeeManagerController {
     @GetMapping
     public String totalList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
+
         Page<Employee> all = es.findAll(pageable);
         model.addAttribute("pageObj", all);
-        return "employee/manager/init";
+
+        return "employee/init";
     }
 
     @GetMapping("/add")
     public String add(Model m) {
 
         m.addAttribute("e", new EmployeeTO());
-        return "employee/manager/add";
+        return "employee/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute EmployeeTO e) {
 
         es.save(e);
-        return "redirect:/employee/manager";
+        return "redirect:/employee";
     }
 
     @GetMapping("/edit/{id}")
@@ -50,22 +53,23 @@ public class EmployeeManagerController {
 
         EmployeeTO byId = es.findById(id);
         model.addAttribute("e", byId);
-        return "employee/manager/edit";
+        return "employee/edit";
     }
 
     @PutMapping("/edit/{id}")
     public String edit(@ModelAttribute("e") EmployeeTO e) {
 
         es.employeeUpdate(e);
-        return "redirect:/employee/manager";
+        return "redirect:/employee";
     }
 
     @PostMapping("/bydepartment")
-    public String byDepartment(@ModelAttribute DepartmentTO departmentTO, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+    public String byDepartment(Model model, @ModelAttribute DepartmentTO departmentTO, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        Iterable<Employee> byDepartment = es.findByDepartment(departmentTO, pageable);
+        Page<Employee> byDepartment = es.findByDepartment(departmentTO, pageable);
         model.addAttribute("pageObj", byDepartment);
-        return "employee/manager/init";
+
+        return "employee/init";
     }
 
     @PostMapping("/delete/{id}")
@@ -73,7 +77,7 @@ public class EmployeeManagerController {
 
         es.deleteEmployeeById(id);
 
-        return "redirect:/employee/manager";
+        return "redirect:/employee";
     }
 
     @ModelAttribute("d")

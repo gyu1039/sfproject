@@ -8,11 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import yonam2023.sfproject.employee.domain.Employee;
 
 @Controller
-@RequestMapping("/employee")
+@RequestMapping("/test")
 @Slf4j
 public class EmployeeController {
 
@@ -23,13 +22,13 @@ public class EmployeeController {
         return "employee/dashboard";
     }
 
-    @PostMapping("/")
-    public void checkIn() {
-
-    }
-
-    @PostMapping("/")
-    public void checkOut() {
-
-    }
+//    @PostMapping("/checkin")
+//    public void checkIn() {
+//
+//    }
+//
+//    @PostMapping("/checkin")
+//    public void checkOut() {
+//
+//    }
 }

@@ -53,7 +53,7 @@ public class EmployeeManagerService {
         er.save(employee);
     }
 
-    public Iterable<Employee> findByDepartment(DepartmentTO departmentTO, Pageable pageable) {
+    public Page<Employee> findByDepartment(DepartmentTO departmentTO, Pageable pageable) {
 
         return er.findByDepartment(departmentTO.getDepartmentType(), pageable);
     }

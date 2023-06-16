@@ -101,11 +101,11 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+<!--<script>
 
     function checkIn() {
         $.ajax({
-            url: '',
+            url: '/employee/checkin',
             type: 'POST',
             success: function() {
                 ${}.load();
@@ -115,14 +115,14 @@
 
     function checkOut() {
         $.ajax({
-            url: '',
-            type: '',
+            url: '/employee/checkout',
+            type: 'POST',
             success: function() {
-
+                ${}.load();
             }
         });
     }
 
-</script>
+</script>-->
 </body>
 </html>
