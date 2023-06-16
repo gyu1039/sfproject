@@ -8,8 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yonam2023.sfproject.employee.domain.DepartmentType;
 import yonam2023.sfproject.logistics.domain.StoredItem;
 import yonam2023.sfproject.logistics.repository.StoredItemRepository;
+import yonam2023.sfproject.notification.fcm.NotifyService;
 import yonam2023.sfproject.production.Exception.MachineNotFoundException;
 import yonam2023.sfproject.production.Exception.ResourceNotEnoughException;
 import yonam2023.sfproject.production.Exception.ResourceNotFoundException;
@@ -48,6 +50,9 @@ public class MachineService {
 
     @Autowired
     StoredItemRepository storedItemRepository;
+
+    @Autowired
+    NotifyService notifyService;
 
     private Logger logger = LoggerFactory.getLogger(MachineService.class);
     private static final String machineURL="http://localhost:8085/";
@@ -376,6 +381,7 @@ public class MachineService {
         //FCM
         //아래 message를 모든 생산 부서 직원에게 전송.
         String message = "기계 ID "+mid+"(이)가 다음의 이유로 긴급정지 했습니다.\n"+"<"+reason+">";
+        notifyService.departmentNotify(DepartmentType.PRODUCTION, "[Fatal]", message);
     }
 
     public ArrayList<Integer> getFactoryMidList(){

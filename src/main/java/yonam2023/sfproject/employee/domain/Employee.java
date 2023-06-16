@@ -17,7 +17,7 @@ import java.util.Collection;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Employee implements UserDetails {
+public class Employee implements UserDetails, Serializable {
 
     @Id
     @NotNull
