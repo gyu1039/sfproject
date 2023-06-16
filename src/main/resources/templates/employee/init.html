@@ -35,8 +35,8 @@
             </div>
 
             <div class="col-sm-4">
-                <form action="#" th:action="@{/employee/bydepartment}" method="post" th:object="${d}">
-                    <select onchange="this.form.submit()" th:field="*{departmentType}" class="w-20 p-3 form-select">
+                <form action="#" th:action="@{/employee/bydepartment}" method="get">
+                    <select onchange="this.form.submit()" class="w-20 p-3 form-select" th:name="departmentType">
                         <option value="">부서별로 직원 조회하기</option>
                         <option th:each="departmentType : ${departments}" th:value="${departmentType}" th:text="${departmentType.description}">Test</option>
                     </select>
