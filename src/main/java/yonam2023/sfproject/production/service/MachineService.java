@@ -329,6 +329,7 @@ public class MachineService {
 
             MachineData machineData = machineDataRepository.findByMachineId(machineId);
             machineData.setRecentData(value);
+            machineData.setStock(machineData.getStock()-used);
 
             machineDataRepository.save(machineData);
 
