@@ -111,8 +111,8 @@
     </form>
 
     <div th:if="${employee.isCheckedIn}">
-        <p th:if="${lateMinutes == null}">
-            출근 시간: <span id="checkInTime" th:text="${#temporals.format(employee.checkInTime, 'yyyy-MM-dd HH:mm:ss')"></span>
+        <p>
+            출근 시간: <span id="checkInTime" th:text="${#temporals.format(employee.checkInTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
         </p>
         <p th:unless="${lateMinutes == null}">
              <span id="lateMinutes" th:text="${lateMinutes}"></span>분 지각하였습니다.

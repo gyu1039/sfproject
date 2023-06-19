@@ -34,7 +34,11 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public String init(Model model, @PathVariable Integer id) {
+    public String init(@AuthenticationPrincipal Employee logined, Model model, @PathVariable Integer id) {
+
+        if(logined.getId().intValue() != id) {
+            return "redirect:/index";
+        }
 
         log.info("pathVariable 메서드 진입");
         Employee employee = ems.findById(id.longValue()).toEntity();
@@ -43,7 +47,7 @@ public class EmployeeController {
 
         LocalTime officeStartTime = LocalTime.of(9, 0);
         LocalDateTime now = employee.getCheckInTime();
-        if (now.toLocalTime().isAfter(officeStartTime)) {
+        if (now != null && now.toLocalTime().isAfter(officeStartTime)) {
             long minutesLate = now.toLocalTime().until(officeStartTime, ChronoUnit.MINUTES);
             model.addAttribute("lateMinutes", -1* minutesLate);
         }
@@ -58,6 +62,7 @@ public class EmployeeController {
 
         EmployeeTO e = ems.findById(employeeId.longValue());
         LocalDateTime now = LocalDateTime.now();
+//        LocalDateTime now = LocalDateTime.of(2023, 6, 19, 8, 30);
         e.setCheckInTime(now);
         e.setCheckedIn(true);
 
