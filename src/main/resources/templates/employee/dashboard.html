@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:method="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -15,6 +15,22 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
+
+
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem;
+        }
+
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -66,6 +82,8 @@
         -webkit-overflow-scrolling: touch;
       }
 
+
+
     </style>
 </head>
 <body>
@@ -73,7 +91,8 @@
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">smart factory project</a>
     <button aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation"
-            class="navbar-toggler position-absolute d-md-none collapsed" data-bs-target="#sidebarMenu" data-bs-toggle="collapse"
+            class="navbar-toggler position-absolute d-md-none collapsed" data-bs-target="#sidebarMenu"
+            data-bs-toggle="collapse"
             type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -81,48 +100,34 @@
 
 <div class="container-fluid">
 
-    <p class="md-4">Name: <span th:text="${employee.name}"></span></p>
-    <p class="md-4">Phone Number: <span th:text="${employee.phoneNumber}"></span></p>
-    <p class="md-4">Department: <span th:text="${employee.department}"></span></p>
+    <p class="md-4">id: <span th:text="${employee.id}"></span></p>
+    <p class="md-4">이름: <span th:text="${employee.name}"></span></p>
+    <p class="md-4">휴대폰 번호: <span th:text="${employee.phoneNumber}"></span></p>
+    <p class="md-4">부서: <span th:text="${employee.department.description}"></span></p>
 
-    <div th:if="${!employee.isLoggedIn}">
-        <button class="btn btn-primary" onclick="checkIn()">Check-In</button>
-    </div>
+    <form th:if="${!employee.isCheckedIn}" th:action="@{/normal/check-in}" method="post">
+        <input type="hidden" name="employeeId" th:value="${employee.id}" />
+        <button type="submit" class="btn btn-primary">출근하기</button>
+    </form>
 
-    <div th:if="${employee.isLoggedIn}">
-        <button class="btn btn-danger" onclick="checkOut()">Check-Out</button>
+    <div th:if="${employee.isCheckedIn}">
+        <p>
+            출근 시간: <span id="checkInTime" th:text="${#temporals.format(employee.checkInTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+        </p>
+        <p th:unless="${lateMinutes == null}">
+             <span id="lateMinutes" th:text="${lateMinutes}"></span>분 지각하였습니다.
+        </p>
+        <form th:if="${employee.checkInTime != null}" th:action="@{/normal/check-out}" method="post">
+            <input type="hidden" name="employeeId" th:value="${employee.id}" />
+            <button class="btn btn-danger" type="submit">퇴근하기</button>
+        </form>
     </div>
 
     <form action="/logout" class="mt-4" method="post">
         <button class="btn btn-secondary" type="submit">Logout</button>
     </form>
-
-
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!--<script>
 
-    function checkIn() {
-        $.ajax({
-            url: '/employee/checkin',
-            type: 'POST',
-            success: function() {
-                ${}.load();
-            }
-        });
-    }
-
-    function checkOut() {
-        $.ajax({
-            url: '/employee/checkout',
-            type: 'POST',
-            success: function() {
-                ${}.load();
-            }
-        });
-    }
-
-</script>-->
 </body>
 </html>

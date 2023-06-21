@@ -1,11 +1,8 @@
 package yonam2023.sfproject.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-import yonam2023.sfproject.config.TargetUrlFactory;
-
 
 import java.util.*;
 
@@ -20,7 +17,7 @@ public class RoleBasedTargetUrlFactory implements TargetUrlFactory {
         rolesTargetUrlMap.put("ROLE_ADMIN_LO", "/storedItems");
         rolesTargetUrlMap.put("ROLE_ADMIN_PRO", "/production");
         rolesTargetUrlMap.put("ROLE_ADMIN", "/index");
-        rolesTargetUrlMap.put("ROLE_EMPLOYEE", "/test");
+        rolesTargetUrlMap.put("ROLE_EMPLOYEE", "/normal");
     }
 
 

@@ -5,12 +5,12 @@ import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -34,7 +34,16 @@ public class Employee implements UserDetails, Serializable {
 
     private DepartmentType department;
     private Role role;
-    private boolean loggedIn;
+    private boolean isCheckedIn;
+    private LocalDateTime checkInTime;
+
+    public LocalDateTime getCheckInTime() {
+        return checkInTime;
+    }
+
+    public void setCheckInTime(LocalDateTime checkInTime) {
+        this.checkInTime = checkInTime;
+    }
 
     private String token;
 
@@ -45,11 +54,11 @@ public class Employee implements UserDetails, Serializable {
         this.token = null;
     }
 
-    public boolean isLoggedIn() {
-        return loggedIn;
+    public boolean isCheckedIn() {
+        return isCheckedIn;
     }
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
+    public void setCheckedIn(boolean checkedIn) {
+        this.isCheckedIn = checkedIn;
     }
 
     public void employeeUpdate(EmployeeTO dto) {
@@ -57,16 +66,25 @@ public class Employee implements UserDetails, Serializable {
         this.phoneNumber = dto.getPhoneNumber();
         this.department = dto.getDepartment();
         this.role = dto.getRole();
+        this.isCheckedIn = dto.isCheckedIn();
+        this.checkInTime = dto.getCheckInTime();
     }
 
     @Builder
-    public Employee(DepartmentType department, Role role, String name, String phoneNumber, String password) {
-        this.department = department;
-        this.role = role;
+    public Employee(Long id, String name, String password, String phoneNumber, DepartmentType department, Role role, boolean isCheckedIn, LocalDateTime checkInTime) {
+        this.id = id;
         this.name = name;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.department = department;
+        this.role = role;
+        this.isCheckedIn = isCheckedIn;
+        this.checkInTime = checkInTime;
     }
+
+
+
+
 
     @Transient
     private Collection<GrantedAuthority> authorities;
@@ -123,9 +141,12 @@ public class Employee implements UserDetails, Serializable {
     public String toString() {
         return "Employee{" +
                 "name='" + name + '\'' +
+                ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", department=" + department +
                 ", role=" + role +
+                ", isCheckedIn=" + isCheckedIn +
+                ", checkInTime=" + checkInTime +
                 '}';
     }
 }

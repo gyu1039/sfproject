@@ -38,6 +38,8 @@ public class EmployeeManagerService {
                 .phoneNumber(em.getPhoneNumber())
                 .department(em.getDepartment())
                 .role(em.getRole())
+                .isCheckedIn(em.isCheckedIn())
+                .checkInTime(em.getCheckInTime())
                 .build();
 
         return dto;
