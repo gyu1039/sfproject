@@ -2,7 +2,6 @@ package yonam2023.sfproject.config.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Collection;
 
 
 @Slf4j
@@ -32,8 +30,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("{}", "onAuthenticationSuccess method");
         clearAuthenticationAttributes(request);
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        handle(request, response, authorities);
+        handle(request, response, authentication);
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request) {
@@ -46,7 +43,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     private void handle(HttpServletRequest request, HttpServletResponse response,
-                        Collection<? extends GrantedAuthority> authorities) throws IOException {
+                        Authentication authorities) throws IOException {
 
         String targetUrl = determineTargetUrl(authorities, requestCache.getRequest(request, response));
 
@@ -59,13 +56,13 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-    private String determineTargetUrl(Collection<? extends GrantedAuthority> authorities, SavedRequest savedRequest) {
+    private String determineTargetUrl(Authentication authorities, SavedRequest savedRequest) {
 
         if(savedRequest != null) {
             return savedRequest.getRedirectUrl();
         }
 
-        return targetUrlFactory.createTargetUrl(authorities);
+        return targetUrlFactory.createTargetUrl(authorities.getAuthorities());
     }
 
 }

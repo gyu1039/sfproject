@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .mvcMatchers("/employee/**").hasAnyRole("ADMIN_EMP", "ADMIN")
                         .mvcMatchers("/production/**").hasAnyRole("ADMIN_PRO", "ADMIN")
                         .mvcMatchers("/storedItems/**", "/receiveRecords/**", "/sendRecords/**").hasAnyRole("ADMIN_LO", "ADMIN")
-                        .mvcMatchers("/test/**").hasRole("EMPLOYEE")
+                        .mvcMatchers("/normal/**").hasRole("EMPLOYEE")
                         .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form
