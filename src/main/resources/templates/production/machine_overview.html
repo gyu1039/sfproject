@@ -1,0 +1,102 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base_paging :: layout ('Machine List Overview', 'production', ~{::section})}"
+      lang="ko">
+<head>
+  <title>index</title>
+</head>
+<body>
+
+
+<section>
+
+  <script>
+    const sse = new EventSource(window.location.protocol+"//"+window.location.host+"/sse/connect");
+
+    sse.addEventListener('connect', (e) => {
+	  const { data: receivedConnectData } = e;
+	  console.log('connect event data: ',receivedConnectData);
+    });
+    sse.addEventListener('called', e => {
+      const { data: receiveData } = e;
+      console.log("event data",receiveData);
+
+    });
+    sse.addEventListener('server', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let t = receiveData.split(',');
+      document.getElementById('factoryConnection').innerText=t[0];
+      document.getElementById('factoryOperation').innerText=t[1];
+    });
+    sse.addEventListener('mdata', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let t = receiveData.split(',');
+
+      t.forEach(mdata=>{
+          let updateData = mdata.split(':');
+          let target = document.getElementById('data_'+updateData[0]);
+          if(target!= null){
+              target.innerText=updateData[1];
+          }
+      });
+    });
+    sse.addEventListener('mstate', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let updateData = receiveData.split(':');
+      let target = document.getElementById('state_'+updateData[0]);
+      if(target!= null){
+          target.innerText=updateData[1];
+      }
+    });
+    sse.addEventListener('mfatal', e => {
+      const { data: receiveData } = e;
+      console.log("server event data",receiveData);
+      let updateData = receiveData.split(':');
+      let target = document.getElementById('fatal_'+updateData[0]);
+      if(target!= null){
+          target.innerText=updateData[1];
+      }
+    });
+  </script>
+  Factory Connection:<span id="factoryConnection" th:text="${factoryConnectionState}"></span><br/>
+  Factory Operation:<span id="factoryOperation" th:text="${factoryOperationState}"></span><br/>
+  Machine List:<br/>
+
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Value</th>
+        <th scope="col">State</th>
+        <th scope="col">Fatal</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="e : ${pageObj}">
+        <td><span th:text="${e.machineId}"></span></td>
+        <td><a th:href="'/production/machine-detail/'+${e.machineId}" th:text="${e.name}"></a></td>
+        <td><span th:id="'data_'+${e.machineId}" th:text="${e.recentData}"></span></td>
+        <td>
+          <span th:id="'state_'+${e.machineId}" th:if="${e.state==true}">In Operation</span>
+          <span th:id="'state_'+${e.machineId}" th:if="${e.state==false}">Stopped</span>
+        </td>
+        <td>
+          <span th:id="'fatal_'+${e.machineId}"th:if="${e.fatal==false}">Normal</span>
+          <span th:id="'fatal_'+${e.machineId}"th:if="${e.fatal==true}">Error</span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--<button onclick="location.href ='/production/machineRegistration'">기계 등록</button>
+  <button onclick="location.href ='/production/factoryManagement'">공장 관리</button>-->
+
+</section>
+
+</body>
+</html>

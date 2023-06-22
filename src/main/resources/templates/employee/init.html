@@ -1,0 +1,50 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base_paging :: layout ('index', 'employee', ~{::section})}"
+      lang="ko">
+
+<body>
+
+<section>
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Name</th>
+                <th scope="col">PhoneNumber</th>
+                <th scope="col">department</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${pageObj}">
+                <td><a th:href="@{employee/edit/{id}(id=${e.id})}"><span th:text="${e.id}"></span></a></td>
+                <td><span th:text="${e.name}"></span></td>
+                <td><span th:text="${e.phoneNumber}"></span></td>
+                <td><span th:text="${e.department.description}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="row gy-2 gx-3 align-items-center">
+            <div class="col-sm-2">
+                <button type="button"
+                        onclick="location.href=add.html"
+                        th:onclick="|location.href='@{/employee/add}'|" class="btn btn-outline-primary">직원 등록
+                </button>
+            </div>
+
+            <div class="col-sm-4">
+                <form action="#" th:action="@{/employee/bydepartment}" method="get">
+                    <select onchange="this.form.submit()" class="w-20 p-3 form-select" th:name="departmentType">
+                        <option value="">부서별로 직원 조회하기</option>
+                        <option th:each="departmentType : ${departments}" th:value="${departmentType}" th:text="${departmentType.description}">Test</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

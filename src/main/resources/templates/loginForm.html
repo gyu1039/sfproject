@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="height:70vh">
+            <div class="col-md-6">
+                <h2>Login</h2>
+                <form th:action="@{/login}" method="post">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="name" placeholder="Enter your username">
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" name="password" placeholder="Enter your password">
+                    </div>
+                    <div class="error-message m-l-4" th:if="${msg}" th:text="${msg}"></div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+        <span>Admin : test/test </span><br/>
+        <span>Employee_Admin : gyu1039/gyu1039 </span><br/>
+        <span>Logistics_Admin : ghk4889/ghk4889 </span><br/>
+        <span>Production_Admin : Ljh3141/Ljh3141 </span><br/>
+        <span>Employee : test1/test </span><br/>
+    </div>
+
+    <script href="/js/bootstrap.bundle.min.css"></script>
+</body>
+</html>

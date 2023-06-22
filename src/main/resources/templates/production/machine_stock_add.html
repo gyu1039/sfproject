@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <title>Title</title>
+</head>
+<body>
+
+  <section>
+<!--      <template id="_preDefined">-->
+<!--          <slot name="flag" th:data-value="${flag}"></slot>-->
+<!--      </template>-->
+      <form id="add_form" th:object="${machineStockAddData}" onsubmit="return onSubmit(event)" method="post">
+          <table class="table w-100 table-bordered"  style="table-layout:fixed">
+              <thead>
+                <tr>
+                    <td colspan="2" align="center">재고 보충</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td align="center"><span>기계 번호</span></td>
+                    <td><span th:text="*{machineId}"/></td>
+                </tr>
+                <tr>
+                    <td align="center"><span>재료 종류</span></td>
+                    <td><span th:text="*{resourceType}"/></td>
+                </tr>
+                <tr>
+                    <td align="center"><span>창고 재고</span></td>
+                    <td>
+                        <span th:text="*{resourceRemain}" th:if="*{resourceRemain!=0}"/>
+                        <span th:if="*{resourceRemain==0}">재고 없음</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center"><span>기계 최대 재고량</span></td>
+                    <td><span th:text="*{maxStock}"/></td>
+                </tr>
+                <tr>
+                    <td align="center"><span>보충량</span></td>
+                    <td><input class="w-100" type="number" name="amount" placeholder="양" th:field="*{amount}" th:value="*{amount}"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><button type="submit" class="btn btn-sm btn-outline-dark">추가</button></td>
+                </tr>
+              </tbody>
+          </table>
+          <input type="hidden" name="machineId" placeholder="기계 번호" th:field="*{machineId}" th:value="*{machineId}"/>
+      </form>
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script>
+          //const pd = _preDefined;
+          //const flag = pd.content.querySelector("[name=flag]").dataset.value;
+
+          function onSubmit(e) {
+            e.preventDefault();
+            submit();
+            return false;
+          }
+
+          async function submit() {
+               try {
+                    const response = await axios.post(location.href,{
+                        machineId: add_form.machineId.value,
+                        amount: add_form.amount.valueAsNumber
+                    });
+                    console.log(response.data);
+                    if (response.data == "added"){
+                        self.close();
+                    }else{
+                        alert(response.data);
+                    }
+               } catch (error) {
+                    console.error(error);
+               }
+          }
+
+      </script>
+  </section>
+</body>
+</html>
