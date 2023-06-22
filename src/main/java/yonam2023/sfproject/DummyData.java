@@ -37,14 +37,14 @@ public class DummyData {
 
         DepartmentType[] dts = {DepartmentType.PERSONNEL, DepartmentType.LOGISTICS, DepartmentType.PRODUCTION};
 
-        IntStream.rangeClosed(1, 50).forEach(i -> {
+        IntStream.rangeClosed(1, 9).forEach(i -> {
             //센서 임시 추가
             MachineData m = MachineData.builder()
                     .machineId(1010+i)
                     .name("machine-"+(1010+i))
                     .state(false)
                     .description("machine-"+(i+1010 )+" description")
-                    .stock(100)
+                    .stock(0)
                     .min(50)
                     .max(150)
                     .maxStock(1000)

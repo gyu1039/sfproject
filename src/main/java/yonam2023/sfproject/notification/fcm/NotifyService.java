@@ -1,6 +1,8 @@
 package yonam2023.sfproject.notification.fcm;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yonam2023.sfproject.employee.EmployeeManagerRepository;
@@ -16,8 +18,10 @@ public class NotifyService {
     private final FCMService fcmService;
     private final EmployeeManagerRepository employeeManagerRepository;
 
+    Logger logger = LoggerFactory.getLogger(NotifyService.class);
     public void sendNotification(final NotificationRequest request) {
         try {
+            logger.info("Message Sended");
             fcmService.send(request);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

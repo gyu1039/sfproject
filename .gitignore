@@ -35,3 +35,4 @@ build/
 application.properties
 persistence.xml
 .jpb/
+/src/main/resources/temp-webpush-bdb1c0dbf0aa.json

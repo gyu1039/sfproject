@@ -29,7 +29,8 @@ public class EmployeeController {
     public String init(@AuthenticationPrincipal Employee employee, Model model) {
 
         log.info("init메서드 진입");
-        model.addAttribute("employee", employee);
+        Employee logindata = ems.findById(employee.getId()).toEntity();
+        model.addAttribute("employee", logindata);
         return "employee/dashboard";
     }
 
