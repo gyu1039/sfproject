@@ -13,7 +13,7 @@
   
 ---
 ### 기술 스택
-+ Spring Boot, Maven, JAVA11, Spring Security, MySQL, JPA, (etc..)
++ Spring Boot, Maven, JAVA11, Spring Security, MySQL, JPA
   
 ---
 ### 기능 구현
